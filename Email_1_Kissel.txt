@@ -1,0 +1,28 @@
+Sehr geehrter Herr Kissel,
+
+unser Stundenplan ist unter 
+
+https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhAjATBwLFPJefeCYDHYgvcF&today=Heute
+
+zu finden. Unsere Fragen sind nicht so dringend, dass man sie vor dem Treffen in Stuttgart klären müsste.
+Uns ging es eher um die organisatorischen Fragen zur Studienarbeit, als um technische Inhalte.
+
+Dabei geht es um folgende Fragen:
+
+- Wie gestaltet sich die Ausarbeitung ?
+- Sollen eine gemeinsame Ausarbeitung oder zwei Einzelarbeiten erstellt werden?
+- Setzt sich die Noten nur aus den schriftlichen Ausarbeitung oder auch aus der umgesetzten Anwendung zusammen ?
+
+Für die Umsetzung der Studienarbeit, hätten wir eine Android-Anwendung implentiert, 
+welche mit einem Foto einer Rechnung die Überweisungsdaten ausliest.
+Die Möglichkeiten und Methoden zur Texterkennung würden im Rahmen der Studienarbeit erforscht werden.
+
+Mögliche Erweiterungen wären das automatische Ausfüllen von Überweisungsformularen
+oder das Speichern einer ausgefüllten Überweisung als PDF.
+Vielleicht haben Sie hier noch Vorschläge, wie die herausgefilterten Daten genutzt werden können ?
+
+Mit freundlichen Grüßen
+Andy Meissner
+Giuseppe Sansone
+
+
