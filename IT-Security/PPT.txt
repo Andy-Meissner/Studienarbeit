@@ -1,0 +1,10 @@
+Vorstellung von Steganographie
+	Unterschiede/Gemeinsamkeiten zu Kryptographie -> Beispiele
+	Methoden
+		LSB
+		(Sinus wellen in jpeg)
+Vorstellung Tools
+	Steghide linux
+	Deepsound Windows
+	(eigenes Tool)
+(Steganalyse)
