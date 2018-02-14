@@ -1,0 +1,42 @@
+Vorbereitungsphase 
+	Tasks:
+		Organisatorisches
+		Entscheidung welches Testmodell
+		Zeitplan
+		Konventionen
+		Pflichtenheft
+	Milestones:
+		Testmodell
+		Zeitplan
+		Konventionen
+		Pflichtenheft
+Recherchephase
+	Tasks:
+		Modellierung der Architektur
+		Mobile Application Software Design/Engineering
+		OCR
+		Textanalyse (Pattern Matching)
+		Prototypentwicklung
+	Milestones:
+		Klassendiagramm
+		Use-Case Diagramm?
+		Prototyp
+
+Implementierungsphase
+	Task:
+		KameraTask
+		MenüTask
+		Archiv
+		Favoriten
+		Texterkennung
+		Pattern Matching
+	Milestones:
+		Berechtigungen kriegen
+		Photo machen
+		Photo speichern und wieder aufrufen
+		Text erkennen und parsen
+		Fertige Applikation
+		jeweils Dokumentationen
+Testphase
+	Task:
+	Milestones:
