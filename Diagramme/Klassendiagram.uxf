@@ -4,10 +4,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>480</x>
-      <y>160</y>
+      <x>260</x>
+      <y>230</y>
       <w>140</w>
-      <h>100</h>
+      <h>110</h>
     </coordinates>
     <panel_attributes>MainActivity
 --
@@ -20,98 +20,129 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>770</x>
-      <y>170</y>
+      <x>400</x>
+      <y>230</y>
       <w>140</w>
       <h>110</h>
     </coordinates>
-    <panel_attributes>Kamera</panel_attributes>
+    <panel_attributes>Kamera
+--
+- cameraInstance
+--
++ takePhoto()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>770</x>
-      <y>310</y>
+      <x>400</x>
+      <y>350</y>
       <w>140</w>
-      <h>30</h>
+      <h>70</h>
     </coordinates>
-    <panel_attributes>PatternMatcher</panel_attributes>
+    <panel_attributes>PatternMatcher
+--
+
+--
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>480</x>
-      <y>290</y>
+      <x>260</x>
+      <y>350</y>
       <w>140</w>
-      <h>30</h>
+      <h>70</h>
     </coordinates>
-    <panel_attributes>MenuActivity</panel_attributes>
+    <panel_attributes>MenuActivity
+--
+
+--</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>480</x>
-      <y>340</y>
+      <x>680</x>
+      <y>430</y>
       <w>140</w>
-      <h>30</h>
+      <h>70</h>
     </coordinates>
-    <panel_attributes>ArchiveActivity</panel_attributes>
+    <panel_attributes>ArchiveActivity
+--
+
+--
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>480</x>
-      <y>400</y>
+      <x>260</x>
+      <y>430</y>
       <w>140</w>
-      <h>30</h>
+      <h>70</h>
     </coordinates>
-    <panel_attributes>AboutActivity</panel_attributes>
+    <panel_attributes>AboutActivity
+--
+
+--
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>480</x>
-      <y>460</y>
+      <x>400</x>
+      <y>430</y>
       <w>140</w>
-      <h>30</h>
+      <h>70</h>
     </coordinates>
-    <panel_attributes>FavoritesActivity</panel_attributes>
+    <panel_attributes>FavoritesActivity
+--
+
+--
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>480</x>
-      <y>520</y>
+      <x>540</x>
+      <y>430</y>
       <w>140</w>
-      <h>30</h>
+      <h>70</h>
     </coordinates>
-    <panel_attributes>ResultActivity</panel_attributes>
+    <panel_attributes>ResultActivity
+--
+
+--
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>770</x>
-      <y>370</y>
+      <x>540</x>
+      <y>230</y>
       <w>140</w>
-      <h>30</h>
+      <h>110</h>
     </coordinates>
-    <panel_attributes>OCR</panel_attributes>
+    <panel_attributes>OCR
+--
+
+--
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>770</x>
-      <y>530</y>
+      <x>680</x>
+      <y>230</y>
       <w>140</w>
-      <h>170</h>
+      <h>150</h>
     </coordinates>
     <panel_attributes>Invoice
 --
@@ -129,8 +160,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>770</x>
-      <y>430</y>
+      <x>540</x>
+      <y>350</y>
       <w>140</w>
       <h>70</h>
     </coordinates>
