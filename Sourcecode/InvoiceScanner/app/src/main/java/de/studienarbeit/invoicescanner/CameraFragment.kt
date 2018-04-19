@@ -29,11 +29,7 @@ import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.util.Size
 import android.util.SparseIntArray
-import android.view.LayoutInflater
-import android.view.Surface
-import android.view.TextureView
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import java.io.File
 import java.util.Arrays
 import java.util.Collections
@@ -68,6 +64,12 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
          * ID of the current [CameraDevice].
          */
         private lateinit var cameraId: String
+
+
+    /**
+     * A [Point] that represents the resolution
+     */
+    public var windowResolution : Point = Point()
 
         /**
          *
@@ -111,7 +113,6 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
                 onDisconnected(cameraDevice)
                 this@CameraFragment.activity?.finish()
             }
-
         }
 
         /**
@@ -315,9 +316,15 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
                             CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) ?: continue
 
                     // For still image captures, we use the largest available size.
-                    val largest = Collections.max(
-                            Arrays.asList(*map.getOutputSizes(ImageFormat.JPEG)),
-                            CompareSizesByArea())
+                    //val largest = Collections.max(
+                    //        Arrays.asList(*map.getOutputSizes(ImageFormat.JPEG)),
+                    //        CompareSizesByArea())
+
+                    val tempWidth = windowResolution.x
+                    val tempHeight = windowResolution.y
+                    val largest = Size(tempWidth, tempHeight)
+                    val screenSize = resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK
+
                     imageReader = ImageReader.newInstance(largest.width, largest.height,
                             ImageFormat.JPEG, /*maxImages*/ 2).apply {
                         setOnImageAvailableListener(onImageAvailableListener, backgroundHandler)
