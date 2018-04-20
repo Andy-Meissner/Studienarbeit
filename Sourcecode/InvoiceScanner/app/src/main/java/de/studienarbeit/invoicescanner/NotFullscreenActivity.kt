@@ -1,9 +1,7 @@
 package de.studienarbeit.invoicescanner
 
-
+import android.support.v4.app.Fragment
 import android.content.Intent
-import android.content.res.Configuration
-import android.graphics.Point
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -11,30 +9,34 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import android.view.WindowManager
 
-
-const val MENU_ITEM_ID = "de.studienarbeit.invoicescanner.MENU_ITEM"
-
-
-class MainActivity : AppCompatActivity() {
+class NotFullscreenActivity : AppCompatActivity() {
 
     private var mDrawerLayout : DrawerLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        setContentView(R.layout.activity_main)
-        val camFrag = CameraFragment.newInstance()
+
+        setContentView(R.layout.activity_not_fullscreen)
+
+        val menuItemId = intent.getIntExtra(MENU_ITEM_ID, R.id.nav_archive)
+        var fragment : Fragment
+
+        when(menuItemId){
+            R.id.nav_archive -> fragment = ArchiveFragment()
+            R.id.nav_favorites -> fragment = FavoritesFragment()
+            R.id.nav_about -> fragment = AboutFragment()
+            else -> fragment = ArchiveFragment()
+        }
+
         savedInstanceState ?: supportFragmentManager.beginTransaction()
-                .add(R.id.container, camFrag)
+                .add(R.id.container, fragment)
                 .commit()
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         val actionbar = supportActionBar
-        actionbar!!.setDisplayShowTitleEnabled(false)
-        actionbar.setDisplayHomeAsUpEnabled(true)
+        actionbar!!.setDisplayHomeAsUpEnabled(true)
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white)
 
 
@@ -50,30 +52,14 @@ class MainActivity : AppCompatActivity() {
             // Add code here to update the UI based on the item selected
             // For example, swap UI fragments here
             when(menuItem.itemId){
-                R.id.nav_archive, R.id.nav_favorites, R.id.nav_about -> startActivity(Intent(this,NotFullscreenActivity::class.java).apply{
-                    putExtra(MENU_ITEM_ID, menuItem.itemId)
-                })
+                R.id.nav_camera -> startActivity(Intent(this,MainActivity::class.java))
+                R.id.nav_archive -> supportFragmentManager.beginTransaction().replace(R.id.container, ArchiveFragment()).commit()
+                R.id.nav_favorites -> supportFragmentManager.beginTransaction().replace(R.id.container, FavoritesFragment()).commit()
+                R.id.nav_about -> supportFragmentManager.beginTransaction().replace(R.id.container, AboutFragment()).commit()
             }
 
             true
         }
-
-
-        // MACHE WOANDERS
-        val display = windowManager.defaultDisplay
-        val resolution = Point()
-        display.getRealSize(resolution)
-
-        val orientation = resources.configuration.orientation
-        if (orientation == Configuration.ORIENTATION_PORTRAIT)
-        {
-            camFrag.windowResolution = Point(resolution.y,resolution.x)
-        }
-        else
-        {
-            camFrag.windowResolution = resolution
-        }
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -85,6 +71,4 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-
 }
