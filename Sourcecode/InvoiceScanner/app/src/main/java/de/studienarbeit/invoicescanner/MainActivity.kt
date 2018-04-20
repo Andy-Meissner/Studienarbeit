@@ -1,6 +1,8 @@
 package de.studienarbeit.invoicescanner
 
 
+import android.app.Fragment
+import android.app.FragmentTransaction
 import android.content.res.Configuration
 import android.graphics.Point
 import android.os.Bundle
@@ -11,9 +13,31 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.WindowManager
+import android.widget.Toast
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedListener, CameraFragment.onImageTakenListener {
+    override fun onImageTaken() {
+        val fragment = RetakeConfirmFragment()
+        supportFragmentManager.beginTransaction().replace(R.id.container,fragment).commit()
+    }
+
+
+    override fun onButtonAnalyze() {
+        val text = "Hello toast!"
+        val duration = Toast.LENGTH_SHORT
+
+        val toast = Toast.makeText(applicationContext, text, duration)
+        toast.show()
+    }
+
+    override fun onButtonDismiss() {
+        val text = "Hello toast!"
+        val duration = Toast.LENGTH_SHORT
+
+        val toast = Toast.makeText(applicationContext, text, duration)
+        toast.show()
+    }
 
     private var mDrawerLayout : DrawerLayout? = null
 
