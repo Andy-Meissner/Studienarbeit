@@ -65,6 +65,21 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
          */
         private lateinit var cameraId: String
 
+    lateinit var imageTakenListener : onImageTakenListener
+
+    interface onImageTakenListener
+    {
+        fun onImageTaken()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            imageTakenListener = context as onImageTakenListener
+        } catch (e: ClassCastException) {
+            throw ClassCastException(context.toString() + " must implement OnArticleSelectedListener")
+    }
+}
 
     /**
      * A [Point] that represents the resolution
@@ -141,6 +156,7 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
          */
         private val onImageAvailableListener = ImageReader.OnImageAvailableListener {
             backgroundHandler?.post(ImageSaver(it.acquireNextImage(), file))
+
         }
 
         /**
@@ -637,6 +653,8 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
                         activity.showToast("Saved: $file")
                         Log.d(TAG, file.toString())
                         unlockFocus()
+                        imageTakenListener.onImageTaken()
+
                     }
                 }
 
