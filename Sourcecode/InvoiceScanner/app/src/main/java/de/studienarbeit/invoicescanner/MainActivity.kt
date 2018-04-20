@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         // MACHE WOANDERS
         val display = windowManager.defaultDisplay
         val resolution : Point = Point()
-        display.getSize(resolution)
+        display.getRealSize(resolution)
 
         val orientation = getResources().getConfiguration().orientation
         if (orientation == Configuration.ORIENTATION_PORTRAIT)

@@ -69,7 +69,7 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
     /**
      * A [Point] that represents the resolution
      */
-    public var windowResolution : Point = Point()
+     var windowResolution : Point = Point()
 
         /**
          *
@@ -323,7 +323,6 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
                     val tempWidth = windowResolution.x
                     val tempHeight = windowResolution.y
                     val largest = Size(tempWidth, tempHeight)
-                    val screenSize = resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK
 
                     imageReader = ImageReader.newInstance(largest.width, largest.height,
                             ImageFormat.JPEG, /*maxImages*/ 2).apply {
@@ -350,10 +349,10 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
                     // Danger, W.R.! Attempting to use too large a preview size could  exceed the camera
                     // bus' bandwidth limitation, resulting in gorgeous previews but the storage of
                     // garbage capture data.
-                    previewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture::class.java),
+                    previewSize = largest/*chooseOptimalSize(map.getOutputSizes(SurfaceTexture::class.java),
                             rotatedPreviewWidth, rotatedPreviewHeight,
                             maxPreviewWidth, maxPreviewHeight,
-                            largest)
+                            largest)*/
 
                     // We fit the aspect ratio of TextureView to the size of preview we picked.
                     if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -713,7 +712,7 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
             /**
              * Tag for the [Log].
              */
-            private val TAG = "Camera2BasicFragment"
+            private val TAG = "CameraFragment"
 
             /**
              * Camera state: Showing camera preview.
