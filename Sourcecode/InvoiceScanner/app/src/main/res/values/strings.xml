@@ -13,4 +13,8 @@
 
         ]]>
     </string>
+    <string name="camera">Camera</string>
+    <string name="archive">Archive</string>
+    <string name="favorites">Favorites</string>
+    <string name="about">About</string>
 </resources>
