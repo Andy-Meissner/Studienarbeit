@@ -349,10 +349,10 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
                     // Danger, W.R.! Attempting to use too large a preview size could  exceed the camera
                     // bus' bandwidth limitation, resulting in gorgeous previews but the storage of
                     // garbage capture data.
-                    previewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture::class.java),
+                    previewSize = largest/*chooseOptimalSize(map.getOutputSizes(SurfaceTexture::class.java),
                             rotatedPreviewWidth, rotatedPreviewHeight,
                             maxPreviewWidth, maxPreviewHeight,
-                            largest)
+                            largest)*/
 
                     // We fit the aspect ratio of TextureView to the size of preview we picked.
                     if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -712,7 +712,7 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
             /**
              * Tag for the [Log].
              */
-            private val TAG = "Camera2BasicFragment"
+            private val TAG = "CameraFragment"
 
             /**
              * Camera state: Showing camera preview.
