@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val camFrag = CameraFragment.newInstance()
         savedInstanceState ?: supportFragmentManager.beginTransaction()
-                .replace(R.id.container, camFrag)
+                .add(R.id.container, camFrag)
                 .commit()
 
         var toolbar = findViewById<Toolbar>(R.id.toolbar)
