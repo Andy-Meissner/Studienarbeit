@@ -69,7 +69,7 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
     /**
      * A [Point] that represents the resolution
      */
-    public var windowResolution : Point = Point()
+     var windowResolution : Point = Point()
 
         /**
          *
@@ -323,7 +323,6 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
                     val tempWidth = windowResolution.x
                     val tempHeight = windowResolution.y
                     val largest = Size(tempWidth, tempHeight)
-                    val screenSize = resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK
 
                     imageReader = ImageReader.newInstance(largest.width, largest.height,
                             ImageFormat.JPEG, /*maxImages*/ 2).apply {
