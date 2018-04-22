@@ -17,9 +17,6 @@ import android.view.WindowManager
 import android.widget.Toast
 
 
-const val MENU_ITEM_ID = "de.studienarbeit.invoicescanner.MENU_ITEM"
-
-
 class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedListener, CameraFragment.onImageTakenListener {
     override fun onImageTaken() {
         val fragment = RetakeConfirmFragment()
@@ -48,6 +45,8 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
+        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         setContentView(R.layout.activity_main)
         val camFrag = CameraFragment.newInstance()
         savedInstanceState ?: supportFragmentManager.beginTransaction()
@@ -74,9 +73,33 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
             // Add code here to update the UI based on the item selected
             // For example, swap UI fragments here
             when(menuItem.itemId){
-                R.id.nav_archive, R.id.nav_favorites, R.id.nav_about -> startActivity(Intent(this,NotFullscreenActivity::class.java).apply{
-                    putExtra(MENU_ITEM_ID, menuItem.itemId)
-                })
+                R.id.nav_camera ->
+                    {supportFragmentManager.beginTransaction().replace(R.id.container, camFrag).commit()
+                    window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
+                    actionbar.setDisplayShowTitleEnabled(false)
+                    toolbar.setBackgroundResource(R.color.transparent)}
+
+                R.id.nav_archive ->
+                    {supportFragmentManager.beginTransaction().replace(R.id.container, ArchiveFragment()).commit()
+                    window.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
+                    actionbar.setTitle(R.string.archive)
+                    actionbar.setDisplayShowTitleEnabled(true)
+                    toolbar.setBackgroundResource(R.color.colorPrimaryDark)}
+
+                R.id.nav_favorites ->
+                    {supportFragmentManager.beginTransaction().replace(R.id.container, FavoritesFragment()).commit()
+                    window.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
+                    actionbar.setTitle(R.string.favorites)
+                    actionbar.setDisplayShowTitleEnabled(true)
+                    toolbar.setBackgroundResource(R.color.colorPrimaryDark)}
+
+                R.id.nav_about ->
+                    {supportFragmentManager.beginTransaction().replace(R.id.container, AboutFragment()).commit()
+                    window.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
+                    actionbar.setTitle(R.string.about)
+                    actionbar.setDisplayShowTitleEnabled(true)
+                    toolbar.setBackgroundResource(R.color.colorPrimaryDark)}
             }
 
             true

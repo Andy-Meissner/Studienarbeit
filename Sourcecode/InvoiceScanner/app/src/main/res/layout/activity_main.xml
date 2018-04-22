@@ -30,9 +30,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#00000000"
+            android:background="@color/transparent"
             android:theme="@style/AppTheme"
-            android:visibility="visible" />
+            android:visibility="visible"
+            android:layout_marginTop="25dp"/>
     </FrameLayout>
     <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
     <android.support.design.widget.NavigationView
