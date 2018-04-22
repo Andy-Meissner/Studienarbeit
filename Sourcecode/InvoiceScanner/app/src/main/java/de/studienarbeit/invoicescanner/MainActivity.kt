@@ -1,9 +1,6 @@
 package de.studienarbeit.invoicescanner
 
 
-import android.content.Intent
-import android.app.Fragment
-import android.app.FragmentTransaction
 import android.content.res.Configuration
 import android.graphics.Point
 import android.os.Bundle
@@ -15,17 +12,25 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.WindowManager
 import android.widget.Toast
+import java.io.File
 
 
 class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedListener, CameraFragment.onImageTakenListener {
-    override fun onImageTaken() {
+
+    val camera_fragment : CameraFragment = CameraFragment.newInstance()
+
+    override fun onImageTaken(file : File) {
+
         val fragment = RetakeConfirmFragment()
+        val args = Bundle()
+        args.putString("imagepath",file.absolutePath)
+        fragment.arguments = args
         supportFragmentManager.beginTransaction().replace(R.id.container,fragment).commit()
     }
 
 
     override fun onButtonAnalyze() {
-        val text = "Hello toast!"
+        val text = "Image is now getting analyzed lulz"
         val duration = Toast.LENGTH_SHORT
 
         val toast = Toast.makeText(applicationContext, text, duration)
@@ -33,11 +38,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
     }
 
     override fun onButtonDismiss() {
-        val text = "Hello toast!"
-        val duration = Toast.LENGTH_SHORT
-
-        val toast = Toast.makeText(applicationContext, text, duration)
-        toast.show()
+        supportFragmentManager.beginTransaction().replace(R.id.container,camera_fragment).commit()
     }
 
     private var mDrawerLayout : DrawerLayout? = null
@@ -48,9 +49,8 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
         window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
         window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         setContentView(R.layout.activity_main)
-        val camFrag = CameraFragment.newInstance()
         savedInstanceState ?: supportFragmentManager.beginTransaction()
-                .add(R.id.container, camFrag)
+                .add(R.id.container, camera_fragment)
                 .commit()
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
             // For example, swap UI fragments here
             when(menuItem.itemId){
                 R.id.nav_camera ->
-                    {supportFragmentManager.beginTransaction().replace(R.id.container, camFrag).commit()
+                    {supportFragmentManager.beginTransaction().replace(R.id.container, camera_fragment).commit()
                     window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                     window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
                     actionbar.setDisplayShowTitleEnabled(false)
@@ -114,11 +114,11 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
         val orientation = resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_PORTRAIT)
         {
-            camFrag.windowResolution = Point(resolution.y,resolution.x)
+            camera_fragment.windowResolution = Point(resolution.y,resolution.x)
         }
         else
         {
-            camFrag.windowResolution = resolution
+            camera_fragment.windowResolution = resolution
         }
 
     }

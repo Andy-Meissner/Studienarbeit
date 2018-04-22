@@ -69,7 +69,7 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
 
     interface onImageTakenListener
     {
-        fun onImageTaken()
+        fun onImageTaken(file : File)
     }
 
     override fun onAttach(context: Context) {
@@ -78,8 +78,8 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
             imageTakenListener = context as onImageTakenListener
         } catch (e: ClassCastException) {
             throw ClassCastException(context.toString() + " must implement OnArticleSelectedListener")
+        }
     }
-}
 
     /**
      * A [Point] that represents the resolution
@@ -156,7 +156,6 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
          */
         private val onImageAvailableListener = ImageReader.OnImageAvailableListener {
             backgroundHandler?.post(ImageSaver(it.acquireNextImage(), file))
-
         }
 
         /**
@@ -653,7 +652,7 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
                         activity.showToast("Saved: $file")
                         Log.d(TAG, file.toString())
                         unlockFocus()
-                        imageTakenListener.onImageTaken()
+                        imageTakenListener.onImageTaken(file)
 
                     }
                 }
