@@ -17,4 +17,7 @@
     <string name="archive">Archive</string>
     <string name="favorites">Favorites</string>
     <string name="about">About</string>
+    <string name="authors">Authors</string>
+    <string name="author_names">Meissner Andy, Sansone Giuseppe</string>
+    <string name="version">Version</string>
 </resources>

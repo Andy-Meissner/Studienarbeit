@@ -46,8 +46,8 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
-        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        //window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
+        //window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         setContentView(R.layout.activity_main)
         savedInstanceState ?: supportFragmentManager.beginTransaction()
                 .add(R.id.container, camera_fragment)
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
                 R.id.nav_about ->
                     {supportFragmentManager.beginTransaction().replace(R.id.container, AboutFragment()).commit()
                     window.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
-                    actionbar.setTitle(R.string.about)
+                    actionbar.title = getString(R.string.about) + " " + getString(R.string.app_name)
                     actionbar.setDisplayShowTitleEnabled(true)
                     toolbar.setBackgroundResource(R.color.colorPrimaryDark)}
             }
