@@ -1,5 +1,6 @@
 package de.studienarbeit.invoicescanner
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -11,7 +12,15 @@ import kotlinx.android.synthetic.main.confirm_retake_fragment.view.*
 import java.io.File
 import android.graphics.BitmapFactory
 import android.graphics.Bitmap
-
+import com.google.android.gms.vision.text.TextRecognizer
+import android.widget.Toast
+import android.content.Intent
+import android.content.IntentFilter
+import android.util.Log
+import android.util.SparseArray
+import com.google.android.gms.vision.Frame
+import com.google.android.gms.vision.text.TextBlock
+import java.util.EnumSet.range
 
 
 /**
@@ -19,13 +28,13 @@ import android.graphics.Bitmap
  */
 class RetakeConfirmFragment() : Fragment() , View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback
 {
-
+    lateinit var currentImage : Bitmap
     lateinit var mListener : onButtonClickedListener
 
     override fun onClick(view: View) {
         when (view.id) {
             R.id.dismiss -> mListener.onButtonDismiss()
-            R.id.analyze -> mListener.onButtonAnalyze()
+            R.id.analyze -> analysePhoto()
         }
     }
     override fun onCreateView(inflater: LayoutInflater,
@@ -35,7 +44,24 @@ class RetakeConfirmFragment() : Fragment() , View.OnClickListener, ActivityCompa
 
     interface onButtonClickedListener {
         fun onButtonDismiss();
-        fun onButtonAnalyze();
+        fun onButtonAnalyze(string: String);
+    }
+
+    fun analysePhoto()
+    {
+        val textRecognizer : TextRecognizer = TextRecognizer.Builder(activity).build()
+        val myFrame = Frame.Builder()
+        myFrame.setBitmap(currentImage)
+        val texts = textRecognizer.detect(myFrame.build())
+        var mystring = ""
+        for (i in 0..texts.size()-1)
+        {
+            mystring += texts[i]?.value
+        }
+
+
+
+        mListener.onButtonAnalyze(mystring)
     }
 
     override fun onAttach(context: Context) {
@@ -52,9 +78,9 @@ class RetakeConfirmFragment() : Fragment() , View.OnClickListener, ActivityCompa
 
         if (imgFile.exists()) {
 
-            val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
+            currentImage = BitmapFactory.decodeFile(imgFile.absolutePath)
 
-            view.myimage.setImageBitmap(myBitmap)
+            view.myimage.setImageBitmap(currentImage)
         }
         view.findViewById<View>(R.id.dismiss).setOnClickListener(this)
         view.findViewById<View>(R.id.analyze).setOnClickListener(this)

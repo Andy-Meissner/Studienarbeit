@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.WindowManager
 import android.widget.Toast
+import com.google.android.gms.vision.Frame
+import com.google.android.gms.vision.text.TextRecognizer
 import java.io.File
 
 
@@ -29,11 +31,10 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
     }
 
 
-    override fun onButtonAnalyze() {
-        val text = "Image is now getting analyzed lulz"
+    override fun onButtonAnalyze(string: String) {
         val duration = Toast.LENGTH_SHORT
 
-        val toast = Toast.makeText(applicationContext, text, duration)
+        val toast = Toast.makeText(applicationContext, string, duration)
         toast.show()
     }
 
