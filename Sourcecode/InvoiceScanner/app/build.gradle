@@ -15,7 +15,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     applicationVariants.all { variant ->
-        variant.resValue "string", "versionname", variant.versionName
+        variant.resValue "string", "version_name", variant.versionName
     }
     buildTypes {
         release {

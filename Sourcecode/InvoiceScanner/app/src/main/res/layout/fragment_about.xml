@@ -79,7 +79,7 @@
                 android:id="@+id/VersionNumber"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@string/versionName"
+                android:text="@string/version_name"
                 android:textAlignment="center"
                 android:textSize="18sp" />
         </TableRow>
