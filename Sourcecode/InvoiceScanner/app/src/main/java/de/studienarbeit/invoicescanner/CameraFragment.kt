@@ -155,6 +155,7 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
          */
         private val onImageAvailableListener = ImageReader.OnImageAvailableListener {
             backgroundHandler?.post(ImageSaver(it.acquireNextImage(), file))
+            imageTakenListener.onImageTaken(file)
         }
 
         /**
@@ -215,6 +216,7 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
                             captureStillPicture()
                         }
                     }
+
                 }
             }
 
@@ -651,8 +653,6 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
                         activity.showToast("Saved: $file")
                         Log.d(TAG, file.toString())
                         unlockFocus()
-                        imageTakenListener.onImageTaken(file)
-
                     }
                 }
 

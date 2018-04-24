@@ -16,11 +16,31 @@ import android.widget.Toast
 import java.io.File
 import android.arch.persistence.room.Room
 import android.os.AsyncTask
+import android.support.v7.app.ActionBar
 
+enum class Fragments {
+    CAMERA,
+    ARCHIVE,
+    FAVORITES,
+    ABOUT,
+    CONFIRM_RETAKE,
+    ANALYZE_PICTURE
+}
 
 class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedListener, CameraFragment.onImageTakenListener {
 
-    val camera_fragment : CameraFragment = CameraFragment.newInstance()
+    private val cameraFragment : CameraFragment = CameraFragment.newInstance()
+    private val archiveFragment = ArchiveFragment()
+    private val favoritesFragment = FavoritesFragment()
+    private val aboutFragment = AboutFragment()
+    private var currentFragment : Fragments? = null
+
+    private lateinit var toolbar : Toolbar
+    private var actionbar : ActionBar? = null
+
+    private var hideIcon = true
+    private var isMenuAvailable = true
+
     lateinit var db : AppDatabase
 
     override fun onImageTaken(file : File) {
@@ -28,7 +48,12 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
         val args = Bundle()
         args.putString("imagepath",file.absolutePath)
         fragment.arguments = args
-        supportFragmentManager.beginTransaction().replace(R.id.container,fragment).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.container,fragment).addToBackStack(null).commit()
+        runOnUiThread {
+            actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_back)
+        }
+        isMenuAvailable = false
+        currentFragment = Fragments.CONFIRM_RETAKE
     }
 
 
@@ -58,11 +83,18 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
         args.putString("imagepath", path)
         args.putString("text", text)
         fragment.arguments = args
-        supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
+        setFullscreenMode(false)
+        actionbar!!.title = getString(R.string.new_invoice)
+        hideIcon = false
+        invalidateOptionsMenu()
+        currentFragment = Fragments.ANALYZE_PICTURE
     }
 
     override fun onButtonDismiss() {
-        supportFragmentManager.beginTransaction().replace(R.id.container,camera_fragment).commit()
+        supportFragmentManager.popBackStack()
+        actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
+        currentFragment = Fragments.CAMERA
     }
 
     private var mDrawerLayout : DrawerLayout? = null
@@ -74,18 +106,19 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
         //window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         setContentView(R.layout.activity_main)
         savedInstanceState ?: supportFragmentManager.beginTransaction()
-                .add(R.id.container, camera_fragment)
+                .add(R.id.container, cameraFragment)
                 .commit()
 
         db = Room.databaseBuilder(applicationContext,
                 AppDatabase::class.java, "database-name").build()
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        val actionbar = supportActionBar
+        actionbar = supportActionBar
         actionbar!!.setDisplayShowTitleEnabled(false)
-        actionbar.setDisplayHomeAsUpEnabled(true)
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white)
+        actionbar!!.setDisplayHomeAsUpEnabled(true)
+        actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
+        currentFragment = Fragments.CAMERA
 
         mDrawerLayout = findViewById(R.id.drawer_layout)
 
@@ -100,32 +133,27 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
             // For example, swap UI fragments here
             when(menuItem.itemId){
                 R.id.nav_camera ->
-                    {supportFragmentManager.beginTransaction().replace(R.id.container, camera_fragment).commit()
-                    window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-                    window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
-                    actionbar.setDisplayShowTitleEnabled(false)
-                    toolbar.setBackgroundResource(R.color.transparent)}
+                    {supportFragmentManager.beginTransaction().replace(R.id.container, cameraFragment).commit()
+                    setFullscreenMode(true)
+                    currentFragment = Fragments.CAMERA}
 
                 R.id.nav_archive ->
-                    {supportFragmentManager.beginTransaction().replace(R.id.container, ArchiveFragment()).commit()
-                    window.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
-                    actionbar.setTitle(R.string.archive)
-                    actionbar.setDisplayShowTitleEnabled(true)
-                    toolbar.setBackgroundResource(R.color.colorPrimaryDark)}
+                    {supportFragmentManager.beginTransaction().replace(R.id.container, archiveFragment).commit()
+                    setFullscreenMode(false)
+                    actionbar!!.setTitle(R.string.archive)
+                    currentFragment = Fragments.ARCHIVE}
 
                 R.id.nav_favorites ->
-                    {supportFragmentManager.beginTransaction().replace(R.id.container, FavoritesFragment()).commit()
-                    window.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
-                    actionbar.setTitle(R.string.favorites)
-                    actionbar.setDisplayShowTitleEnabled(true)
-                    toolbar.setBackgroundResource(R.color.colorPrimaryDark)}
+                    {supportFragmentManager.beginTransaction().replace(R.id.container, favoritesFragment).commit()
+                    setFullscreenMode(false)
+                    actionbar!!.setTitle(R.string.favorites)
+                    currentFragment = Fragments.FAVORITES}
 
                 R.id.nav_about ->
-                    {supportFragmentManager.beginTransaction().replace(R.id.container, AboutFragment()).commit()
-                    window.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
-                    actionbar.title = getString(R.string.about) + " " + getString(R.string.app_name)
-                    actionbar.setDisplayShowTitleEnabled(true)
-                    toolbar.setBackgroundResource(R.color.colorPrimaryDark)}
+                    {supportFragmentManager.beginTransaction().replace(R.id.container, aboutFragment).commit()
+                    setFullscreenMode(false)
+                    actionbar!!.title = getString(R.string.about) + " " + getString(R.string.app_name)
+                    currentFragment = Fragments.ABOUT}
             }
 
             true
@@ -140,29 +168,62 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
         val orientation = resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_PORTRAIT)
         {
-            camera_fragment.windowResolution = Point(resolution.y,resolution.x)
+            cameraFragment.windowResolution = Point(resolution.y,resolution.x)
         }
         else
         {
-            camera_fragment.windowResolution = resolution
+            cameraFragment.windowResolution = resolution
         }
 
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_save, menu)
+        menu!!.findItem(R.id.save_button).isVisible = !hideIcon
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                mDrawerLayout!!.openDrawer(GravityCompat.START)
+                if(isMenuAvailable){
+                    mDrawerLayout!!.openDrawer(GravityCompat.START)
+                } else {
+                    supportFragmentManager.popBackStack()
+                    if(currentFragment == Fragments.ANALYZE_PICTURE) {
+                        setFullscreenMode(true)
+                        hideIcon = true
+                        invalidateOptionsMenu()
+                        currentFragment = Fragments.CONFIRM_RETAKE
+                    } else if (currentFragment == Fragments.CONFIRM_RETAKE) {
+                        actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
+                        currentFragment = Fragments.CAMERA
+                        isMenuAvailable = true
+                    }
+                }
+                return true
+            }
+            R.id.save_button -> {
+                hideIcon = true
+                invalidateOptionsMenu()
+                Toast.makeText(applicationContext, "Invoice saved", Toast.LENGTH_LONG)
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
+    private fun setFullscreenMode(yes : Boolean) {
+        if(yes) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
+            actionbar!!.setDisplayShowTitleEnabled(false)
+            toolbar.setBackgroundResource(R.color.transparent)
+        } else {
+            window.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
+            actionbar!!.setDisplayShowTitleEnabled(true)
+            toolbar.setBackgroundResource(R.color.colorPrimaryDark)
+        }
+    }
 
 }
