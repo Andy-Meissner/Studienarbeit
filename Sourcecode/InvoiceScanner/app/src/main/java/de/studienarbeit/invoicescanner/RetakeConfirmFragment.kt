@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.confirm_retake_fragment.view.*
 import java.io.File
 import android.graphics.BitmapFactory
 import android.graphics.Bitmap
@@ -20,6 +19,7 @@ import android.util.Log
 import android.util.SparseArray
 import com.google.android.gms.vision.Frame
 import com.google.android.gms.vision.text.TextBlock
+import kotlinx.android.synthetic.main.fragment_retake_confirm.view.*
 import java.util.EnumSet.range
 
 
@@ -41,7 +41,7 @@ class RetakeConfirmFragment() : Fragment() , View.OnClickListener, ActivityCompa
     override fun onCreateView(inflater: LayoutInflater,
                                        container: ViewGroup?,
                                        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.confirm_retake_fragment, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_retake_confirm, container, false)
 
     interface onButtonClickedListener {
         fun onButtonDismiss();

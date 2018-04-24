@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
 
     override fun onButtonAnalyze(path: String, text: String) {
 
-        val currentInvoice = Invoice(0,path,text)
+        val currentInvoice = Invoice(null,path,text)
         object : AsyncTask<Void, Void, Int>() {
             var myInv = ""
 
@@ -52,6 +52,13 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
                 Toast.makeText(this@MainActivity, myInv, Toast.LENGTH_LONG).show()
             }
         }.execute()
+
+        val fragment = PictureAnalyzedFragment()
+        val args = Bundle()
+        args.putString("imagepath", path)
+        args.putString("text", text)
+        fragment.arguments = args
+        supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
     }
 
     override fun onButtonDismiss() {

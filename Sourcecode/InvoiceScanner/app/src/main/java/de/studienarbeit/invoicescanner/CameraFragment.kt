@@ -1,7 +1,6 @@
 package de.studienarbeit.invoicescanner
 
 import android.Manifest
-import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -253,7 +252,7 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
         override fun onCreateView(inflater: LayoutInflater,
                                   container: ViewGroup?,
                                   savedInstanceState: Bundle?
-        ): View? = inflater.inflate(R.layout.camera_fragment, container, false)
+        ): View? = inflater.inflate(R.layout.fragment_camera, container, false)
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             view.findViewById<View>(R.id.picture).setOnClickListener(this)
