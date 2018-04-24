@@ -20,4 +20,5 @@
     <string name="authors">Authors</string>
     <string name="author_names">Meissner Andy, Sansone Giuseppe</string>
     <string name="version">Version</string>
+    <string name="save">Save</string>
 </resources>
