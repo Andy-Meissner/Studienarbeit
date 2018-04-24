@@ -1,6 +1,5 @@
 package de.studienarbeit.invoicescanner
 
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -12,25 +11,18 @@ import java.io.File
 import android.graphics.BitmapFactory
 import android.graphics.Bitmap
 import com.google.android.gms.vision.text.TextRecognizer
-import android.widget.Toast
-import android.content.Intent
-import android.content.IntentFilter
-import android.util.Log
-import android.util.SparseArray
 import com.google.android.gms.vision.Frame
-import com.google.android.gms.vision.text.TextBlock
 import kotlinx.android.synthetic.main.fragment_retake_confirm.view.*
-import java.util.EnumSet.range
 
 
 /**
  * Created by andym on 20.04.2018.
  */
-class RetakeConfirmFragment() : Fragment() , View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback
+class RetakeConfirmFragment : Fragment() , View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback
 {
-    lateinit var currentImage : Bitmap
-    lateinit var mListener : onButtonClickedListener
-    lateinit var imagePath : String
+    private lateinit var currentImage : Bitmap
+    private lateinit var mListener : OnButtonClickedListener
+    private lateinit var imagePath : String
 
     override fun onClick(view: View) {
         when (view.id) {
@@ -43,19 +35,19 @@ class RetakeConfirmFragment() : Fragment() , View.OnClickListener, ActivityCompa
                                        savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_retake_confirm, container, false)
 
-    interface onButtonClickedListener {
-        fun onButtonDismiss();
-        fun onButtonAnalyze(invoice: Invoice);
+    interface OnButtonClickedListener {
+        fun onButtonDismiss()
+        fun onButtonAnalyze(invoice: Invoice)
     }
 
-    fun analysePhoto()
+    private fun analysePhoto()
     {
         val textRecognizer : TextRecognizer = TextRecognizer.Builder(activity).build()
         val myFrame = Frame.Builder()
         myFrame.setBitmap(currentImage)
         val texts = textRecognizer.detect(myFrame.build())
         var mystring = ""
-        for (i in 0..texts.size()-1)
+        for (i in 0 until texts.size())
         {
             mystring += texts[i]?.value
         }
@@ -69,7 +61,7 @@ class RetakeConfirmFragment() : Fragment() , View.OnClickListener, ActivityCompa
     override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
-            mListener = context as onButtonClickedListener
+            mListener = context as OnButtonClickedListener
         } catch (e: ClassCastException) {
             throw ClassCastException(context.toString() + " must implement OnArticleSelectedListener")
         }

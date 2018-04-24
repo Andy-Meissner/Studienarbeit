@@ -5,17 +5,18 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.PrimaryKey
 import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Dao
+import android.support.annotation.NonNull
 
 /**
  * Created by andym on 24.04.2018.
  */
 @Entity
 data class Invoice (@PrimaryKey var imagePath: String,
-                    @ColumnInfo(name = "iban") var iban: String,
+                    @ColumnInfo(name = "iban")@NonNull var iban: String,
                     @ColumnInfo(name = "bic") var bic: String,
-                    @ColumnInfo(name = "amount") var amount: Double,
+                    @ColumnInfo(name = "amount") @NonNull var amount: Double,
                     @ColumnInfo(name = "details") var details: String,
-                    @ColumnInfo(name = "receiver") var receiver: String,
+                    @ColumnInfo(name = "receiver") @NonNull var receiver: String,
                     @ColumnInfo(name = "isFavorite") var isFavorite: Boolean
                     ){
     constructor():this("","","",0.0,"","",false)

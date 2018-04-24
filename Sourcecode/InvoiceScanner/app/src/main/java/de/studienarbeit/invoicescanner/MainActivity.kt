@@ -27,7 +27,7 @@ enum class Fragments {
     ANALYZE_PICTURE
 }
 
-class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedListener, CameraFragment.onImageTakenListener {
+class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedListener, CameraFragment.onImageTakenListener {
 
     private val cameraFragment : CameraFragment = CameraFragment.newInstance()
     private val archiveFragment = ArchiveFragment()
