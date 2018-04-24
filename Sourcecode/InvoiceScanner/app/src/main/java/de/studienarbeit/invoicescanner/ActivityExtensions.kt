@@ -4,7 +4,6 @@ package de.studienarbeit.invoicescanner
  * Created by andym on 11.04.2018.
  */
 import android.support.v4.app.FragmentActivity
-import android.support.v4.content.ContextCompat
 import android.widget.Toast
 
 /**
