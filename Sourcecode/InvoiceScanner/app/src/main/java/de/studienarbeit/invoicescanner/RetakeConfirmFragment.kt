@@ -30,6 +30,7 @@ class RetakeConfirmFragment() : Fragment() , View.OnClickListener, ActivityCompa
 {
     lateinit var currentImage : Bitmap
     lateinit var mListener : onButtonClickedListener
+    lateinit var imagePath : String
 
     override fun onClick(view: View) {
         when (view.id) {
@@ -44,7 +45,7 @@ class RetakeConfirmFragment() : Fragment() , View.OnClickListener, ActivityCompa
 
     interface onButtonClickedListener {
         fun onButtonDismiss();
-        fun onButtonAnalyze(string: String);
+        fun onButtonAnalyze(path: String, text: String);
     }
 
     fun analysePhoto()
@@ -61,7 +62,7 @@ class RetakeConfirmFragment() : Fragment() , View.OnClickListener, ActivityCompa
 
 
 
-        mListener.onButtonAnalyze(mystring)
+        mListener.onButtonAnalyze(imagePath, mystring)
     }
 
     override fun onAttach(context: Context) {
@@ -73,7 +74,7 @@ class RetakeConfirmFragment() : Fragment() , View.OnClickListener, ActivityCompa
         }
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val imagePath = arguments.get("imagepath") as String
+        imagePath = arguments.get("imagepath") as String
         val imgFile = File(imagePath)
 
         if (imgFile.exists()) {

@@ -12,17 +12,17 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.WindowManager
 import android.widget.Toast
-import com.google.android.gms.vision.Frame
-import com.google.android.gms.vision.text.TextRecognizer
 import java.io.File
+import android.arch.persistence.room.Room
+import android.os.AsyncTask
 
 
 class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedListener, CameraFragment.onImageTakenListener {
 
     val camera_fragment : CameraFragment = CameraFragment.newInstance()
+    lateinit var db : AppDatabase
 
     override fun onImageTaken(file : File) {
-
         val fragment = RetakeConfirmFragment()
         val args = Bundle()
         args.putString("imagepath",file.absolutePath)
@@ -31,11 +31,26 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
     }
 
 
-    override fun onButtonAnalyze(string: String) {
-        val duration = Toast.LENGTH_SHORT
+    override fun onButtonAnalyze(path: String, text: String) {
 
-        val toast = Toast.makeText(applicationContext, string, duration)
-        toast.show()
+        val currentInvoice = Invoice(0,path,text)
+        object : AsyncTask<Void, Void, Int>() {
+            var myInv = ""
+
+            override fun doInBackground(vararg params: Void): Int? {
+                db.invoiceDao().insertAll(currentInvoice)
+                val results = db.invoiceDao().all
+                for (result in results)
+                {
+                    myInv = result.recognizedText
+                }
+                return 0
+            }
+
+            override fun onPostExecute(resultCode: Int?) {
+                Toast.makeText(this@MainActivity, myInv, Toast.LENGTH_LONG).show()
+            }
+        }.execute()
     }
 
     override fun onButtonDismiss() {
@@ -54,13 +69,15 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
                 .add(R.id.container, camera_fragment)
                 .commit()
 
+        db = Room.databaseBuilder(applicationContext,
+                AppDatabase::class.java, "database-name").build()
+
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         val actionbar = supportActionBar
         actionbar!!.setDisplayShowTitleEnabled(false)
         actionbar.setDisplayHomeAsUpEnabled(true)
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white)
-
 
         mDrawerLayout = findViewById(R.id.drawer_layout)
 

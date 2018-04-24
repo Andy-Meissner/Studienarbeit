@@ -659,8 +659,6 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
 
                 captureSession?.apply {
                     stopRepeating()
-                    Thread.sleep(1000)
-                    abortCaptures()
                     capture(captureBuilder?.build(), captureCallback, null)
                 }
             } catch (e: CameraAccessException) {
