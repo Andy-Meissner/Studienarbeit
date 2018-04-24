@@ -196,7 +196,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
             R.id.save_button -> {
                 hideIcon = true
                 invalidateOptionsMenu()
-                Toast.makeText(applicationContext, "Invoice saved", Toast.LENGTH_LONG)
+                Toast.makeText(applicationContext, "Invoice saved", Toast.LENGTH_LONG).show()
                 return true
             }
         }
