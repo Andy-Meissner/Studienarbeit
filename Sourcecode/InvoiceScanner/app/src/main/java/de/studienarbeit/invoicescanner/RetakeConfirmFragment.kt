@@ -45,7 +45,7 @@ class RetakeConfirmFragment() : Fragment() , View.OnClickListener, ActivityCompa
 
     interface onButtonClickedListener {
         fun onButtonDismiss();
-        fun onButtonAnalyze(path: String, text: String);
+        fun onButtonAnalyze(invoice: Invoice);
     }
 
     fun analysePhoto()
@@ -60,9 +60,10 @@ class RetakeConfirmFragment() : Fragment() , View.OnClickListener, ActivityCompa
             mystring += texts[i]?.value
         }
 
+        val analyzedInvoice = Invoice(imagePath,mystring,mystring,0.0 ,mystring,mystring,false)
 
 
-        mListener.onButtonAnalyze(imagePath, mystring)
+        mListener.onButtonAnalyze(analyzedInvoice)
     }
 
     override fun onAttach(context: Context) {

@@ -56,32 +56,22 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.onButtonClickedL
         currentFragment = Fragments.CONFIRM_RETAKE
     }
 
+    override fun onButtonAnalyze(invoice: Invoice) {
 
-    override fun onButtonAnalyze(path: String, text: String) {
-
-        val currentInvoice = Invoice(null,path,text)
         object : AsyncTask<Void, Void, Int>() {
-            var myInv = ""
-
             override fun doInBackground(vararg params: Void): Int? {
-                db.invoiceDao().insertAll(currentInvoice)
-                val results = db.invoiceDao().all
-                for (result in results)
-                {
-                    myInv = result.recognizedText
-                }
+                db.invoiceDao().insertInvoice(invoice)
                 return 0
             }
 
             override fun onPostExecute(resultCode: Int?) {
-                Toast.makeText(this@MainActivity, myInv, Toast.LENGTH_LONG).show()
             }
         }.execute()
 
         val fragment = PictureAnalyzedFragment()
         val args = Bundle()
-        args.putString("imagepath", path)
-        args.putString("text", text)
+        args.putString("imagepath", invoice.imagePath)
+        args.putString("text", invoice.bic)
         fragment.arguments = args
         supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
         setFullscreenMode(false)
