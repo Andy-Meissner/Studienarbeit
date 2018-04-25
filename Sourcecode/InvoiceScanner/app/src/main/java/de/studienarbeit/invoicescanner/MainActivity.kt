@@ -19,6 +19,7 @@ import android.os.AsyncTask
 import android.support.v7.app.ActionBar
 import de.studienarbeit.invoicescanner.fragments.*
 import de.studienarbeit.invoicescanner.fragments.RecyclerViewFragment
+import android.support.v7.widget.LinearLayoutManager
 
 
 class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedListener, CameraFragment.onImageTakenListener {
@@ -35,6 +36,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
 
     private var hideIcon = true
     private var isMenuAvailable = true
+    lateinit var currentInvoice : Invoice
 
     lateinit var db : AppDatabase
 
@@ -50,31 +52,24 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         }
         isMenuAvailable = false
         currentFragment = Fragment.CONFIRM_RETAKE
+
+        val imageAnalyer = ImageAnalyzer(this,file.absolutePath)
+        imageAnalyer.analyse()
+        currentInvoice = imageAnalyer.getInvoice()
     }
 
-    override fun onButtonAnalyze() {/*
-
-        object : AsyncTask<Void, Void, Int>() {
-            override fun doInBackground(vararg params: Void): Int? {
-                db.invoiceDao().insertInvoice(invoice)
-                return 0
-            }
-
-            override fun onPostExecute(resultCode: Int?) {
-            }
-        }.execute()
-
+    override fun onButtonAnalyze() {
         val fragment = PictureAnalyzedFragment()
         val args = Bundle()
-        args.putString("imagepath", invoice.imagePath)
-        args.putString("text", invoice.bic)
+        args.putString("imagepath", currentInvoice.imagePath)
+        args.putString("text", currentInvoice.bic)
         fragment.arguments = args
         supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
         setFullscreenMode(false)
         actionbar!!.title = getString(R.string.new_invoice)
         hideIcon = false
         invalidateOptionsMenu()
-        currentFragment = Fragment.ANALYZE_PICTURE*/
+        currentFragment = Fragment.ANALYZE_PICTURE
     }
 
     override fun onButtonDismiss() {
@@ -208,6 +203,20 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun onSaveButtonClicked()
+    {
+
+        object : AsyncTask<Void, Void, Int>() {
+            override fun doInBackground(vararg params: Void): Int? {
+                db.invoiceDao().insertInvoice(currentInvoice)
+                return 0
+            }
+
+            override fun onPostExecute(resultCode: Int?) {
+            }
+        }.execute()
     }
 
     private fun setFullscreenMode(yes : Boolean) {

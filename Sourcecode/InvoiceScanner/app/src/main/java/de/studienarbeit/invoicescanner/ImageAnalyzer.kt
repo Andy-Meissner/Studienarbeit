@@ -9,7 +9,7 @@ import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
 import java.io.File
 
-class ImageAnalyer(context: Context , imagePath : String) {
+class ImageAnalyzer(context: Context, imagePath : String) {
 
     private val context = context
     private val imagePath = imagePath
@@ -49,7 +49,7 @@ class ImageAnalyer(context: Context , imagePath : String) {
         invoice = Invoice(null, imagePath, mystring, mystring, 0.0, mystring, mystring, false)
     }
 
-    fun analyze()
+    fun analyse()
     {
         loadImage()
         getTextFromImage()
