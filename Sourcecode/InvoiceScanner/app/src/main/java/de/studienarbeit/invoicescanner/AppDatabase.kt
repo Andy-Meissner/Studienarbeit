@@ -11,7 +11,7 @@ import android.support.annotation.NonNull
  * Created by andym on 24.04.2018.
  */
 @Entity
-data class Invoice (@PrimaryKey(autoGenerate = true) val id: Int? = null,
+data class Invoice (@PrimaryKey(autoGenerate = true) var id: Int? = null,
                     @ColumnInfo(name = "imagePath") var imagePath: String,
                     @ColumnInfo(name = "iban")@NonNull var iban: String,
                     @ColumnInfo(name = "bic") var bic: String,
