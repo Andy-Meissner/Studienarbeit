@@ -1,4 +1,4 @@
-package de.studienarbeit.invoicescanner.Fragments
+package de.studienarbeit.invoicescanner.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -9,12 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import java.io.File
 import android.graphics.BitmapFactory
-import android.graphics.Bitmap
-import com.google.android.gms.vision.text.TextRecognizer
-import com.google.android.gms.vision.Frame
-import de.studienarbeit.invoicescanner.Invoice
+import android.widget.ImageView
 import de.studienarbeit.invoicescanner.R
-import kotlinx.android.synthetic.main.fragment_retake_confirm.view.*
 
 
 /**
@@ -48,17 +44,16 @@ class RetakeConfirmFragment : Fragment() , View.OnClickListener, ActivityCompat.
             throw ClassCastException(context.toString() + " must implement OnArticleSelectedListener")
         }
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val imgFile = File(arguments.get("imagepath") as String)
-
-        if (imgFile.exists()) {
-
-            val currentImage = BitmapFactory.decodeFile(imgFile.absolutePath)
-
-            view.myimage.setImageBitmap(currentImage)
-        }
-
         view.findViewById<View>(R.id.dismiss).setOnClickListener(this)
         view.findViewById<View>(R.id.analyze).setOnClickListener(this)
+        val file = File(arguments?.get("imagepath") as String)
+
+        if (file.exists()) {
+            val currentImage = BitmapFactory.decodeFile(file.absolutePath)
+
+            view.findViewById<ImageView>(R.id.myimage).setImageBitmap(currentImage)
+        }
     }
 }

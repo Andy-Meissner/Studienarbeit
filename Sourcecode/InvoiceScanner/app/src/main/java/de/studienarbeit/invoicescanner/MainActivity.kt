@@ -15,11 +15,11 @@ import android.view.WindowManager
 import android.widget.Toast
 import java.io.File
 import android.arch.persistence.room.Room
-import android.os.AsyncTask
 import android.support.v7.app.ActionBar
-import de.studienarbeit.invoicescanner.Fragments.*
+import de.studienarbeit.invoicescanner.fragments.*
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.widget.ImageView
 
 
 class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedListener, CameraFragment.onImageTakenListener {
