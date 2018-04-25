@@ -98,9 +98,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
 
         object : AsyncTask<Void, Void, Int>() {
             override fun doInBackground(vararg params: Void): Int? {
-                for(i in 0 until 10){
-                    db.invoiceDao().insertInvoice(invoice)
-                }
+                db.invoiceDao().insertInvoice(invoice)
                 recyclerViewFragment.initDataset(db.invoiceDao().all)
                 return 0
             }
@@ -204,6 +202,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
                 hideIcon = true
                 invalidateOptionsMenu()
                 Toast.makeText(applicationContext, "Invoice saved", Toast.LENGTH_LONG).show()
+                onSaveButtonClicked()
                 return true
             }
         }
@@ -212,7 +211,6 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
 
     private fun onSaveButtonClicked()
     {
-
         object : AsyncTask<Void, Void, Int>() {
             override fun doInBackground(vararg params: Void): Int? {
                 db.invoiceDao().insertInvoice(currentInvoice)
