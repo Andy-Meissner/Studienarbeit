@@ -19,7 +19,6 @@ import android.os.AsyncTask
 import android.support.v7.app.ActionBar
 import de.studienarbeit.invoicescanner.fragments.*
 import de.studienarbeit.invoicescanner.fragments.RecyclerViewFragment
-import android.support.v7.widget.LinearLayoutManager
 
 
 class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedListener, CameraFragment.onImageTakenListener {
@@ -93,9 +92,13 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         db = Room.databaseBuilder(applicationContext,
                 AppDatabase::class.java, "database-name").build()
 
+        val invoice = Invoice(null, "", "meine Iban", "", 0.0, "", "receiver", false)
+
         object : AsyncTask<Void, Void, Int>() {
             override fun doInBackground(vararg params: Void): Int? {
-                db.invoiceDao().insertInvoice(invoice)
+                for(i in 0 until 10){
+                    db.invoiceDao().insertInvoice(invoice)
+                }
                 recyclerViewFragment.initDataset(db.invoiceDao().all)
                 return 0
             }
