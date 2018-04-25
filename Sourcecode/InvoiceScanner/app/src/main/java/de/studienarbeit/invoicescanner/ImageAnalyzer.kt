@@ -34,7 +34,7 @@ class ImageAnalyzer(context: Context, imagePath : String) {
         {
             val myFrame = Frame.Builder()
             myFrame.setBitmap(imgBitmap)
-            val texts = textRecognizer.detect(myFrame.build())
+            recognizedText = textRecognizer.detect(myFrame.build())
 
         }
     }

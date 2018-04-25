@@ -5,8 +5,11 @@
 package de.studienarbeit.invoicescanner.helper
 
 
+import android.content.Context
 import android.media.Image
 import android.util.Log
+import de.studienarbeit.invoicescanner.fragments.CameraFragment
+import de.studienarbeit.invoicescanner.fragments.RetakeConfirmFragment
 
 import java.io.File
 import java.io.FileOutputStream
@@ -24,7 +27,9 @@ internal class ImageSaver(
         /**
          * The file we save the image into.
          */
-        private val file: File
+        private val file: File,
+
+        private val context : CameraFragment
 ) : Runnable {
 
     override fun run() {
@@ -40,6 +45,7 @@ internal class ImageSaver(
             Log.e(TAG, e.toString())
         } finally {
             image.close()
+            mListener.onImageSaved()
             output?.let {
                 try {
                     it.close()
@@ -50,10 +56,19 @@ internal class ImageSaver(
         }
     }
 
+
     companion object {
         /**
          * Tag for the [Log].
          */
         private val TAG = "ImageSaver"
     }
+
+    private var mListener = context as onImageSavedListener
+
+    interface onImageSavedListener
+    {
+        fun onImageSaved()
+    }
 }
+

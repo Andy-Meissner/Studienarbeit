@@ -22,6 +22,11 @@ import de.studienarbeit.invoicescanner.fragments.RecyclerViewFragment
 
 
 class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedListener, CameraFragment.onImageTakenListener {
+    override fun onImageSaved(path: String) {
+        val imageAnalyer = ImageAnalyzer(this, path)
+        imageAnalyer.analyse()
+        currentInvoice = imageAnalyer.getInvoice()
+    }
 
     private val cameraFragment : CameraFragment = CameraFragment.newInstance()
     private val archiveFragment = ArchiveFragment()
@@ -51,10 +56,6 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         }
         isMenuAvailable = false
         currentFragment = Fragment.CONFIRM_RETAKE
-
-        val imageAnalyer = ImageAnalyzer(this,file.absolutePath)
-        imageAnalyer.analyse()
-        currentInvoice = imageAnalyer.getInvoice()
     }
 
     override fun onButtonAnalyze() {

@@ -42,9 +42,13 @@ import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 
-class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback
+class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback, ImageSaver.onImageSavedListener
 {
-        /**
+    override fun onImageSaved() {
+        imageTakenListener.onImageSaved(file.absolutePath)
+    }
+
+    /**
          * [TextureView.SurfaceTextureListener] handles several lifecycle events on a
          * [TextureView].
          */
@@ -74,6 +78,7 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
     interface onImageTakenListener
     {
         fun onImageTaken(file : File)
+        fun onImageSaved(path: String)
     }
 
     override fun onAttach(context: Context) {
@@ -159,7 +164,8 @@ class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnReques
          * still image is ready to be saved.
          */
         private val onImageAvailableListener = ImageReader.OnImageAvailableListener {
-            backgroundHandler?.post(ImageSaver(it.acquireNextImage(), file))
+            val imagesaver = ImageSaver(it.acquireNextImage(), file, this)
+            backgroundHandler?.post(imagesaver)
             imageTakenListener.onImageTaken(file)
         }
 
