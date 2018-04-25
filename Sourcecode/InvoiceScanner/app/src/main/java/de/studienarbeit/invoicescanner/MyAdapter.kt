@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import kotlinx.android.synthetic.main.row_item_invoice.view.*
 import java.io.File
 
@@ -17,7 +16,7 @@ class MyAdapter(private val myDataset: List<Invoice>) :
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder.
     // Each data item is just a string in this case that is shown in a TextView.
-    class ViewHolder(val textView: View) : RecyclerView.ViewHolder(textView)
+    class ViewHolder(val container: View) : RecyclerView.ViewHolder(container)
 
 
     // Create new views (invoked by the layout manager)
@@ -35,13 +34,13 @@ class MyAdapter(private val myDataset: List<Invoice>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.textView.textView.text = myDataset[position].iban
+        holder.container.textView.text = myDataset[position].iban
 
         val file = File(myDataset[position].imagePath)
         if (file.exists()) {
             val currentImage = BitmapFactory.decodeFile(file.absolutePath)
 
-            holder.textView.textView.imageView2.setImageBitmap(currentImage)
+            holder.container.imageView2.setImageBitmap(currentImage)
         }
 
     }

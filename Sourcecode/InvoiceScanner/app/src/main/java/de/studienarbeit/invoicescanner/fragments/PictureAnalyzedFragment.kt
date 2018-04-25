@@ -22,7 +22,6 @@ class PictureAnalyzedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val imagePath = arguments!!.get("imagepath") as String
-        view.findViewById<EditText>(R.id.edit_iban).setText(arguments!!.get("text") as String , TextView.BufferType.EDITABLE)
 
         val imgFile = File(imagePath)
 
