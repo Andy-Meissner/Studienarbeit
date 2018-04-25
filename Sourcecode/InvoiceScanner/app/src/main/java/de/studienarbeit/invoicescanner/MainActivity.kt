@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         currentFragment = Fragment.CONFIRM_RETAKE
     }
 
-    override fun onButtonAnalyze(path : String) {
+    override fun onButtonAnalyze() {
         val fragment = PictureAnalyzedFragment()
         val args = Bundle()
         args.putString("imagepath", currentImagePath)
