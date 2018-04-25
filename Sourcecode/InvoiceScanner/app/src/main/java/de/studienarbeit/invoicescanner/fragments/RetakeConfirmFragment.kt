@@ -33,7 +33,7 @@ class RetakeConfirmFragment : Fragment() , View.OnClickListener, ActivityCompat.
 
     interface OnButtonClickedListener {
         fun onButtonDismiss()
-        fun onButtonAnalyze()
+        fun onButtonAnalyze(path : String)
     }
 
     override fun onAttach(context: Context) {
