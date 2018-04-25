@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
     private val aboutFragment = AboutFragment()
     private val recyclerViewFragment = RecyclerViewFragment()
     private var currentFragment : Fragment? = null
+    private var currentImagePath : String = ""
 
     private lateinit var toolbar : Toolbar
     private var actionbar : ActionBar? = null
@@ -46,9 +47,10 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
 
 
     override fun onImageTaken(file : File) {
+        currentImagePath = file.absolutePath
         val fragment = RetakeConfirmFragment()
         val args = Bundle()
-        args.putString("imagepath",file.absolutePath)
+        args.putString("imagepath",currentImagePath)
         fragment.arguments = args
         supportFragmentManager.beginTransaction().replace(R.id.container,fragment).addToBackStack(null).commit()
         runOnUiThread {
@@ -58,11 +60,10 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         currentFragment = Fragment.CONFIRM_RETAKE
     }
 
-    override fun onButtonAnalyze() {
+    override fun onButtonAnalyze(path : String) {
         val fragment = PictureAnalyzedFragment()
         val args = Bundle()
-        args.putString("imagepath", currentInvoice.imagePath)
-        args.putString("text", currentInvoice.bic)
+        args.putString("imagepath", currentImagePath)
         fragment.arguments = args
         supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
         setFullscreenMode(false)
