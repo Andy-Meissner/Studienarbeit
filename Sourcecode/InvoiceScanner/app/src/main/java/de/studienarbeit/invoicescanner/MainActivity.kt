@@ -148,6 +148,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
             true
         }
 
+        var myDataset : Array<String> = arrayOf("hallo")
         viewManager = LinearLayoutManager(this)
         viewAdapter = MyAdapter(myDataset)
 
