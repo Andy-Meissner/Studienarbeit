@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         currentFragment = Fragment.CONFIRM_RETAKE
     }
 
-    override fun onButtonAnalyze(invoice: Invoice) {
+    override fun onButtonAnalyze() {/*
 
         object : AsyncTask<Void, Void, Int>() {
             override fun doInBackground(vararg params: Void): Int? {
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         actionbar!!.title = getString(R.string.new_invoice)
         hideIcon = false
         invalidateOptionsMenu()
-        currentFragment = Fragment.ANALYZE_PICTURE
+        currentFragment = Fragment.ANALYZE_PICTURE*/
     }
 
     override fun onButtonDismiss() {

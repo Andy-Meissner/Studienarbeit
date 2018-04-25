@@ -10,10 +10,11 @@ import android.view.ViewGroup
 import java.io.File
 import android.graphics.BitmapFactory
 import android.graphics.Bitmap
-import com.google.android.gms.vision.Frame
 import com.google.android.gms.vision.text.TextRecognizer
+import com.google.android.gms.vision.Frame
 import de.studienarbeit.invoicescanner.Invoice
 import de.studienarbeit.invoicescanner.R
+import kotlinx.android.synthetic.main.fragment_retake_confirm.view.*
 
 
 /**
@@ -21,14 +22,12 @@ import de.studienarbeit.invoicescanner.R
  */
 class RetakeConfirmFragment : Fragment() , View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback
 {
-    private lateinit var currentImage : Bitmap
     private lateinit var mListener : OnButtonClickedListener
-    private lateinit var imagePath : String
 
     override fun onClick(view: View) {
         when (view.id) {
             R.id.dismiss -> mListener.onButtonDismiss()
-            R.id.analyze -> analysePhoto()
+            R.id.analyze -> mListener.onButtonAnalyze()
         }
     }
     override fun onCreateView(inflater: LayoutInflater,
@@ -38,24 +37,7 @@ class RetakeConfirmFragment : Fragment() , View.OnClickListener, ActivityCompat.
 
     interface OnButtonClickedListener {
         fun onButtonDismiss()
-        fun onButtonAnalyze(invoice: Invoice)
-    }
-
-    private fun analysePhoto()
-    {
-        val textRecognizer : TextRecognizer = TextRecognizer.Builder(activity).build()
-        val myFrame = Frame.Builder()
-        myFrame.setBitmap(currentImage)
-        val texts = textRecognizer.detect(myFrame.build())
-        var mystring = ""
-        for (i in 0 until texts.size())
-        {
-            mystring += texts[i]?.value
-        }
-
-        val analyzedInvoice = Invoice(imagePath, mystring, mystring, 0.0, mystring, mystring, false)
-
-        mListener.onButtonAnalyze(analyzedInvoice)
+        fun onButtonAnalyze()
     }
 
     override fun onAttach(context: Context) {
@@ -67,13 +49,15 @@ class RetakeConfirmFragment : Fragment() , View.OnClickListener, ActivityCompat.
         }
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        imagePath = arguments.get("imagepath") as String
-        val imgFile = File(imagePath)
+        val imgFile = File(arguments.get("imagepath") as String)
 
         if (imgFile.exists()) {
 
-            currentImage = BitmapFactory.decodeFile(imgFile.absolutePath)
+            val currentImage = BitmapFactory.decodeFile(imgFile.absolutePath)
+
+            view.myimage.setImageBitmap(currentImage)
         }
+
         view.findViewById<View>(R.id.dismiss).setOnClickListener(this)
         view.findViewById<View>(R.id.analyze).setOnClickListener(this)
     }
