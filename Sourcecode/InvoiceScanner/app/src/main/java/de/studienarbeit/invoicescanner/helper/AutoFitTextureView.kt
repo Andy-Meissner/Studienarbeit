@@ -1,4 +1,4 @@
-package de.studienarbeit.invoicescanner.Helper
+package de.studienarbeit.invoicescanner.helper
 
 import android.content.Context
 import android.util.AttributeSet

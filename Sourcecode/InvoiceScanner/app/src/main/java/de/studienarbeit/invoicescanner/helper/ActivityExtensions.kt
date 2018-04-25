@@ -1,4 +1,4 @@
-package de.studienarbeit.invoicescanner.Helper
+package de.studienarbeit.invoicescanner.helper
 
 /**
  * Created by andym on 11.04.2018.
