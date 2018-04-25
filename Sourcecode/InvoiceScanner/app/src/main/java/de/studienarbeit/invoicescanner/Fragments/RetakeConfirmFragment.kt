@@ -1,4 +1,4 @@
-package de.studienarbeit.invoicescanner
+package de.studienarbeit.invoicescanner.Fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -10,9 +10,10 @@ import android.view.ViewGroup
 import java.io.File
 import android.graphics.BitmapFactory
 import android.graphics.Bitmap
-import com.google.android.gms.vision.text.TextRecognizer
 import com.google.android.gms.vision.Frame
-import kotlinx.android.synthetic.main.fragment_retake_confirm.view.*
+import com.google.android.gms.vision.text.TextRecognizer
+import de.studienarbeit.invoicescanner.Invoice
+import de.studienarbeit.invoicescanner.R
 
 
 /**
@@ -52,8 +53,7 @@ class RetakeConfirmFragment : Fragment() , View.OnClickListener, ActivityCompat.
             mystring += texts[i]?.value
         }
 
-        val analyzedInvoice = Invoice(imagePath,mystring,mystring,0.0 ,mystring,mystring,false)
-
+        val analyzedInvoice = Invoice(imagePath, mystring, mystring, 0.0, mystring, mystring, false)
 
         mListener.onButtonAnalyze(analyzedInvoice)
     }
@@ -73,8 +73,6 @@ class RetakeConfirmFragment : Fragment() , View.OnClickListener, ActivityCompat.
         if (imgFile.exists()) {
 
             currentImage = BitmapFactory.decodeFile(imgFile.absolutePath)
-
-            view.myimage.setImageBitmap(currentImage)
         }
         view.findViewById<View>(R.id.dismiss).setOnClickListener(this)
         view.findViewById<View>(R.id.analyze).setOnClickListener(this)

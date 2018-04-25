@@ -17,17 +17,10 @@ import java.io.File
 import android.arch.persistence.room.Room
 import android.os.AsyncTask
 import android.support.v7.app.ActionBar
+import de.studienarbeit.invoicescanner.Fragments.*
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 
-enum class Fragments {
-    CAMERA,
-    ARCHIVE,
-    FAVORITES,
-    ABOUT,
-    CONFIRM_RETAKE,
-    ANALYZE_PICTURE
-}
 
 class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedListener, CameraFragment.onImageTakenListener {
 
@@ -35,7 +28,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
     private val archiveFragment = ArchiveFragment()
     private val favoritesFragment = FavoritesFragment()
     private val aboutFragment = AboutFragment()
-    private var currentFragment : Fragments? = null
+    private var currentFragment : Fragment? = null
 
     private lateinit var toolbar : Toolbar
     private var actionbar : ActionBar? = null
@@ -59,7 +52,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
             actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_back)
         }
         isMenuAvailable = false
-        currentFragment = Fragments.CONFIRM_RETAKE
+        currentFragment = Fragment.CONFIRM_RETAKE
     }
 
     override fun onButtonAnalyze(invoice: Invoice) {
@@ -84,13 +77,13 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         actionbar!!.title = getString(R.string.new_invoice)
         hideIcon = false
         invalidateOptionsMenu()
-        currentFragment = Fragments.ANALYZE_PICTURE
+        currentFragment = Fragment.ANALYZE_PICTURE
     }
 
     override fun onButtonDismiss() {
         supportFragmentManager.popBackStack()
         actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
-        currentFragment = Fragments.CAMERA
+        currentFragment = Fragment.CAMERA
     }
 
     private var mDrawerLayout : DrawerLayout? = null
@@ -114,7 +107,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         actionbar!!.setDisplayShowTitleEnabled(false)
         actionbar!!.setDisplayHomeAsUpEnabled(true)
         actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
-        currentFragment = Fragments.CAMERA
+        currentFragment = Fragment.CAMERA
 
         mDrawerLayout = findViewById(R.id.drawer_layout)
 
@@ -131,25 +124,25 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
                 R.id.nav_camera ->
                     {supportFragmentManager.beginTransaction().replace(R.id.container, cameraFragment).commit()
                     setFullscreenMode(true)
-                    currentFragment = Fragments.CAMERA}
+                    currentFragment = Fragment.CAMERA}
 
                 R.id.nav_archive ->
                     {supportFragmentManager.beginTransaction().replace(R.id.container, archiveFragment).commit()
                     setFullscreenMode(false)
                     actionbar!!.setTitle(R.string.archive)
-                    currentFragment = Fragments.ARCHIVE}
+                    currentFragment = Fragment.ARCHIVE}
 
                 R.id.nav_favorites ->
                     {supportFragmentManager.beginTransaction().replace(R.id.container, favoritesFragment).commit()
                     setFullscreenMode(false)
                     actionbar!!.setTitle(R.string.favorites)
-                    currentFragment = Fragments.FAVORITES}
+                    currentFragment = Fragment.FAVORITES}
 
                 R.id.nav_about ->
                     {supportFragmentManager.beginTransaction().replace(R.id.container, aboutFragment).commit()
                     setFullscreenMode(false)
                     actionbar!!.title = getString(R.string.about) + " " + getString(R.string.app_name)
-                    currentFragment = Fragments.ABOUT}
+                    currentFragment = Fragment.ABOUT}
             }
 
             true
@@ -203,14 +196,14 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
                     mDrawerLayout!!.openDrawer(GravityCompat.START)
                 } else {
                     supportFragmentManager.popBackStack()
-                    if(currentFragment == Fragments.ANALYZE_PICTURE) {
+                    if(currentFragment == Fragment.ANALYZE_PICTURE) {
                         setFullscreenMode(true)
                         hideIcon = true
                         invalidateOptionsMenu()
-                        currentFragment = Fragments.CONFIRM_RETAKE
-                    } else if (currentFragment == Fragments.CONFIRM_RETAKE) {
+                        currentFragment = Fragment.CONFIRM_RETAKE
+                    } else if (currentFragment == Fragment.CONFIRM_RETAKE) {
                         actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
-                        currentFragment = Fragments.CAMERA
+                        currentFragment = Fragment.CAMERA
                         isMenuAvailable = true
                     }
                 }
@@ -238,5 +231,4 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
             toolbar.setBackgroundResource(R.color.colorPrimaryDark)
         }
     }
-
 }

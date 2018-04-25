@@ -1,4 +1,4 @@
-package de.studienarbeit.invoicescanner
+package de.studienarbeit.invoicescanner.Helper
 
 
 import android.Manifest
@@ -6,6 +6,8 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import de.studienarbeit.invoicescanner.R
+import de.studienarbeit.invoicescanner.REQUEST_CAMERA_PERMISSION
 
 /**
  * Shows OK/Cancel confirmation dialog about camera permission.

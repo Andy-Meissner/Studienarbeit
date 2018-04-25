@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:theme="@style/AppTheme"
         tools:context="de.studienarbeit.invoicescanner.MainActivity">
-        <fragment android:name="de.studienarbeit.invoicescanner.CameraFragment"
+        <fragment android:name="de.studienarbeit.invoicescanner.Fragments.CameraFragment"
             android:id="@+id/viewer"
             android:layout_weight="2"
             android:layout_width="0dp"

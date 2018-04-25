@@ -1,4 +1,4 @@
-package de.studienarbeit.invoicescanner
+package de.studienarbeit.invoicescanner.Fragments
 
 import android.Manifest
 import android.content.Context
@@ -29,6 +29,11 @@ import android.util.Log
 import android.util.Size
 import android.util.SparseIntArray
 import android.view.*
+import de.studienarbeit.invoicescanner.Helper.*
+import de.studienarbeit.invoicescanner.Helper.ImageSaver
+import de.studienarbeit.invoicescanner.PIC_FILE_NAME
+import de.studienarbeit.invoicescanner.R
+import de.studienarbeit.invoicescanner.REQUEST_CAMERA_PERMISSION
 import java.io.File
 import java.util.Arrays
 import java.util.Collections
