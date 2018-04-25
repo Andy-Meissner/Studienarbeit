@@ -15,11 +15,10 @@ import android.view.WindowManager
 import android.widget.Toast
 import java.io.File
 import android.arch.persistence.room.Room
+import android.os.AsyncTask
 import android.support.v7.app.ActionBar
 import de.studienarbeit.invoicescanner.fragments.*
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.widget.ImageView
+import de.studienarbeit.invoicescanner.fragments.RecyclerViewFragment
 
 
 class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedListener, CameraFragment.onImageTakenListener {
@@ -28,6 +27,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
     private val archiveFragment = ArchiveFragment()
     private val favoritesFragment = FavoritesFragment()
     private val aboutFragment = AboutFragment()
+    private val recyclerViewFragment = RecyclerViewFragment()
     private var currentFragment : Fragment? = null
 
     private lateinit var toolbar : Toolbar
@@ -98,6 +98,17 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         db = Room.databaseBuilder(applicationContext,
                 AppDatabase::class.java, "database-name").build()
 
+        object : AsyncTask<Void, Void, Int>() {
+            override fun doInBackground(vararg params: Void): Int? {
+                db.invoiceDao().insertInvoice(invoice)
+                recyclerViewFragment.initDataset(db.invoiceDao().all)
+                return 0
+            }
+
+            override fun onPostExecute(resultCode: Int?) {
+            }
+        }.execute()
+
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         actionbar = supportActionBar
@@ -124,7 +135,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
                     currentFragment = Fragment.CAMERA}
 
                 R.id.nav_archive ->
-                    {supportFragmentManager.beginTransaction().replace(R.id.container, archiveFragment).commit()
+                    {supportFragmentManager.beginTransaction().replace(R.id.container, recyclerViewFragment).commit()
                     setFullscreenMode(false)
                     actionbar!!.setTitle(R.string.archive)
                     currentFragment = Fragment.ARCHIVE}

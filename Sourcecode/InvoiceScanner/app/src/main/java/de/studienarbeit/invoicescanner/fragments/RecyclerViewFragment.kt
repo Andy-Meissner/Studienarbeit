@@ -1,4 +1,4 @@
-package de.studienarbeit.invoicescanner.Fragments
+package de.studienarbeit.invoicescanner.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
+import de.studienarbeit.invoicescanner.Invoice
 import de.studienarbeit.invoicescanner.MyAdapter
 import de.studienarbeit.invoicescanner.R
 
@@ -21,7 +21,7 @@ class RecyclerViewFragment : Fragment() {
     private lateinit var currentLayoutManagerType: LayoutManagerType
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: RecyclerView.LayoutManager
-    private lateinit var dataset: Array<String>
+    private lateinit var dataset: List<Invoice>
 
     enum class LayoutManagerType { GRID_LAYOUT_MANAGER, LINEAR_LAYOUT_MANAGER }
 
@@ -30,7 +30,7 @@ class RecyclerViewFragment : Fragment() {
 
         // Initialize dataset, this data would usually come from a local content provider or
         // remote server.
-        initDataset()
+
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -105,8 +105,8 @@ class RecyclerViewFragment : Fragment() {
      * Generates Strings for RecyclerView's adapter. This data would usually come
      * from a local content provider or remote server.
      */
-    private fun initDataset() {
-        dataset = Array(DATASET_COUNT, {i -> "This is element # $i"})
+    fun initDataset(Invoices : List<Invoice>) {
+            dataset = Invoices
     }
 
     companion object {
