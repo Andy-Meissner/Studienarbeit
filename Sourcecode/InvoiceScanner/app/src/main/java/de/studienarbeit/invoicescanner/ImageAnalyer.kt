@@ -46,7 +46,7 @@ class ImageAnalyer(context: Context , imagePath : String) {
         {
             mystring += recognizedText[i]?.value
         }
-        invoice = Invoice(imagePath, mystring, mystring, 0.0, mystring, mystring, false)
+        invoice = Invoice(null, imagePath, mystring, mystring, 0.0, mystring, mystring, false)
     }
 
     fun analyze()
