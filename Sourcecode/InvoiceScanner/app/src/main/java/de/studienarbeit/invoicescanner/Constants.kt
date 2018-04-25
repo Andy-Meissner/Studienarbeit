@@ -7,4 +7,13 @@ package de.studienarbeit.invoicescanner
  */
 
 @JvmField val REQUEST_CAMERA_PERMISSION = 1
-@JvmField val PIC_FILE_NAME = "pic.jpg"
+@JvmField val PIC_FILE_NAME = "temp.jpg"
+
+enum class Fragment {
+    CAMERA,
+    ARCHIVE,
+    FAVORITES,
+    ABOUT,
+    CONFIRM_RETAKE,
+    ANALYZE_PICTURE
+}

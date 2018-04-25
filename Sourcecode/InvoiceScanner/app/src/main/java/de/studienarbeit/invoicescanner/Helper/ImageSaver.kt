@@ -2,7 +2,7 @@
  * Created by andym on 11.04.2018.
  */
 
-package de.studienarbeit.invoicescanner
+package de.studienarbeit.invoicescanner.Helper
 
 
 import android.media.Image
@@ -11,7 +11,6 @@ import android.util.Log
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.nio.ByteBuffer
 
 /**
  * Saves a JPEG [Image] into the specified [File].
