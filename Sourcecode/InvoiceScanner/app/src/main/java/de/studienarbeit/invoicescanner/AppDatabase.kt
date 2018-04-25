@@ -11,7 +11,8 @@ import android.support.annotation.NonNull
  * Created by andym on 24.04.2018.
  */
 @Entity
-data class Invoice (@PrimaryKey var imagePath: String,
+data class Invoice (@PrimaryKey(autoGenerate = true) val id: Int? = null,
+                    @ColumnInfo(name = "imagePath") var imagePath: String,
                     @ColumnInfo(name = "iban")@NonNull var iban: String,
                     @ColumnInfo(name = "bic") var bic: String,
                     @ColumnInfo(name = "amount") @NonNull var amount: Double,
@@ -19,7 +20,7 @@ data class Invoice (@PrimaryKey var imagePath: String,
                     @ColumnInfo(name = "receiver") @NonNull var receiver: String,
                     @ColumnInfo(name = "isFavorite") var isFavorite: Boolean
                     ){
-    constructor():this("","","",0.0,"","",false)
+    constructor():this(null,"","","",0.0,"","",false)
 }
 
 @Dao
