@@ -14,6 +14,11 @@ import de.studienarbeit.invoicescanner.R
 import java.io.File
 
 class PictureAnalyzedFragment : Fragment() {
+
+    val fullScreen = false
+    val isMenuAvailable = false
+    val actionBarTitle = R.string.new_invoice
+
     lateinit var currentImage : Bitmap
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)

@@ -18,6 +18,11 @@ import de.studienarbeit.invoicescanner.R
  */
 class RetakeConfirmFragment : Fragment() , View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback
 {
+
+    val fullScreen = true
+    val isMenuAvailable = false
+    val actionBarTitle = ""
+
     private lateinit var mListener : OnButtonClickedListener
 
     override fun onClick(view: View) {

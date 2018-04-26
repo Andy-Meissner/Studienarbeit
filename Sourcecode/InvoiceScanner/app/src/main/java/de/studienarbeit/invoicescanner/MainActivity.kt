@@ -16,6 +16,7 @@ import android.widget.Toast
 import java.io.File
 import android.arch.persistence.room.Room
 import android.os.AsyncTask
+import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBar
 import de.studienarbeit.invoicescanner.fragments.*
 import de.studienarbeit.invoicescanner.fragments.RecyclerViewFragment
@@ -33,7 +34,9 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
     private val favoritesFragment = FavoritesFragment()
     private val aboutFragment = AboutFragment()
     private val recyclerViewFragment = RecyclerViewFragment()
-    private var currentFragment : Fragment? = null
+    private val retakeConfirmFragment = RetakeConfirmFragment()
+    private val pictureAnalyzedFragment = PictureAnalyzedFragment()
+    private var currentFragment : android.support.v4.app.Fragment? = null
     private var currentImagePath : String = ""
 
     private lateinit var toolbar : Toolbar
@@ -48,35 +51,31 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
 
     override fun onImageTaken(file : File) {
         currentImagePath = file.absolutePath
-        val fragment = RetakeConfirmFragment()
         val args = Bundle()
         args.putString("imagepath",currentImagePath)
-        fragment.arguments = args
-        supportFragmentManager.beginTransaction().replace(R.id.container,fragment).addToBackStack(null).commit()
+        retakeConfirmFragment.arguments = args
+        setFragment(retakeConfirmFragment)
         runOnUiThread {
             actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_back)
         }
         isMenuAvailable = false
-        currentFragment = Fragment.CONFIRM_RETAKE
     }
 
     override fun onButtonAnalyze() {
-        val fragment = PictureAnalyzedFragment()
         val args = Bundle()
         args.putString("imagepath", currentImagePath)
-        fragment.arguments = args
-        supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
+        pictureAnalyzedFragment.arguments = args
+        setFragment(pictureAnalyzedFragment)
         setFullscreenMode(false)
         actionbar!!.title = getString(R.string.new_invoice)
         hideIcon = false
         invalidateOptionsMenu()
-        currentFragment = Fragment.ANALYZE_PICTURE
     }
 
     override fun onButtonDismiss() {
         supportFragmentManager.popBackStack()
         actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
-        currentFragment = Fragment.CAMERA
+        currentFragment = cameraFragment
     }
 
     private var mDrawerLayout : DrawerLayout? = null
@@ -94,11 +93,8 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         db = Room.databaseBuilder(applicationContext,
                 AppDatabase::class.java, "database-name").build()
 
-        val invoice = Invoice(null, "", "meine Iban", "", 0.0, "", "receiver", false)
-
         object : AsyncTask<Void, Void, Int>() {
             override fun doInBackground(vararg params: Void): Int? {
-                db.invoiceDao().insertInvoice(invoice)
                 recyclerViewFragment.initDataset(db.invoiceDao().all)
                 return 0
             }
@@ -113,7 +109,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         actionbar!!.setDisplayShowTitleEnabled(false)
         actionbar!!.setDisplayHomeAsUpEnabled(true)
         actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
-        currentFragment = Fragment.CAMERA
+        currentFragment = cameraFragment
 
         mDrawerLayout = findViewById(R.id.drawer_layout)
 
@@ -128,27 +124,16 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
             // For example, swap UI fragments here
             when(menuItem.itemId){
                 R.id.nav_camera ->
-                    {supportFragmentManager.beginTransaction().replace(R.id.container, cameraFragment).commit()
-                    setFullscreenMode(true)
-                    currentFragment = Fragment.CAMERA}
+                    {setFragment(cameraFragment)}
 
                 R.id.nav_archive ->
-                    {supportFragmentManager.beginTransaction().replace(R.id.container, recyclerViewFragment).commit()
-                    setFullscreenMode(false)
-                    actionbar!!.setTitle(R.string.archive)
-                    currentFragment = Fragment.ARCHIVE}
+                    {setFragment(recyclerViewFragment)}
 
                 R.id.nav_favorites ->
-                    {supportFragmentManager.beginTransaction().replace(R.id.container, favoritesFragment).commit()
-                    setFullscreenMode(false)
-                    actionbar!!.setTitle(R.string.favorites)
-                    currentFragment = Fragment.FAVORITES}
+                    {setFragment(favoritesFragment)}
 
                 R.id.nav_about ->
-                    {supportFragmentManager.beginTransaction().replace(R.id.container, aboutFragment).commit()
-                    setFullscreenMode(false)
-                    actionbar!!.title = getString(R.string.about) + " " + getString(R.string.app_name)
-                    currentFragment = Fragment.ABOUT}
+                    {setFragment(aboutFragment)}
             }
 
             true
@@ -185,23 +170,20 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
                     mDrawerLayout!!.openDrawer(GravityCompat.START)
                 } else {
                     supportFragmentManager.popBackStack()
-                    if(currentFragment == Fragment.ANALYZE_PICTURE) {
+                    if(currentFragment == aboutFragment) {
                         setFullscreenMode(true)
                         hideIcon = true
                         invalidateOptionsMenu()
-                        currentFragment = Fragment.CONFIRM_RETAKE
-                    } else if (currentFragment == Fragment.CONFIRM_RETAKE) {
+                        currentFragment = retakeConfirmFragment
+                    } else if (currentFragment == retakeConfirmFragment) {
                         actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
-                        currentFragment = Fragment.CAMERA
+                        currentFragment = cameraFragment
                         isMenuAvailable = true
                     }
                 }
                 return true
             }
             R.id.save_button -> {
-                hideIcon = true
-                invalidateOptionsMenu()
-                Toast.makeText(applicationContext, "Invoice saved", Toast.LENGTH_LONG).show()
                 onSaveButtonClicked()
                 return true
             }
@@ -214,12 +196,20 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         object : AsyncTask<Void, Void, Int>() {
             override fun doInBackground(vararg params: Void): Int? {
                 db.invoiceDao().insertInvoice(currentInvoice)
+                recyclerViewFragment.initDataset(db.invoiceDao().all)
                 return 0
             }
 
             override fun onPostExecute(resultCode: Int?) {
             }
         }.execute()
+
+        hideIcon = true
+        invalidateOptionsMenu()
+        Toast.makeText(applicationContext, "Invoice saved", Toast.LENGTH_LONG).show()
+        setFragment(recyclerViewFragment)
+        setFullscreenMode(false)
+        actionbar!!.setTitle(R.string.archive)
     }
 
     private fun setFullscreenMode(yes : Boolean) {
@@ -233,5 +223,16 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
             actionbar!!.setDisplayShowTitleEnabled(true)
             toolbar.setBackgroundResource(R.color.colorPrimaryDark)
         }
+    }
+
+    private fun setFragment(fragment : Fragment) {
+        if(currentFragment == cameraFragment || currentFragment == retakeConfirmFragment){
+            supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
+        }else{
+            supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+        }
+        currentFragment = fragment
+        setFullscreenMode(fragment.fullscreen)
+        actionbar!!.setTitle(fragment.ActionBarTitle)
     }
 }

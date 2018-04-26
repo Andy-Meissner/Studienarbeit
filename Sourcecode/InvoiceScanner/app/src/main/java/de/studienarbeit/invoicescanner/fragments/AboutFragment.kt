@@ -9,6 +9,10 @@ import de.studienarbeit.invoicescanner.R
 
 class AboutFragment : Fragment() {
 
+    val fullScreen = false
+    val isMenuAvailable = true
+    val actionBarTitle = getString(R.string.about) + " " + getString(R.string.app_name)
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
     : View? = inflater.inflate(R.layout.fragment_about, container, false)
 

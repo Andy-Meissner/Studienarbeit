@@ -18,6 +18,10 @@ import de.studienarbeit.invoicescanner.R
  */
 class RecyclerViewFragment : Fragment() {
 
+    val fullScreen = false
+    val isMenuAvailable = true
+    val actionBarTitle = R.string.archive
+
     private lateinit var currentLayoutManagerType: LayoutManagerType
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: RecyclerView.LayoutManager
