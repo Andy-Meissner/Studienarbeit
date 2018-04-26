@@ -218,8 +218,8 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
 
     private fun setFullscreenMode(yes : Boolean) {
         if(yes) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-            window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
+                window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
             actionbar!!.setDisplayShowTitleEnabled(false)
             toolbar.setBackgroundResource(R.color.transparent)
         } else {
@@ -230,14 +230,16 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
     }
 
     private fun setFragment(fragment : Fragment) {
-        if(currentFragment == cameraFragment || currentFragment == retakeConfirmFragment){
-            supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
-        }else{
-            supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+        runOnUiThread{
+            if(currentFragment == cameraFragment || currentFragment == retakeConfirmFragment){
+                supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
+            }else{
+                supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+            }
+            currentFragment = fragment
+            fragment as FragmentAttributeInterface
+            setFullscreenMode(fragment.fullScreen)
+            actionbar!!.title = fragment.actionBarTitle
         }
-        currentFragment = fragment
-        fragment as FragmentAttributeInterface
-        setFullscreenMode(fragment.fullScreen)
-        actionbar!!.title = fragment.actionBarTitle
     }
 }
