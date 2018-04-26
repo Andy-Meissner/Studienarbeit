@@ -16,16 +16,9 @@ import java.io.File
 
 class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface {
 
-    override var isMenuAvailable: Boolean
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override var isMenuAvailable = true
     override var  actionBarTitle = ""
-    override var actionBarTitle: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
-
-    override var fullScreen: Boolean
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
+    override var fullScreen = false
 
     lateinit var currentImage : Bitmap
 
@@ -48,8 +41,6 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        actionBarTitle = getString(R.string.new_invoice)
-        fullScreen = false
         actionBarTitle = getString(R.string.new_invoice)
     }
 }

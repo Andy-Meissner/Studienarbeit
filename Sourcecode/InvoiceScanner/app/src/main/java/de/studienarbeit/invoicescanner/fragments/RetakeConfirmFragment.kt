@@ -19,16 +19,10 @@ import de.studienarbeit.invoicescanner.R
  */
 class RetakeConfirmFragment : Fragment() , FragmentAttributeInterface, View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback
 {
-    override var isMenuAvailable: Boolean
-    get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-    set(value) {}
-    override var actionBarTitle: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
 
-    override var fullScreen: Boolean
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
+    override var fullScreen = true
+    override var isMenuAvailable = false
+    override var actionBarTitle = ""
 
 
     private lateinit var mListener : OnButtonClickedListener
@@ -56,9 +50,6 @@ class RetakeConfirmFragment : Fragment() , FragmentAttributeInterface, View.OnCl
         } catch (e: ClassCastException) {
             throw ClassCastException(context.toString() + " must implement OnArticleSelectedListener")
         }
-        var  fullScreen = true
-        var  isMenuAvailable = false
-        var  actionBarTitle = ""
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

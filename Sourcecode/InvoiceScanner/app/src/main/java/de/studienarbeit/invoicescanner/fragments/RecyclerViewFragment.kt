@@ -19,24 +19,9 @@ import de.studienarbeit.invoicescanner.R
  */
 class RecyclerViewFragment : Fragment(), FragmentAttributeInterface {
 
-    override var isMenuAvailable: Boolean
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override var isMenuAvailable = true
     override var actionBarTitle = ""
-    override var actionBarTitle: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
-
-    override var fullScreen: Boolean
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        fullScreen = false
-        isMenuAvailable = true
-        actionBarTitle = getString(R.string.archive)
-    }
+    override var fullScreen = false
 
     private lateinit var currentLayoutManagerType: LayoutManagerType
     private lateinit var recyclerView: RecyclerView
@@ -57,6 +42,7 @@ class RecyclerViewFragment : Fragment(), FragmentAttributeInterface {
         super.onAttach(context)
         actionBarTitle = getString(R.string.archive)
     }
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
