@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import de.studienarbeit.invoicescanner.R
 
-class FavoritesFragment : Fragment() {
+class FavoritesFragment : FragmentAttributeInterface() {
 
-    val fullScreen = false
-    val isMenuAvailable = true
-    val ActionBarTitle = R.string.favorites
+    override var fullScreen = false
+    override var isMenuAvailable = true
+    override var actionBarTitle = R.string.favorites as String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
     : View? = inflater.inflate(R.layout.fragment_favorites, container, false)

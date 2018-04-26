@@ -42,11 +42,11 @@ import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 
-class CameraFragment : Fragment(), View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback, ImageSaver.onImageSavedListener
+class CameraFragment : FragmentAttributeInterface(), View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback, ImageSaver.onImageSavedListener
 {
-    val fullScreen = true
-    val isMenuAvailable = true
-    val actionBarTitle = ""
+    override var fullScreen = true
+    override var  isMenuAvailable = true
+    override var actionBarTitle = ""
 
     override fun onImageSaved() {
         imageTakenListener.onImageSaved(file.absolutePath)

@@ -225,14 +225,14 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         }
     }
 
-    private fun setFragment(fragment : Fragment) {
+    private fun setFragment(fragment : FragmentAttributeInterface) {
         if(currentFragment == cameraFragment || currentFragment == retakeConfirmFragment){
             supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
         }else{
             supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
         }
         currentFragment = fragment
-        setFullscreenMode(fragment.fullscreen)
-        actionbar!!.setTitle(fragment.ActionBarTitle)
+        setFullscreenMode(fragment.fullScreen)
+        actionbar!!.title = fragment.actionBarTitle
     }
 }

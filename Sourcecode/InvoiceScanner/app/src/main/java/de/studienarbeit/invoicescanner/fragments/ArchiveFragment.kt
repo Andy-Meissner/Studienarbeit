@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import de.studienarbeit.invoicescanner.R
 
-class ArchiveFragment : Fragment() {
+class ArchiveFragment : FragmentAttributeInterface() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
     : View? = inflater.inflate(R.layout.fragment_archive, container, false)

@@ -16,11 +16,11 @@ import de.studienarbeit.invoicescanner.R
  * Demonstrates the use of [RecyclerView] with a [LinearLayoutManager] and a
  * [GridLayoutManager].
  */
-class RecyclerViewFragment : Fragment() {
+class RecyclerViewFragment : FragmentAttributeInterface() {
 
-    val fullScreen = false
-    val isMenuAvailable = true
-    val actionBarTitle = R.string.archive
+    override var fullScreen = false
+    override var isMenuAvailable = true
+    override var actionBarTitle: String = R.string.archive as String
 
     private lateinit var currentLayoutManagerType: LayoutManagerType
     private lateinit var recyclerView: RecyclerView

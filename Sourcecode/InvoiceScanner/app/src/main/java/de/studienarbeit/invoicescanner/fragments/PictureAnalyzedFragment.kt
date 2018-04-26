@@ -13,11 +13,11 @@ import android.widget.TextView
 import de.studienarbeit.invoicescanner.R
 import java.io.File
 
-class PictureAnalyzedFragment : Fragment() {
+class PictureAnalyzedFragment : FragmentAttributeInterface() {
 
-    val fullScreen = false
-    val isMenuAvailable = false
-    val actionBarTitle = R.string.new_invoice
+    override var  fullScreen = false
+    override var  isMenuAvailable = false
+    override var  actionBarTitle = R.string.new_invoice as String
 
     lateinit var currentImage : Bitmap
 
