@@ -22,4 +22,10 @@
     <string name="version">Version</string>
     <string name="save">Save</string>
     <string name="new_invoice">New Invoice</string>
+    <string name="iban">IBAN</string>
+    <string name="amount">Amount</string>
+    <string name="bic">BIC</string>
+    <string name="receiver">Receiver</string>
+    <string name="details">Details</string>
+    <string name="empty">empty</string>
 </resources>

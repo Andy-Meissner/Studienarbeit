@@ -36,6 +36,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-vision:15.0.0'
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:gridlayout-v7:27.1.1'
     implementation "android.arch.persistence.room:runtime:$archRoomVersion"
     annotationProcessor "android.arch.persistence.room:compiler:$archRoomVersion"
     kapt "android.arch.persistence.room:compiler:$archRoomVersion"

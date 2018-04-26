@@ -34,13 +34,15 @@ class MyAdapter(private val myDataset: List<Invoice>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.container.textView.text = myDataset[position].iban
+        holder.container.saved_iban.text = myDataset[position].iban
+        holder.container.saved_receiver.text = myDataset[position].receiver
+        holder.container.saved_amount.text = myDataset[position].amount.toString()
 
         val file = File(myDataset[position].imagePath)
         if (file.exists()) {
             val currentImage = BitmapFactory.decodeFile(file.absolutePath)
 
-            holder.container.imageView2.setImageBitmap(currentImage)
+            holder.container.saved_invoice_picture.setImageBitmap(currentImage)
         }
 
     }
