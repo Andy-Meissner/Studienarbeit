@@ -18,7 +18,7 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface {
 
     override var isMenuAvailable: Boolean
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
+    override var  actionBarTitle = ""
     override var actionBarTitle: String
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
         set(value) {}
@@ -48,7 +48,7 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        isMenuAvailable = false
+        actionBarTitle = getString(R.string.new_invoice)
         fullScreen = false
         actionBarTitle = getString(R.string.new_invoice)
     }

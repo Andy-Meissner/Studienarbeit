@@ -12,7 +12,7 @@ class FavoritesFragment : Fragment(), FragmentAttributeInterface {
 
     override var isMenuAvailable: Boolean
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
+    override var actionBarTitle = ""
     override var actionBarTitle: String
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
         set(value) {}
@@ -31,4 +31,8 @@ class FavoritesFragment : Fragment(), FragmentAttributeInterface {
         actionBarTitle = getString(R.string.favorites)
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        actionBarTitle = getString(R.string.favorites)
+    }
 }

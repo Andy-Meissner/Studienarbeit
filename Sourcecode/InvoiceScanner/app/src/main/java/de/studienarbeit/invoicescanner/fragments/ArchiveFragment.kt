@@ -9,17 +9,9 @@ import de.studienarbeit.invoicescanner.R
 
 class ArchiveFragment : Fragment(), FragmentAttributeInterface {
 
-    override var fullScreen: Boolean
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
-
-    override var actionBarTitle: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
-
-    override var isMenuAvailable: Boolean
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
+    override var fullScreen = false
+    override var actionBarTitle = ""
+    override var isMenuAvailable = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
     : View? = inflater.inflate(R.layout.fragment_archive, container, false)
