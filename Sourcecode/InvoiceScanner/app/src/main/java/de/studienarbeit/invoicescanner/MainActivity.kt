@@ -220,7 +220,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         var bmp = BitmapFactory.decodeFile(currentInvoice.imagePath)
         var timestamp  = (System.currentTimeMillis()/1000).toString()
         var description = "test"
-        pictureAnalyzedFragment.test()
+        pictureAnalyzedFragment.askPermission()
         saveImageToExternalStorage(bmp)
         setFragment(recyclerViewFragment)
         setFullscreenMode(false)

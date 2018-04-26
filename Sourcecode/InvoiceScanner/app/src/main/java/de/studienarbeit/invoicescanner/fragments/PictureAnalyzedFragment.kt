@@ -45,7 +45,7 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
         }
     }
 
-    fun test()
+    fun askPermission()
     {
         val permission = ContextCompat.checkSelfPermission(this!!.activity!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)
         if(permission != PackageManager.PERMISSION_GRANTED)
