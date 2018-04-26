@@ -236,13 +236,8 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
             supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
         }
         currentFragment = fragment
-        try {
-            var attributes = fragment as FragmentAttributeInterface
-            setFullscreenMode(attributes.fullScreen)
-            actionbar!!.title = attributes.actionBarTitle
-        } catch (e : Throwable)
-        {
-            throw Throwable(fragment.toString() + "is not implementing interface FragmentAttributeInterface")
-        }
+        fragment as FragmentAttributeInterface
+        setFullscreenMode(fragment.fullScreen)
+        actionbar!!.title = fragment.actionBarTitle
     }
 }
