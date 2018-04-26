@@ -16,7 +16,7 @@ import de.studienarbeit.invoicescanner.R
 /**
  * Created by andym on 20.04.2018.
  */
-class RetakeConfirmFragment : FragmentAttributeInterface() , View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback
+class RetakeConfirmFragment : Fragment() , FragmentAttributeInterface, View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback
 {
 
     override var  fullScreen = true

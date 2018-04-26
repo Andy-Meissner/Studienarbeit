@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import de.studienarbeit.invoicescanner.R
 
-class FavoritesFragment : FragmentAttributeInterface() {
+class FavoritesFragment : Fragment(), FragmentAttributeInterface {
 
     override var fullScreen = false
     override var isMenuAvailable = true

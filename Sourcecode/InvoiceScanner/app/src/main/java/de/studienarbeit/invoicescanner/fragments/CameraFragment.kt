@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 
-class CameraFragment : FragmentAttributeInterface(), View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback, ImageSaver.onImageSavedListener
+class CameraFragment : Fragment(), FragmentAttributeInterface, View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback, ImageSaver.onImageSavedListener
 {
     override var fullScreen = true
     override var  isMenuAvailable = true

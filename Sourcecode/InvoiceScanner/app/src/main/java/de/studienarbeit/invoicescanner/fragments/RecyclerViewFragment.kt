@@ -16,7 +16,7 @@ import de.studienarbeit.invoicescanner.R
  * Demonstrates the use of [RecyclerView] with a [LinearLayoutManager] and a
  * [GridLayoutManager].
  */
-class RecyclerViewFragment : FragmentAttributeInterface() {
+class RecyclerViewFragment : Fragment(), FragmentAttributeInterface {
 
     override var fullScreen = false
     override var isMenuAvailable = true

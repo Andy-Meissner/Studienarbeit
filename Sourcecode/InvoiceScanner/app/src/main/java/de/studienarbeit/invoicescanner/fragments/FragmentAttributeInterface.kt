@@ -3,9 +3,9 @@ package de.studienarbeit.invoicescanner.fragments
 import android.support.v4.app.Fragment
 import de.studienarbeit.invoicescanner.R
 
-open class FragmentAttributeInterface : Fragment()
+interface FragmentAttributeInterface
 {
-    open var fullScreen = false
-    open var isMenuAvailable = true
-    open var actionBarTitle = getString(R.string.about) + " " + getString(R.string.app_name)
+    var fullScreen : Boolean
+    var isMenuAvailable : Boolean
+    var actionBarTitle : String
 }

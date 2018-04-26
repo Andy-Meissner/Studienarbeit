@@ -13,7 +13,7 @@ import android.widget.TextView
 import de.studienarbeit.invoicescanner.R
 import java.io.File
 
-class PictureAnalyzedFragment : FragmentAttributeInterface() {
+class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface {
 
     override var  fullScreen = false
     override var  isMenuAvailable = false
