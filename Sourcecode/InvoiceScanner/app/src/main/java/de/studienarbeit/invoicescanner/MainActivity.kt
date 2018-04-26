@@ -209,8 +209,10 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         hideIcon = true
         invalidateOptionsMenu()
         var bmp = BitmapFactory.decodeFile(currentInvoice.imagePath)
-        MediaStore.Images.Media.insertImage(getContentResolver(), bmp, (System.currentTimeMillis()/1000) as String , currentInvoice.details);
-        Toast.makeText(applicationContext, "Invoice saved", Toast.LENGTH_LONG).show()
+        var timestamp  = (System.currentTimeMillis()/1000).toString()
+        var description = "test"
+        var uri = MediaStore.Images.Media.insertImage(contentResolver, bmp, timestamp , description);
+        Toast.makeText(applicationContext, uri, Toast.LENGTH_LONG).show()
         setFragment(recyclerViewFragment)
         setFullscreenMode(false)
         actionbar!!.setTitle(R.string.archive)
