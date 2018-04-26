@@ -225,14 +225,20 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         }
     }
 
-    private fun setFragment(fragment : FragmentAttributeInterface) {
+    private fun setFragment(fragment : Fragment) {
         if(currentFragment == cameraFragment || currentFragment == retakeConfirmFragment){
             supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
         }else{
             supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
         }
         currentFragment = fragment
-        setFullscreenMode(fragment.fullScreen)
-        actionbar!!.title = fragment.actionBarTitle
+        try {
+            var attributes = fragment as FragmentAttributeInterface
+            setFullscreenMode(attributes.fullScreen)
+            actionbar!!.title = attributes.actionBarTitle
+        } catch (e : Exception)
+        {
+            throw Exception(fragment.toString() + "is not implementing interface FragmentAttributeInterface")
+        }
     }
 }
