@@ -16,8 +16,8 @@ import java.io.File
 
 class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface {
 
-    override var isMenuAvailable = true
-    override var  actionBarTitle = ""
+    override var isMenuAvailable = false
+    override var actionBarTitle = ""
     override var fullScreen = false
 
     lateinit var currentImage : Bitmap
