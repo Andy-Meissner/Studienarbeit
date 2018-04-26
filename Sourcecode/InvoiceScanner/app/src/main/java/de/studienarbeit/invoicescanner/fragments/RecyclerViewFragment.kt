@@ -1,6 +1,5 @@
 package de.studienarbeit.invoicescanner.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -12,6 +11,7 @@ import android.view.ViewGroup
 import de.studienarbeit.invoicescanner.Invoice
 import de.studienarbeit.invoicescanner.MyAdapter
 import de.studienarbeit.invoicescanner.R
+import de.studienarbeit.invoicescanner.TITLE_ARCHIVE
 
 /**
  * Demonstrates the use of [RecyclerView] with a [LinearLayoutManager] and a
@@ -20,7 +20,7 @@ import de.studienarbeit.invoicescanner.R
 class RecyclerViewFragment : Fragment(), FragmentAttributeInterface {
 
     override var isMenuAvailable = true
-    override var actionBarTitle = ""
+    override var actionBarTitle = TITLE_ARCHIVE
     override var fullScreen = false
 
     private lateinit var currentLayoutManagerType: LayoutManagerType
@@ -36,11 +36,6 @@ class RecyclerViewFragment : Fragment(), FragmentAttributeInterface {
         // Initialize dataset, this data would usually come from a local content provider or
         // remote server.
 
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        actionBarTitle = getString(R.string.archive)
     }
 
     override fun onCreateView(inflater: LayoutInflater,

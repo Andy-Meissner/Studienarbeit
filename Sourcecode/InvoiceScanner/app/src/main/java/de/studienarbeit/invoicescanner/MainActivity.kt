@@ -72,10 +72,6 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         args.putString("imagepath",currentImagePath)
         retakeConfirmFragment.arguments = args
         setFragment(retakeConfirmFragment)
-        runOnUiThread {
-            actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_back)
-        }
-        isMenuAvailable = false
     }
 
     override fun onButtonAnalyze() {
@@ -83,8 +79,6 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         args.putString("imagepath", currentImagePath)
         pictureAnalyzedFragment.arguments = args
         setFragment(pictureAnalyzedFragment)
-        setFullscreenMode(false)
-        actionbar!!.title = getString(R.string.new_invoice)
         hideIcon = false
         invalidateOptionsMenu()
     }
@@ -187,7 +181,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
                     mDrawerLayout!!.openDrawer(GravityCompat.START)
                 } else {
                     supportFragmentManager.popBackStack()
-                    if(currentFragment == aboutFragment) {
+                    if(currentFragment == pictureAnalyzedFragment) {
                         setFullscreenMode(true)
                         hideIcon = true
                         invalidateOptionsMenu()
@@ -288,8 +282,8 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
 
     private fun setFullscreenMode(yes : Boolean) {
         if(yes) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-                window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
+            window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
             actionbar!!.setDisplayShowTitleEnabled(false)
             toolbar.setBackgroundResource(R.color.transparent)
         } else {
@@ -300,16 +294,24 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
     }
 
     private fun setFragment(fragment : Fragment) {
-        runOnUiThread{
-            if(currentFragment == cameraFragment || currentFragment == retakeConfirmFragment){
-                supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
-            }else{
-                supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+        if(currentFragment != fragment) {
+            runOnUiThread {
+                if (currentFragment == cameraFragment || currentFragment == retakeConfirmFragment) {
+                    supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
+                } else {
+                    supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+                }
+                currentFragment = fragment
+                fragment as FragmentAttributeInterface
+                setFullscreenMode(fragment.fullScreen)
+                actionbar!!.title = fragment.actionBarTitle
+                isMenuAvailable = fragment.isMenuAvailable
+                if(isMenuAvailable) {
+                    actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
+                } else {
+                    actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_back)
+                }
             }
-            currentFragment = fragment
-            fragment as FragmentAttributeInterface
-            setFullscreenMode(fragment.fullScreen)
-            actionbar!!.title = fragment.actionBarTitle
         }
     }
 }

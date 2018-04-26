@@ -10,11 +10,7 @@ package de.studienarbeit.invoicescanner
 @JvmField val REQUEST_EXTERNAL_FILE_STORAGE = 2
 @JvmField val PIC_FILE_NAME = "temp.jpg"
 
-enum class Fragment {
-    CAMERA,
-    ARCHIVE,
-    FAVORITES,
-    ABOUT,
-    CONFIRM_RETAKE,
-    ANALYZE_PICTURE
-}
+val TITLE_ABOUT = "About InvoiceScanner"
+val TITLE_ARCHIVE = "Archive"
+val TITLE_FAVORITES = "Favorites"
+val TITLE_NEW_INVOICE = "New Invoice"
