@@ -1,6 +1,5 @@
 package de.studienarbeit.invoicescanner.fragments
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -8,16 +7,15 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import de.studienarbeit.invoicescanner.R
+import de.studienarbeit.invoicescanner.TITLE_NEW_INVOICE
 import java.io.File
 
 class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface {
 
     override var isMenuAvailable = false
-    override var actionBarTitle = ""
+    override var actionBarTitle = TITLE_NEW_INVOICE
     override var fullScreen = false
 
     lateinit var currentImage : Bitmap
@@ -37,10 +35,5 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface {
 
             view.findViewById<ImageView>(R.id.captured_image).setImageBitmap(currentImage)
         }
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        actionBarTitle = getString(R.string.new_invoice)
     }
 }
