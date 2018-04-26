@@ -1,6 +1,8 @@
 package de.studienarbeit.invoicescanner
 
 
+import android.Manifest
+import android.app.Activity
 import android.content.res.Configuration
 import android.graphics.Point
 import android.os.Bundle
@@ -12,19 +14,32 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
-import android.widget.Toast
 import java.io.File
 import android.arch.persistence.room.Room
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
-import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBar
 import de.studienarbeit.invoicescanner.fragments.*
 import de.studienarbeit.invoicescanner.fragments.RecyclerViewFragment
+import android.media.MediaScannerConnection
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Environment
+import android.support.design.widget.Snackbar
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.util.Log
+import de.studienarbeit.invoicescanner.helper.ConfirmationDialog
+import de.studienarbeit.invoicescanner.helper.ErrorDialog
+import de.studienarbeit.invoicescanner.helper.showToast
+import kotlinx.android.synthetic.main.fragment_about.*
+import java.io.FileOutputStream
+import java.util.*
 
 
-class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedListener, CameraFragment.onImageTakenListener {
+class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback, RetakeConfirmFragment.OnButtonClickedListener, CameraFragment.onImageTakenListener {
     override fun onImageSaved(path: String) {
         val imageAnalyer = ImageAnalyzer(this, path)
         imageAnalyer.analyse()
@@ -211,11 +226,64 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         var bmp = BitmapFactory.decodeFile(currentInvoice.imagePath)
         var timestamp  = (System.currentTimeMillis()/1000).toString()
         var description = "test"
-        var uri = MediaStore.Images.Media.insertImage(contentResolver, bmp, timestamp , description);
-        Toast.makeText(applicationContext, uri, Toast.LENGTH_LONG).show()
+        saveImageToExternalStorage(bmp)
         setFragment(recyclerViewFragment)
         setFullscreenMode(false)
         actionbar!!.setTitle(R.string.archive)
+    }
+
+    private fun saveImageToExternalStorage(finalBitmap: Bitmap) {
+        val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
+        val generator = Random()
+        var n = 10000
+        n = generator.nextInt(n)
+        val imagepath = root + "/Image-$n.jpg"
+        getExternalWritePermission()
+        val file = File(imagepath)
+        if (file.exists())
+            file.delete()
+        try {
+            val out = FileOutputStream(file)
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+            out.flush()
+            out.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        // Tell the media scanner about the new file so that it is
+        // immediately available to the user.
+        MediaScannerConnection.scanFile(this, arrayOf(file.toString()), null,
+                object : MediaScannerConnection.OnScanCompletedListener {
+                    override fun onScanCompleted(path: String, uri: Uri) {
+                        Log.i("ExternalStorage", "Scanned $path:")
+                        Log.i("ExternalStorage", "-> uri=$uri")
+                    }
+                })
+
+    }
+
+    private fun getExternalWritePermission()
+    {
+        if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+        } else {
+            ActivityCompat.requestPermissions(this,  arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1);
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            1 -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                } else {
+                }
+                return
+            }
+            else -> {
+            }
+        }
     }
 
     private fun setFullscreenMode(yes : Boolean) {
