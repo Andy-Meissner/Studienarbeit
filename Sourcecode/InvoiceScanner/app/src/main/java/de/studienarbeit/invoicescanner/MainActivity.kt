@@ -39,7 +39,7 @@ import java.io.FileOutputStream
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback, RetakeConfirmFragment.OnButtonClickedListener, CameraFragment.onImageTakenListener {
+class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedListener, CameraFragment.onImageTakenListener {
     override fun onImageSaved(path: String) {
         val imageAnalyer = ImageAnalyzer(this, path)
         imageAnalyer.analyse()
@@ -220,6 +220,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         var bmp = BitmapFactory.decodeFile(currentInvoice.imagePath)
         var timestamp  = (System.currentTimeMillis()/1000).toString()
         var description = "test"
+        pictureAnalyzedFragment.test()
         saveImageToExternalStorage(bmp)
         setFragment(recyclerViewFragment)
         setFullscreenMode(false)
@@ -228,11 +229,14 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
 
     private fun saveImageToExternalStorage(finalBitmap: Bitmap) {
         val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
+
+        val myDir = File("$root/saved_images_1")
+        myDir.mkdirs()
         val generator = Random()
         var n = 10000
         n = generator.nextInt(n)
         val imagepath = root + "/Image-$n.jpg"
-        getExternalWritePermission()
+
         val file = File(imagepath)
         if (file.exists())
             file.delete()
@@ -255,29 +259,6 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
                     }
                 })
 
-    }
-
-    private fun getExternalWritePermission()
-    {
-        if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED) {
-        } else {
-            ActivityCompat.requestPermissions(this,  arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1);
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            1 -> {
-                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                } else {
-                }
-                return
-            }
-            else -> {
-            }
-        }
     }
 
     private fun setFullscreenMode(yes : Boolean) {
