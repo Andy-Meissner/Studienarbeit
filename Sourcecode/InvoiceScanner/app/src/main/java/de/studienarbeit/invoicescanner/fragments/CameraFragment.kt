@@ -44,9 +44,16 @@ import kotlin.collections.ArrayList
 
 class CameraFragment : Fragment(), FragmentAttributeInterface, View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback, ImageSaver.onImageSavedListener
 {
-    override var fullScreen = true
-    override var  isMenuAvailable = true
-    override var actionBarTitle = ""
+    override var isMenuAvailable: Boolean
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        set(value) {}
+    override var actionBarTitle: String
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        set(value) {}
+
+    override var fullScreen: Boolean
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        set(value) {}
 
     override fun onImageSaved() {
         imageTakenListener.onImageSaved(file.absolutePath)
@@ -92,6 +99,9 @@ class CameraFragment : Fragment(), FragmentAttributeInterface, View.OnClickListe
         } catch (e: ClassCastException) {
             throw ClassCastException(context.toString() + " must implement OnArticleSelectedListener")
         }
+        isMenuAvailable = true
+        fullScreen = true
+        actionBarTitle = ""
     }
 
     /**

@@ -1,5 +1,6 @@
 package de.studienarbeit.invoicescanner.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -18,9 +19,24 @@ import de.studienarbeit.invoicescanner.R
  */
 class RecyclerViewFragment : Fragment(), FragmentAttributeInterface {
 
-    override var fullScreen = false
-    override var isMenuAvailable = true
-    override var actionBarTitle: String = R.string.archive as String
+    override var isMenuAvailable: Boolean
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        set(value) {}
+    override var actionBarTitle: String
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        set(value) {}
+
+    override var fullScreen: Boolean
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        set(value) {}
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+        fullScreen = false
+        isMenuAvailable = true
+        actionBarTitle = getString(R.string.archive)
+    }
 
     private lateinit var currentLayoutManagerType: LayoutManagerType
     private lateinit var recyclerView: RecyclerView

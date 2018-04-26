@@ -1,5 +1,6 @@
 package de.studienarbeit.invoicescanner.fragments
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -15,9 +16,16 @@ import java.io.File
 
 class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface {
 
-    override var  fullScreen = false
-    override var  isMenuAvailable = false
-    override var  actionBarTitle = R.string.new_invoice as String
+    override var isMenuAvailable: Boolean
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        set(value) {}
+    override var actionBarTitle: String
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        set(value) {}
+
+    override var fullScreen: Boolean
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        set(value) {}
 
     lateinit var currentImage : Bitmap
 
@@ -36,5 +44,12 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface {
 
             view.findViewById<ImageView>(R.id.captured_image).setImageBitmap(currentImage)
         }
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        isMenuAvailable = false
+        fullScreen = false
+        actionBarTitle = getString(R.string.new_invoice)
     }
 }

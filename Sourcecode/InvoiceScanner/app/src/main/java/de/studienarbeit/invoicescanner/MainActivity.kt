@@ -15,7 +15,9 @@ import android.view.WindowManager
 import android.widget.Toast
 import java.io.File
 import android.arch.persistence.room.Room
+import android.graphics.BitmapFactory
 import android.os.AsyncTask
+import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBar
 import de.studienarbeit.invoicescanner.fragments.*
@@ -206,6 +208,8 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
 
         hideIcon = true
         invalidateOptionsMenu()
+        var bmp = BitmapFactory.decodeFile(currentInvoice.imagePath)
+        MediaStore.Images.Media.insertImage(getContentResolver(), bmp, (System.currentTimeMillis()/1000) as String , currentInvoice.details);
         Toast.makeText(applicationContext, "Invoice saved", Toast.LENGTH_LONG).show()
         setFragment(recyclerViewFragment)
         setFullscreenMode(false)
@@ -236,9 +240,9 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
             var attributes = fragment as FragmentAttributeInterface
             setFullscreenMode(attributes.fullScreen)
             actionbar!!.title = attributes.actionBarTitle
-        } catch (e : Exception)
+        } catch (e : Throwable)
         {
-            throw Exception(fragment.toString() + "is not implementing interface FragmentAttributeInterface")
+            throw Throwable(fragment.toString() + "is not implementing interface FragmentAttributeInterface")
         }
     }
 }
