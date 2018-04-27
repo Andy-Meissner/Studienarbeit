@@ -3,11 +3,13 @@ package de.studienarbeit.invoicescanner
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Environment
 import android.util.SparseArray
 import com.google.android.gms.vision.Frame
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
 import java.io.File
+import java.util.*
 
 class ImageAnalyzer(context: Context, imagePath : String) {
 
@@ -39,6 +41,17 @@ class ImageAnalyzer(context: Context, imagePath : String) {
         }
     }
 
+    private fun getImagePath(): String {
+        val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
+
+        val myDir = File("$root/invoice_scanner")
+        myDir.mkdirs()
+        val timestamp = (System.currentTimeMillis() / 1000).toString()
+        val imagepath = myDir.toString() + "Invoice-" + timestamp + ".jpg"
+
+        return imagepath
+    }
+
     private fun mapTextToInvoice()
     {
         var mystring = ""
@@ -46,7 +59,7 @@ class ImageAnalyzer(context: Context, imagePath : String) {
         {
             mystring += recognizedText[i]?.value
         }
-        invoice = Invoice(null, imagePath, mystring, mystring, 0.0, mystring, mystring, false)
+        invoice = Invoice(null, getImagePath(), mystring, mystring, 0.0, mystring, mystring, false)
     }
 
     fun analyse()

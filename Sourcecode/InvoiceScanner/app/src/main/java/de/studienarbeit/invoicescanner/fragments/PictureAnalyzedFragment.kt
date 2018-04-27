@@ -12,15 +12,16 @@ import android.os.Environment
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
-import de.studienarbeit.invoicescanner.R
-import de.studienarbeit.invoicescanner.REQUEST_CAMERA_PERMISSION
-import de.studienarbeit.invoicescanner.REQUEST_EXTERNAL_FILE_STORAGE
-import de.studienarbeit.invoicescanner.TITLE_NEW_INVOICE
+import android.widget.RelativeLayout
+import android.widget.TextView
+import de.studienarbeit.invoicescanner.*
 import de.studienarbeit.invoicescanner.helper.ConfirmationDialog
 import de.studienarbeit.invoicescanner.helper.ErrorDialog
 import de.studienarbeit.invoicescanner.helper.showToast
@@ -35,8 +36,10 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
     override var fullScreen = false
 
     private lateinit var myListener : onImagedSavedListener
-
-    lateinit var currentImage : Bitmap
+    private var viewCreated = false
+    private lateinit var currentImage : Bitmap
+    private lateinit var currentInvoice : Invoice
+    private var dataAvailable = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
             : View? = inflater.inflate(R.layout.fragment_picture_analyzed, container, false)
@@ -53,7 +56,16 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
 
             view.findViewById<ImageView>(R.id.captured_image).setImageBitmap(currentImage)
         }
+        viewCreated = true
+
+        if (dataAvailable)
+        {
+            view!!.findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
+            fillEditTextFields(currentInvoice)
+        }
+
     }
+
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -103,16 +115,28 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
         fun onImageSaved()
     }
 
+    fun onImageAnalyzed(invoice : Invoice)
+    {
+        if (viewCreated) {
+            view!!.findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
+            fillEditTextFields(invoice)
+        }
+        dataAvailable = true
+        currentInvoice = invoice
+    }
+
+    fun fillEditTextFields(inv : Invoice)
+    {
+        view!!.findViewById<EditText>(R.id.edit_iban).setText(inv.iban, TextView.BufferType.EDITABLE)
+        view!!.findViewById<EditText>(R.id.edit_bic).setText(inv.bic, TextView.BufferType.EDITABLE)
+        view!!.findViewById<EditText>(R.id.edit_amount).setText((inv.amount).toString(), TextView.BufferType.EDITABLE)
+        view!!.findViewById<EditText>(R.id.edit_receiver).setText(inv.receiver, TextView.BufferType.EDITABLE)
+        view!!.findViewById<EditText>(R.id.edit_details).setText(inv.details, TextView.BufferType.EDITABLE)
+
+    }
+
     private fun saveImageToExternalStorage(finalBitmap: Bitmap) {
-        val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
-
-        val myDir = File("$root/saved_images_1")
-        myDir.mkdirs()
-        val generator = Random()
-        var n = 10000
-        n = generator.nextInt(n)
-        val imagepath = root + "/Image-$n.jpg"
-
+        val imagepath = ""
         val file = File(imagepath)
         if (file.exists())
             file.delete()

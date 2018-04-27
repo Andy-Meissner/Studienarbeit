@@ -1,8 +1,6 @@
 package de.studienarbeit.invoicescanner
 
 
-import android.Manifest
-import android.app.Activity
 import android.content.res.Configuration
 import android.graphics.Point
 import android.os.Bundle
@@ -16,35 +14,15 @@ import android.view.MenuItem
 import android.view.WindowManager
 import java.io.File
 import android.arch.persistence.room.Room
-import android.graphics.BitmapFactory
 import android.os.AsyncTask
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBar
 import de.studienarbeit.invoicescanner.fragments.*
 import de.studienarbeit.invoicescanner.fragments.RecyclerViewFragment
-import android.media.MediaScannerConnection
-import android.graphics.Bitmap
-import android.net.Uri
-import android.os.Environment
-import android.util.Log
-import java.io.FileOutputStream
-import java.util.*
 
 
-class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedListener, CameraFragment.onImageTakenListener, PictureAnalyzedFragment.onImagedSavedListener {
-    override fun onImageSaved() {
-        hideIcon = true
-        invalidateOptionsMenu()
-        setFragment(recyclerViewFragment)
-        setFullscreenMode(false)
-        actionbar!!.setTitle(R.string.archive)
-    }
-
-    override fun onImageSaved(path: String) {
-        val imageAnalyer = ImageAnalyzer(this, path)
-        imageAnalyer.analyse()
-        currentInvoice = imageAnalyer.getInvoice()
-    }
+class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, PictureAnalyzedFragment.onImagedSavedListener {
 
     private val cameraFragment : CameraFragment = CameraFragment.newInstance()
     private val archiveFragment = ArchiveFragment()
@@ -66,24 +44,33 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
     lateinit var db : AppDatabase
 
 
+    override fun onImageSaved() {
+        hideIcon = true
+        invalidateOptionsMenu()
+        setFragment(recyclerViewFragment)
+        setFullscreenMode(false)
+        actionbar!!.setTitle(R.string.archive)
+    }
+
+    override fun onImageAvailable(path: String) {
+        val imageAnalyzer = ImageAnalyzer(this, path)
+        imageAnalyzer.analyse()
+        currentInvoice = imageAnalyzer.getInvoice()
+        pictureAnalyzedFragment.onImageAnalyzed(currentInvoice)
+    }
+
+
     override fun onImageTaken(file : File) {
         currentImagePath = file.absolutePath
         val args = Bundle()
         args.putString("imagepath",currentImagePath)
-        retakeConfirmFragment.arguments = args
-        setFragment(retakeConfirmFragment)
-    }
-
-    override fun onButtonAnalyze() {
-        val args = Bundle()
-        args.putString("imagepath", currentImagePath)
         pictureAnalyzedFragment.arguments = args
         setFragment(pictureAnalyzedFragment)
         hideIcon = false
         invalidateOptionsMenu()
     }
 
-    override fun onButtonDismiss() {
+    fun onButtonDismiss() {
         supportFragmentManager.popBackStack()
         actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
         currentFragment = cameraFragment
