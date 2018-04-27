@@ -20,9 +20,16 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBar
 import de.studienarbeit.invoicescanner.fragments.*
 import de.studienarbeit.invoicescanner.fragments.RecyclerViewFragment
+import android.app.SearchManager
+import android.content.Context
+import android.widget.SearchView
 
+        hideSaveButton = true
 
 class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, PictureAnalyzedFragment.onImagedSavedListener {
+        val imageAnalyzer = ImageAnalyzer(this, path)
+        imageAnalyzer.analyse()
+        currentInvoice = imageAnalyzer.getInvoice()
 
     private val cameraFragment : CameraFragment = CameraFragment.newInstance()
     private val archiveFragment = ArchiveFragment()
@@ -37,7 +44,8 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
     private lateinit var toolbar : Toolbar
     private var actionbar : ActionBar? = null
 
-    private var hideIcon = true
+    private var hideSaveButton = true
+    private var hideSearchButton = true
     private var isMenuAvailable = true
     lateinit var currentInvoice : Invoice
 
@@ -66,7 +74,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         args.putString("imagepath",currentImagePath)
         pictureAnalyzedFragment.arguments = args
         setFragment(pictureAnalyzedFragment)
-        hideIcon = false
+        hideSaveButton = false
         invalidateOptionsMenu()
     }
 
@@ -156,8 +164,16 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_save, menu)
-        menu!!.findItem(R.id.save_button).isVisible = !hideIcon
+        menuInflater.inflate(R.menu.options_menu, menu)
+        menu!!.findItem(R.id.save_button).isVisible = !hideSaveButton
+        menu!!.findItem(R.id.search).isVisible = !hideSearchButton
+
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = menu.findItem(R.id.search).actionView as SearchView
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(componentName))
+
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -170,7 +186,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
                     supportFragmentManager.popBackStack()
                     if(currentFragment == pictureAnalyzedFragment) {
                         setFullscreenMode(true)
-                        hideIcon = true
+                        hideSaveButton = true
                         invalidateOptionsMenu()
                         currentFragment = retakeConfirmFragment
                     } else if (currentFragment == retakeConfirmFragment) {
