@@ -28,6 +28,9 @@ interface InvoiceDao {
     @get:Query("SELECT * FROM invoice")
     val all: List<Invoice>
 
+    @get:Query("SELECT * FROM invoice WHERE isFavorite = 1")
+    val favorites: List<Invoice>
+
     @Insert
     fun insertInvoice(image : Invoice)
 
