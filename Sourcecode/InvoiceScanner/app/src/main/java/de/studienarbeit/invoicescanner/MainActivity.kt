@@ -24,12 +24,8 @@ import android.app.SearchManager
 import android.content.Context
 import android.widget.SearchView
 
-        hideSaveButton = true
 
 class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, PictureAnalyzedFragment.onImagedSavedListener {
-        val imageAnalyzer = ImageAnalyzer(this, path)
-        imageAnalyzer.analyse()
-        currentInvoice = imageAnalyzer.getInvoice()
 
     private val cameraFragment : CameraFragment = CameraFragment.newInstance()
     private val archiveFragment = ArchiveFragment()
@@ -51,9 +47,8 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
 
     lateinit var db : AppDatabase
 
-
     override fun onImageSaved() {
-        hideIcon = true
+        hideSaveButton = true
         invalidateOptionsMenu()
         setFragment(recyclerViewFragment)
         setFullscreenMode(false)
