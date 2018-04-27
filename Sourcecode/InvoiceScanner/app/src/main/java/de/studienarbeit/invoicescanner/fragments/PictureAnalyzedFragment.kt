@@ -89,6 +89,7 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
             }
             else
             {
+                saveImageToExternalStorage(currentImage)
                 myListener.onImageSaved()
             }
         } else {
@@ -106,8 +107,10 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
         }
         else
         {
+            saveImageToExternalStorage(currentImage)
             myListener.onImageSaved()
         }
+
     }
 
     interface onImagedSavedListener
