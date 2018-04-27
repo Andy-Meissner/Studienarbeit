@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
     override fun onImageSaved() {
         hideSaveButton = true
         invalidateOptionsMenu()
-        setFragment(recyclerViewFragment)
+        setFragment(archiveFragment)
         actionbar!!.setTitle(R.string.archive)
     }
 
@@ -38,11 +38,12 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         currentInvoice = imageAnalyzer.getInvoice()
     }
 
-    private val cameraFragment : CameraFragment = CameraFragment.newInstance()
-    private val archiveFragment = ArchiveFragment()
-    private val favoritesFragment = FavoritesFragment()
+
+
+    private val cameraFragment = CameraFragment.newInstance()
+    private val archiveFragment = RecyclerViewFragment()
+    private val favoritesFragment = RecyclerViewFragment()
     private val aboutFragment = AboutFragment()
-    private val recyclerViewFragment = RecyclerViewFragment()
     private val retakeConfirmFragment = RetakeConfirmFragment()
     private val pictureAnalyzedFragment = PictureAnalyzedFragment()
     private var currentFragment : android.support.v4.app.Fragment? = null
@@ -89,6 +90,10 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         //window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
         //window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+
+        archiveFragment.actionBarTitle = TITLE_ARCHIVE
+        favoritesFragment.actionBarTitle = TITLE_FAVORITES
+
         setContentView(R.layout.activity_main)
         savedInstanceState ?: supportFragmentManager.beginTransaction()
                 .add(R.id.container, cameraFragment)
@@ -99,7 +104,8 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
 
         object : AsyncTask<Void, Void, Int>() {
             override fun doInBackground(vararg params: Void): Int? {
-                recyclerViewFragment.initDataset(db.invoiceDao().all)
+                archiveFragment.initDataset(db.invoiceDao().all)
+                favoritesFragment.initDataset(db.invoiceDao().favorites)
                 return 0
             }
 
@@ -131,7 +137,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
                     {setFragment(cameraFragment)}
 
                 R.id.nav_archive ->
-                    {setFragment(recyclerViewFragment)}
+                    {setFragment(archiveFragment)}
 
                 R.id.nav_favorites ->
                     {setFragment(favoritesFragment)}
@@ -208,7 +214,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         object : AsyncTask<Void, Void, Int>() {
             override fun doInBackground(vararg params: Void): Int? {
                 db.invoiceDao().insertInvoice(currentInvoice)
-                recyclerViewFragment.initDataset(db.invoiceDao().all)
+                archiveFragment.initDataset(db.invoiceDao().all)
                 return 0
             }
 

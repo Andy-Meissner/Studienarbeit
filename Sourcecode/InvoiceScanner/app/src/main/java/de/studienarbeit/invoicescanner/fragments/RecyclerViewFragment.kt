@@ -21,7 +21,7 @@ import de.studienarbeit.invoicescanner.helper.SimpleDividerItemDecoration
 class RecyclerViewFragment : Fragment(), FragmentAttributeInterface {
 
     override var isMenuAvailable = true
-    override var actionBarTitle = TITLE_ARCHIVE
+    override var actionBarTitle = ""
     override var fullScreen = false
 
     private lateinit var currentLayoutManagerType: LayoutManagerType
