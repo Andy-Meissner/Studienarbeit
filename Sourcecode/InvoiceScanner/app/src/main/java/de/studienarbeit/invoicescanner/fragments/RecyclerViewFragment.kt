@@ -12,6 +12,7 @@ import de.studienarbeit.invoicescanner.Invoice
 import de.studienarbeit.invoicescanner.MyAdapter
 import de.studienarbeit.invoicescanner.R
 import de.studienarbeit.invoicescanner.TITLE_ARCHIVE
+import de.studienarbeit.invoicescanner.helper.SimpleDividerItemDecoration
 
 /**
  * Demonstrates the use of [RecyclerView] with a [LinearLayoutManager] and a
@@ -61,6 +62,7 @@ class RecyclerViewFragment : Fragment(), FragmentAttributeInterface {
         setRecyclerViewLayoutManager(currentLayoutManagerType)
 
         // Set CustomAdapter as the adapter for RecyclerView.
+        recyclerView.addItemDecoration(SimpleDividerItemDecoration(activity!!.applicationContext))
         recyclerView.adapter = MyAdapter(dataset)
         setRecyclerViewLayoutManager(LayoutManagerType.LINEAR_LAYOUT_MANAGER)
 
