@@ -16,7 +16,6 @@ import android.view.MenuItem
 import android.view.WindowManager
 import java.io.File
 import android.arch.persistence.room.Room
-import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.support.v4.app.Fragment
@@ -27,19 +26,20 @@ import android.media.MediaScannerConnection
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
-import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.util.Log
-import de.studienarbeit.invoicescanner.helper.ConfirmationDialog
-import de.studienarbeit.invoicescanner.helper.ErrorDialog
-import de.studienarbeit.invoicescanner.helper.showToast
-import kotlinx.android.synthetic.main.fragment_about.*
 import java.io.FileOutputStream
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedListener, CameraFragment.onImageTakenListener {
+class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedListener, CameraFragment.onImageTakenListener, PictureAnalyzedFragment.onImagedSavedListener {
+    override fun onImageSaved() {
+        hideIcon = true
+        invalidateOptionsMenu()
+        setFragment(recyclerViewFragment)
+        setFullscreenMode(false)
+        actionbar!!.setTitle(R.string.archive)
+    }
+
     override fun onImageSaved(path: String) {
         val imageAnalyer = ImageAnalyzer(this, path)
         imageAnalyer.analyse()
@@ -215,51 +215,10 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
             }
         }.execute()
 
-        hideIcon = true
-        invalidateOptionsMenu()
-        var bmp = BitmapFactory.decodeFile(currentInvoice.imagePath)
-        var timestamp  = (System.currentTimeMillis()/1000).toString()
-        var description = "test"
-        pictureAnalyzedFragment.askPermission()
-        saveImageToExternalStorage(bmp)
-        setFragment(recyclerViewFragment)
-        setFullscreenMode(false)
-        actionbar!!.setTitle(R.string.archive)
+        pictureAnalyzedFragment.saveImage()
     }
 
-    private fun saveImageToExternalStorage(finalBitmap: Bitmap) {
-        val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
 
-        val myDir = File("$root/saved_images_1")
-        myDir.mkdirs()
-        val generator = Random()
-        var n = 10000
-        n = generator.nextInt(n)
-        val imagepath = root + "/Image-$n.jpg"
-
-        val file = File(imagepath)
-        if (file.exists())
-            file.delete()
-        try {
-            val out = FileOutputStream(file)
-            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
-            out.flush()
-            out.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        // Tell the media scanner about the new file so that it is
-        // immediately available to the user.
-        MediaScannerConnection.scanFile(this, arrayOf(file.toString()), null,
-                object : MediaScannerConnection.OnScanCompletedListener {
-                    override fun onScanCompleted(path: String, uri: Uri) {
-                        Log.i("ExternalStorage", "Scanned $path:")
-                        Log.i("ExternalStorage", "-> uri=$uri")
-                    }
-                })
-
-    }
 
     private fun setFullscreenMode(yes : Boolean) {
         if(yes) {
