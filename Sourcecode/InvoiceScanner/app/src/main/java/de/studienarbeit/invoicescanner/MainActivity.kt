@@ -26,9 +26,6 @@ import android.widget.SearchView
 
 
 class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, PictureAnalyzedFragment.onImagedSavedListener {
-        setFragment(archiveFragment)
-
-
 
     private val cameraFragment = CameraFragment.newInstance()
     private val archiveFragment = RecyclerViewFragment()
@@ -52,7 +49,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
     override fun onImageSaved() {
         hideSaveButton = true
         invalidateOptionsMenu()
-        setFragment(recyclerViewFragment)
+        setFragment(archiveFragment)
         setFullscreenMode(false)
         actionbar!!.setTitle(R.string.archive)
     }
