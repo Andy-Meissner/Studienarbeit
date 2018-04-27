@@ -50,7 +50,7 @@ class CameraFragment : Fragment(), FragmentAttributeInterface, View.OnClickListe
     override var actionBarTitle = ""
 
     override fun onImageSaved() {
-        imageTakenListener.onImageSaved(file.absolutePath)
+        imageTakenListener.onImageAvailable(file.absolutePath)
     }
 
     /**
@@ -83,7 +83,7 @@ class CameraFragment : Fragment(), FragmentAttributeInterface, View.OnClickListe
     interface onImageTakenListener
     {
         fun onImageTaken(file : File)
-        fun onImageSaved(path: String)
+        fun onImageAvailable(path: String)
     }
 
     override fun onAttach(context: Context) {
