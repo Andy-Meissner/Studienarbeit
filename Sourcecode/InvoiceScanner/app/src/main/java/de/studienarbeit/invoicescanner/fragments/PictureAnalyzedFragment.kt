@@ -139,7 +139,7 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
     }
 
     private fun saveImageToExternalStorage(finalBitmap: Bitmap) {
-        val imagepath = ""
+        val imagepath = currentInvoice.imagePath
         val file = File(imagepath)
         if (file.exists())
             file.delete()
