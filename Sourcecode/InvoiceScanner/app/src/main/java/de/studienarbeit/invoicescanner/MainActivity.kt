@@ -1,8 +1,6 @@
 package de.studienarbeit.invoicescanner
 
 
-import android.Manifest
-import android.app.Activity
 import android.content.res.Configuration
 import android.graphics.Point
 import android.os.Bundle
@@ -16,34 +14,28 @@ import android.view.MenuItem
 import android.view.WindowManager
 import java.io.File
 import android.arch.persistence.room.Room
-import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBar
 import de.studienarbeit.invoicescanner.fragments.*
 import de.studienarbeit.invoicescanner.fragments.RecyclerViewFragment
-import android.media.MediaScannerConnection
-import android.graphics.Bitmap
-import android.net.Uri
-import android.os.Environment
-import android.util.Log
-import java.io.FileOutputStream
-import java.util.*
+import android.app.SearchManager
+import android.content.Context
+import android.widget.SearchView
 
 
 class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedListener, CameraFragment.onImageTakenListener, PictureAnalyzedFragment.onImagedSavedListener {
     override fun onImageSaved() {
-        hideIcon = true
+        hideSaveButton = true
         invalidateOptionsMenu()
         setFragment(recyclerViewFragment)
-        setFullscreenMode(false)
         actionbar!!.setTitle(R.string.archive)
     }
 
     override fun onImageSaved(path: String) {
-        val imageAnalyer = ImageAnalyzer(this, path)
-        imageAnalyer.analyse()
-        currentInvoice = imageAnalyer.getInvoice()
+        val imageAnalyzer = ImageAnalyzer(this, path)
+        imageAnalyzer.analyse()
+        currentInvoice = imageAnalyzer.getInvoice()
     }
 
     private val cameraFragment : CameraFragment = CameraFragment.newInstance()
@@ -59,7 +51,8 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
     private lateinit var toolbar : Toolbar
     private var actionbar : ActionBar? = null
 
-    private var hideIcon = true
+    private var hideSaveButton = true
+    private var hideSearchButton = true
     private var isMenuAvailable = true
     lateinit var currentInvoice : Invoice
 
@@ -79,7 +72,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
         args.putString("imagepath", currentImagePath)
         pictureAnalyzedFragment.arguments = args
         setFragment(pictureAnalyzedFragment)
-        hideIcon = false
+        hideSaveButton = false
         invalidateOptionsMenu()
     }
 
@@ -169,8 +162,16 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_save, menu)
-        menu!!.findItem(R.id.save_button).isVisible = !hideIcon
+        menuInflater.inflate(R.menu.options_menu, menu)
+        menu!!.findItem(R.id.save_button).isVisible = !hideSaveButton
+        menu!!.findItem(R.id.search).isVisible = !hideSearchButton
+
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = menu.findItem(R.id.search).actionView as SearchView
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(componentName))
+
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -183,7 +184,7 @@ class MainActivity : AppCompatActivity(), RetakeConfirmFragment.OnButtonClickedL
                     supportFragmentManager.popBackStack()
                     if(currentFragment == pictureAnalyzedFragment) {
                         setFullscreenMode(true)
-                        hideIcon = true
+                        hideSaveButton = true
                         invalidateOptionsMenu()
                         currentFragment = retakeConfirmFragment
                     } else if (currentFragment == retakeConfirmFragment) {

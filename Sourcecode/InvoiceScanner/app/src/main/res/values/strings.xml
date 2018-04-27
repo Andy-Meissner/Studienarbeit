@@ -29,4 +29,6 @@
     <string name="receiver">Receiver</string>
     <string name="details">Details</string>
     <string name="empty">empty</string>
+    <string name="search_title">Search</string>
+    <string name="search_hint">Hint</string>
 </resources>
