@@ -37,6 +37,11 @@ class MyAdapter(private val myDataset: List<Invoice>) :
         holder.container.saved_iban.text = myDataset[position].iban
         holder.container.saved_receiver.text = myDataset[position].receiver
         holder.container.saved_amount.text = myDataset[position].amount.toString()
+        if(myDataset[position].isFavorite) {
+            holder.container.toggle_favorite.setBackgroundResource(R.drawable.ic_star_black)
+        } else {
+            holder.container.toggle_favorite.setBackgroundResource(R.drawable.ic_star_border_black)
+        }
 
         val file = File(myDataset[position].imagePath)
         if (file.exists()) {
