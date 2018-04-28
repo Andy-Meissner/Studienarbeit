@@ -12,14 +12,11 @@ import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.graphics.Rect
 import android.media.MediaScannerConnection
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.support.constraint.ConstraintLayout
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -27,20 +24,18 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.*
 import de.studienarbeit.invoicescanner.*
-import de.studienarbeit.invoicescanner.helper.ConfirmationDialog
-import de.studienarbeit.invoicescanner.helper.ErrorDialog
 import de.studienarbeit.invoicescanner.helper.showToast
 import java.io.File
 import java.io.FileOutputStream
-import java.util.*
 
+@Suppress("NAME_SHADOWING")
 class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , ActivityCompat.OnRequestPermissionsResultCallback {
 
     override var isMenuAvailable = false
     override var actionBarTitle = TITLE_NEW_INVOICE
     override var fullScreen = false
 
-    private lateinit var myListener : onImagedSavedListener
+    private lateinit var myListener : OnImagedSavedListener
     private lateinit var currentImage : Bitmap
     private lateinit var currentInvoice : Invoice
     private var dataAvailable = false
@@ -59,7 +54,7 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
         if (imgFile.exists()) {
 
             currentImage = BitmapFactory.decodeFile(imgFile.absolutePath)
-            var imageView = view.findViewById<ImageView>(R.id.captured_image)
+            val imageView = view.findViewById<ImageView>(R.id.captured_image)
             imageView.setImageBitmap(currentImage)
             imageView.setOnClickListener({
                 zoomImageFromThumb(imageView,currentImage)
@@ -79,7 +74,7 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         try {
-            myListener = context as onImagedSavedListener
+            myListener = context as OnImagedSavedListener
         } catch (e: ClassCastException) {
             throw ClassCastException(context.toString() + " must implement OnArticleSelectedListener")
         }
@@ -108,7 +103,7 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
 
     fun saveImage()
     {
-        val permission = ContextCompat.checkSelfPermission(this!!.activity!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val permission = ContextCompat.checkSelfPermission(this.activity!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)
         if(permission != PackageManager.PERMISSION_GRANTED)
         {
             requestCameraPermission()
@@ -122,10 +117,9 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
 
     }
 
-    interface onImagedSavedListener
+    interface OnImagedSavedListener
     {
         fun onImageSaved()
-        fun onToggleImageFullscreen()
     }
 
     fun onImageAnalyzed(invoice : Invoice)
@@ -135,7 +129,7 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
         dataAvailable = true
     }
 
-    fun fillEditTextFields(inv : Invoice)
+    private fun fillEditTextFields(inv : Invoice)
     {
         if (view != null)
         {
@@ -163,13 +157,11 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
 
         // Tell the media scanner about the new file so that it is
         // immediately available to the user.
-        MediaScannerConnection.scanFile(activity, arrayOf(file.toString()), null,
-                object : MediaScannerConnection.OnScanCompletedListener {
-                    override fun onScanCompleted(path: String, uri: Uri) {
-                        Log.i("ExternalStorage", "Scanned $path:")
-                        Log.i("ExternalStorage", "-> uri=$uri")
-                    }
-                })
+        MediaScannerConnection.scanFile(activity, arrayOf(file.toString()), null
+        ) { path, uri ->
+            Log.i("ExternalStorage", "Scanned $path:")
+            Log.i("ExternalStorage", "-> uri=$uri")
+        }
 
     }
 
@@ -263,7 +255,7 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
         // Upon clicking the zoomed-in image, it should zoom back down
         // to the original bounds and show the thumbnail instead of
         // the expanded image.
-        expandedImageView.setOnClickListener(View.OnClickListener {
+        expandedImageView.setOnClickListener({
             if (mCurrentAnimator != null) {
                 mCurrentAnimator!!.cancel()
             }
@@ -287,13 +279,13 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
             set.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     thumbView.alpha = 1f
-                    expandedImageView.setVisibility(View.GONE)
+                    expandedImageView.visibility = View.GONE
                     mCurrentAnimator = null
                 }
 
                 override fun onAnimationCancel(animation: Animator) {
                     thumbView.alpha = 1f
-                    expandedImageView.setVisibility(View.GONE)
+                    expandedImageView.visibility = View.GONE
                     mCurrentAnimator = null
                 }
             })

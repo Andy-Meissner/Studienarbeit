@@ -12,10 +12,8 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
-import java.io.File
 import android.arch.persistence.room.Room
 import android.os.AsyncTask
-import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBar
 import de.studienarbeit.invoicescanner.fragments.*
@@ -25,13 +23,12 @@ import android.content.Context
 import android.widget.SearchView
 
 
-class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, PictureAnalyzedFragment.onImagedSavedListener {
+class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, PictureAnalyzedFragment.OnImagedSavedListener {
 
     private val cameraFragment = CameraFragment.newInstance()
     private val archiveFragment = RecyclerViewFragment()
     private val favoritesFragment = RecyclerViewFragment()
     private val aboutFragment = AboutFragment()
-    private val retakeConfirmFragment = RetakeConfirmFragment()
     private val pictureAnalyzedFragment = PictureAnalyzedFragment()
     private var currentFragment : android.support.v4.app.Fragment? = null
     private var currentImagePath : String = ""
@@ -52,9 +49,6 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         setFragment(archiveFragment)
         setFullscreenMode(false)
         actionbar!!.setTitle(R.string.archive)
-    }
-
-    override fun onToggleImageFullscreen() {
     }
 
     override fun onImageAvailable(path: String) {
@@ -185,8 +179,6 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
                         setFullscreenMode(true)
                         hideSaveButton = true
                         invalidateOptionsMenu()
-                        currentFragment = retakeConfirmFragment
-                    } else if (currentFragment == retakeConfirmFragment) {
                         actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
                         currentFragment = cameraFragment
                         isMenuAvailable = true
@@ -236,7 +228,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
     private fun setFragment(fragment : Fragment) {
         if(currentFragment != fragment) {
             runOnUiThread {
-                if (currentFragment == cameraFragment || currentFragment == retakeConfirmFragment) {
+                if (currentFragment == cameraFragment) {
                     supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
                 } else {
                     supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
