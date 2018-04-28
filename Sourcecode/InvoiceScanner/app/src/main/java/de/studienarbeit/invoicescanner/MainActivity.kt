@@ -54,6 +54,9 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         actionbar!!.setTitle(R.string.archive)
     }
 
+    override fun onToggleImageFullscreen() {
+    }
+
     override fun onImageAvailable(path: String) {
         val args = Bundle()
         args.putString("imagepath", path)
