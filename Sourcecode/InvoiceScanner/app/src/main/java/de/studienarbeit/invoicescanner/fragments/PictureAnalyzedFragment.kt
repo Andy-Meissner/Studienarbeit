@@ -36,7 +36,6 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
     override var fullScreen = false
 
     private lateinit var myListener : onImagedSavedListener
-    private var viewCreated = false
     private lateinit var currentImage : Bitmap
     private lateinit var currentInvoice : Invoice
     private var dataAvailable = false
@@ -56,14 +55,14 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
 
             view.findViewById<ImageView>(R.id.captured_image).setImageBitmap(currentImage)
         }
-        viewCreated = true
+    }
 
+    override fun onStart() {
+        super.onStart()
         if (dataAvailable)
         {
-            view!!.findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
             fillEditTextFields(currentInvoice)
         }
-
     }
 
 
@@ -120,26 +119,25 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
 
     fun onImageAnalyzed(invoice : Invoice)
     {
-        if (viewCreated) {
-            view!!.findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
-            fillEditTextFields(invoice)
-        }
-        dataAvailable = true
+        fillEditTextFields(invoice)
         currentInvoice = invoice
+        dataAvailable = true
     }
 
     fun fillEditTextFields(inv : Invoice)
     {
-        view!!.findViewById<EditText>(R.id.edit_iban).setText(inv.iban, TextView.BufferType.EDITABLE)
-        view!!.findViewById<EditText>(R.id.edit_bic).setText(inv.bic, TextView.BufferType.EDITABLE)
-        view!!.findViewById<EditText>(R.id.edit_amount).setText((inv.amount).toString(), TextView.BufferType.EDITABLE)
-        view!!.findViewById<EditText>(R.id.edit_receiver).setText(inv.receiver, TextView.BufferType.EDITABLE)
-        view!!.findViewById<EditText>(R.id.edit_details).setText(inv.details, TextView.BufferType.EDITABLE)
-
+        if (view != null)
+        {
+            view!!.findViewById<EditText>(R.id.edit_iban).setText(inv.iban, TextView.BufferType.EDITABLE)
+            view!!.findViewById<EditText>(R.id.edit_bic).setText(inv.bic, TextView.BufferType.EDITABLE)
+            view!!.findViewById<EditText>(R.id.edit_amount).setText((inv.amount).toString(), TextView.BufferType.EDITABLE)
+            view!!.findViewById<EditText>(R.id.edit_receiver).setText(inv.receiver, TextView.BufferType.EDITABLE)
+            view!!.findViewById<EditText>(R.id.edit_details).setText(inv.details, TextView.BufferType.EDITABLE)
+        }
     }
 
     private fun saveImageToExternalStorage(finalBitmap: Bitmap) {
-        val imagepath = ""
+        val imagepath = currentInvoice.imagePath
         val file = File(imagepath)
         if (file.exists())
             file.delete()
