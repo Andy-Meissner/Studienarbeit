@@ -202,6 +202,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
             currentFragment = cameraFragment
         } else if (currentFragment == pictureAnalyzedFragment) {
             setFullscreenMode(true)
+            isMenuAvailable = true
             hideSaveButton = true
             invalidateOptionsMenu()
             actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
