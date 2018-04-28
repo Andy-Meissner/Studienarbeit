@@ -10,55 +10,89 @@
     <android.support.v7.widget.GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:columnCount="2"
-        app:rowCount="6">
+        app:columnCount="3"
+        app:rowCount="6"
+        >
 
         <ImageView
             android:id="@+id/saved_invoice_picture"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="150dp"
+            app:layout_columnWeight="50"
             app:layout_rowSpan="6" />
 
         <TextView
             android:id="@+id/iban"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            app:layout_rowWeight="1"
+            app:layout_columnWeight="1"
+            app:layout_columnSpan="2"
             android:text="@string/iban"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/saved_iban"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/empty" />
+            android:layout_width="0dp"
+            app:layout_rowWeight="1"
+            app:layout_columnWeight="1"
+            app:layout_columnSpan="2"
+            android:text="@string/empty"
+            android:maxLines="1"
+            android:ellipsize="end"/>
 
         <TextView
             android:id="@+id/receiver"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            app:layout_rowWeight="1"
+            app:layout_columnWeight="1"
+            app:layout_columnSpan="2"
             android:text="@string/receiver"
             android:textStyle="bold"
-            android:paddingTop="10dp"/>
+            android:paddingTop="10dp"
+            android:maxLines="1"
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/saved_receiver"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/empty" />
+            android:layout_width="0dp"
+            app:layout_rowWeight="1"
+            app:layout_columnWeight="1"
+            app:layout_columnSpan="2"
+            android:text="@string/empty"
+            android:maxLines="1"
+            android:ellipsize="end"  />
 
         <TextView
             android:id="@+id/amount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            app:layout_rowWeight="1"
+            app:layout_columnWeight="3"
+            app:layout_columnSpan="2"
             android:text="@string/amount"
             android:textStyle="bold"
-            android:paddingTop="10dp"/>
+            android:paddingTop="10dp"
+            android:maxLines="1"
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/saved_amount"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            app:layout_rowWeight="1"
+            app:layout_columnWeight="100"
+            android:text="@string/empty"
+            android:gravity="bottom"
+            android:maxLines="1"
+            android:ellipsize="end"  />
+
+        <ImageButton
+            android:id="@+id/toggle_favorite"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/empty" />
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:background="@drawable/ic_star_border_black" />
     </android.support.v7.widget.GridLayout>
 
 </android.support.constraint.ConstraintLayout>
