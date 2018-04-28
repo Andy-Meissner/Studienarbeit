@@ -200,6 +200,12 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
                 currentFragment == aboutFragment) {
             setFullscreenMode(true)
             currentFragment = cameraFragment
+        } else if (currentFragment == pictureAnalyzedFragment) {
+            setFullscreenMode(true)
+            hideSaveButton = true
+            invalidateOptionsMenu()
+            actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
+            currentFragment = cameraFragment
         }
         super.onBackPressed()
     }
