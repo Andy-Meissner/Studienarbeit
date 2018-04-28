@@ -199,6 +199,16 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onBackPressed() {
+        if(currentFragment == archiveFragment ||
+                currentFragment == favoritesFragment ||
+                currentFragment == aboutFragment) {
+            setFullscreenMode(true)
+            currentFragment = cameraFragment
+        }
+        super.onBackPressed()
+    }
+
     private fun onSaveButtonClicked()
     {
         object : AsyncTask<Void, Void, Int>() {
@@ -233,7 +243,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
     private fun setFragment(fragment : Fragment) {
         if(currentFragment != fragment) {
             runOnUiThread {
-                if (currentFragment == cameraFragment || currentFragment == retakeConfirmFragment) {
+                if (currentFragment == cameraFragment) {
                     supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
                 } else {
                     supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
