@@ -5,11 +5,9 @@
 package de.studienarbeit.invoicescanner.helper
 
 
-import android.content.Context
 import android.media.Image
 import android.util.Log
 import de.studienarbeit.invoicescanner.fragments.CameraFragment
-import de.studienarbeit.invoicescanner.fragments.RetakeConfirmFragment
 
 import java.io.File
 import java.io.FileOutputStream
