@@ -55,21 +55,16 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
     }
 
     override fun onImageAvailable(path: String) {
-        val imageAnalyzer = ImageAnalyzer(this, path)
-        imageAnalyzer.analyse()
-        currentInvoice = imageAnalyzer.getInvoice()
-        pictureAnalyzedFragment.onImageAnalyzed(currentInvoice)
-    }
-
-
-    override fun onImageTaken(file : File) {
-        currentImagePath = file.absolutePath
         val args = Bundle()
-        args.putString("imagepath",currentImagePath)
+        args.putString("imagepath", path)
         pictureAnalyzedFragment.arguments = args
         setFragment(pictureAnalyzedFragment)
         hideSaveButton = false
         invalidateOptionsMenu()
+        val imageAnalyzer = ImageAnalyzer(this, path)
+        imageAnalyzer.analyse()
+        currentInvoice = imageAnalyzer.getInvoice()
+        pictureAnalyzedFragment.onImageAnalyzed(currentInvoice)
     }
 
     fun onButtonDismiss() {

@@ -82,7 +82,6 @@ class CameraFragment : Fragment(), FragmentAttributeInterface, View.OnClickListe
 
     interface onImageTakenListener
     {
-        fun onImageTaken(file : File)
         fun onImageAvailable(path: String)
     }
 
@@ -171,7 +170,6 @@ class CameraFragment : Fragment(), FragmentAttributeInterface, View.OnClickListe
         private val onImageAvailableListener = ImageReader.OnImageAvailableListener {
             val imagesaver = ImageSaver(it.acquireNextImage(), file, this)
             backgroundHandler?.post(imagesaver)
-            imageTakenListener.onImageTaken(file)
         }
 
         /**
