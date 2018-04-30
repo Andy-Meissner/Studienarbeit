@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
     private val aboutFragment = AboutFragment()
     private val pictureAnalyzedFragment = PictureAnalyzedFragment()
     private var currentFragment : android.support.v4.app.Fragment? = null
-    private var currentImagePath : String = ""
 
     private lateinit var toolbar : Toolbar
     private var actionbar : ActionBar? = null
@@ -62,12 +61,6 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         imageAnalyzer.analyse()
         currentInvoice = imageAnalyzer.getInvoice()
         pictureAnalyzedFragment.onImageAnalyzed(currentInvoice)
-    }
-
-    fun onButtonDismiss() {
-        supportFragmentManager.popBackStack()
-        actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
-        currentFragment = cameraFragment
     }
 
     private var mDrawerLayout : DrawerLayout? = null
