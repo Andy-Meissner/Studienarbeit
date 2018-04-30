@@ -23,13 +23,27 @@ import android.content.Context
 import android.widget.SearchView
 
 
-class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, PictureAnalyzedFragment.OnImagedSavedListener {
+class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, PictureAnalyzedFragment.OnImagedSavedListener, RecyclerViewFragment.OnInvoiceChangedListener {
+    override fun onInvoiceChanged(invoice: Invoice) {
+        object : AsyncTask<Void, Void, Int>() {
+            override fun doInBackground(vararg params: Void): Int? {
+                db.invoiceDao().updateInvoice(invoice)
+                favoritesFragment.initDataset(db.invoiceDao().favorites)
+                archiveFragment.initDataset(db.invoiceDao().all)
+                return 0
+            }
+
+            override fun onPostExecute(resultCode: Int?) {
+            }
+        }.execute()
+    }
 
     private val cameraFragment = CameraFragment.newInstance()
     private val archiveFragment = RecyclerViewFragment()
     private val favoritesFragment = RecyclerViewFragment()
     private val aboutFragment = AboutFragment()
     private val pictureAnalyzedFragment = PictureAnalyzedFragment()
+    private val invoiceDetailsFragment = PictureAnalyzedFragment()
     private var currentFragment : android.support.v4.app.Fragment? = null
 
     private lateinit var toolbar : Toolbar
@@ -37,6 +51,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
 
     private var hideSaveButton = true
     private var hideSearchButton = true
+    private var hideEditButton = true
     private var isMenuAvailable = true
     lateinit var currentInvoice : Invoice
 
@@ -151,6 +166,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         menuInflater.inflate(R.menu.options_menu, menu)
         menu!!.findItem(R.id.save_button).isVisible = !hideSaveButton
         menu!!.findItem(R.id.search).isVisible = !hideSearchButton
+        menu.findItem(R.id.edit).isVisible = !hideEditButton
 
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView = menu.findItem(R.id.search).actionView as SearchView

@@ -5,11 +5,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import de.studienarbeit.invoicescanner.fragments.RecyclerViewFragment
 import kotlinx.android.synthetic.main.row_item_invoice.view.*
 import java.io.File
 
 
-class MyAdapter(private val myDataset: List<Invoice>) :
+class MyAdapter(private val myDataset: List<Invoice>, private val recyclerViewFragment: RecyclerViewFragment) :
         RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
     // Provide a reference to the views for each data item
@@ -37,6 +38,16 @@ class MyAdapter(private val myDataset: List<Invoice>) :
         holder.container.saved_iban.text = myDataset[position].iban
         holder.container.saved_receiver.text = myDataset[position].receiver
         holder.container.saved_amount.text = myDataset[position].amount.toString()
+        holder.container.toggle_favorite.setOnClickListener({
+            myDataset[position].isFavorite = !myDataset[position].isFavorite
+
+            if(myDataset[position].isFavorite) {
+                holder.container.toggle_favorite.setBackgroundResource(R.drawable.ic_star_black)
+            } else {
+                holder.container.toggle_favorite.setBackgroundResource(R.drawable.ic_star_border_black)
+            }
+            recyclerViewFragment.onInvoiceChanged(myDataset[position])
+        })
         if(myDataset[position].isFavorite) {
             holder.container.toggle_favorite.setBackgroundResource(R.drawable.ic_star_black)
         } else {
@@ -55,4 +66,3 @@ class MyAdapter(private val myDataset: List<Invoice>) :
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = myDataset.size
 }
-
