@@ -1,5 +1,6 @@
 package de.studienarbeit.invoicescanner.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -11,7 +12,6 @@ import android.view.ViewGroup
 import de.studienarbeit.invoicescanner.Invoice
 import de.studienarbeit.invoicescanner.MyAdapter
 import de.studienarbeit.invoicescanner.R
-import de.studienarbeit.invoicescanner.TITLE_ARCHIVE
 import de.studienarbeit.invoicescanner.helper.SimpleDividerItemDecoration
 
 /**
@@ -24,20 +24,14 @@ class RecyclerViewFragment : Fragment(), FragmentAttributeInterface {
     override var actionBarTitle = ""
     override var fullScreen = false
 
+    private lateinit var myListener : OnInvoiceChangedListener
+
     private lateinit var currentLayoutManagerType: LayoutManagerType
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var dataset: List<Invoice>
 
     enum class LayoutManagerType { GRID_LAYOUT_MANAGER, LINEAR_LAYOUT_MANAGER }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Initialize dataset, this data would usually come from a local content provider or
-        // remote server.
-
-    }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -63,10 +57,29 @@ class RecyclerViewFragment : Fragment(), FragmentAttributeInterface {
 
         // Set CustomAdapter as the adapter for RecyclerView.
         recyclerView.addItemDecoration(SimpleDividerItemDecoration(activity!!.applicationContext))
-        recyclerView.adapter = MyAdapter(dataset)
+        recyclerView.adapter = MyAdapter(dataset, this)
         setRecyclerViewLayoutManager(LayoutManagerType.LINEAR_LAYOUT_MANAGER)
 
         return rootView
+    }
+
+    fun onInvoiceChanged(invoice : Invoice)
+    {
+        myListener.onInvoiceChanged(invoice)
+    }
+
+    interface OnInvoiceChangedListener
+    {
+        fun onInvoiceChanged(invoice: Invoice)
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        try {
+            myListener = context as OnInvoiceChangedListener
+        } catch (e: ClassCastException) {
+            throw ClassCastException(context.toString() + " must implement OnArticleSelectedListener")
+        }
     }
 
     /**
