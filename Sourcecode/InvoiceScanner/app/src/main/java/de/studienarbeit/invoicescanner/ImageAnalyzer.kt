@@ -5,12 +5,18 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
 import android.util.SparseArray
+import com.google.android.gms.common.util.IOUtils
 import com.google.android.gms.vision.Frame
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
 import java.io.File
-import java.util.*
 import com.googlecode.tesseract.android.TessBaseAPI
+import java.io.BufferedReader
+import java.io.FileOutputStream
+import android.content.pm.PackageManager
+import android.content.pm.PackageInfo
+import android.util.Log
+
 
 
 
@@ -53,20 +59,51 @@ class ImageAnalyzer(context: Context, imagePath : String) {
 
     private fun getTextFromImageTess()
     {
-        val time1 = System.nanoTime()
-        val myDir = context.getExternalFilesDir(Environment.MEDIA_MOUNTED)
-        if(imgFile.exists()) {
+        var m = context.packageManager
+        var path = context.packageName
+        try {
+            val p = m.getPackageInfo(path, 0)
+            path = p.applicationInfo.dataDir
+        } catch (e: PackageManager.NameNotFoundException) {
+            Log.w("yourtag", "Error Package name not found ", e)
         }
-        val baseApi = TessBaseAPI()
-        baseApi.init(myDir.toString(), "eng") // myDir + "/tessdata/eng.traineddata" must be present
-        baseApi.setImage(imgFile)
 
-        tessText = baseApi.utF8Text // Log or otherwise display this string...
+        val tessdataDir = File(path + "/tessdata")
+        if (!tessdataDir.exists())
+        {
+            tessdataDir.mkdirs()
+        }
+        val trainedData = File(path + "/tessdata/eng.traineddata")
+        if (trainedData.exists())
+        {
+            if (trainedData.isDirectory)
+            {
+                trainedData.delete()
+                trainedData.createNewFile()
+            }
+        }
+        else
+        {
+            trainedData.createNewFile()
+        }
 
-        baseApi.end()
+        val outputStream = FileOutputStream(trainedData)
+        IOUtils.copyStream(context.assets.open("eng.traineddata"), outputStream)
+        outputStream.close()
 
-        val time2 = System.nanoTime()
-        analyzeTimeTess = time2 - time1
+        if(imgFile.exists()) {
+            val time1 = System.nanoTime()
+            val baseApi = TessBaseAPI()
+            baseApi.init(path, "eng") // myDir + "/tessdata/eng.traineddata" must be present
+            baseApi.setImage(imgFile)
+
+            tessText = baseApi.utF8Text // Log or otherwise display this string...
+
+            baseApi.end()
+            val time2 = System.nanoTime()
+            analyzeTimeTess = time2 - time1
+        }
+
     }
 
     private fun getImagePath(): String {
@@ -96,6 +133,7 @@ class ImageAnalyzer(context: Context, imagePath : String) {
         getTextFromImage()
         getTextFromImageTess()
         mapTextToInvoice()
+
     }
 
     fun getInvoice() : Invoice
