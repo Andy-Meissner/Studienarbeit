@@ -10,6 +10,9 @@ import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
 import java.io.File
 import java.util.*
+import com.googlecode.tesseract.android.TessBaseAPI
+
+
 
 class ImageAnalyzer(context: Context, imagePath : String) {
 
@@ -19,7 +22,10 @@ class ImageAnalyzer(context: Context, imagePath : String) {
     private lateinit var imgFile : File
     private lateinit var imgBitmap : Bitmap
     private lateinit var recognizedText : SparseArray<TextBlock>
+    private lateinit var tessText : String
     private lateinit var invoice : Invoice
+    private var analyzeTimeTess : Long = 0
+    private var anaylzeTimeGMV : Long = 0
 
     private fun loadImage()
     {
@@ -31,14 +37,36 @@ class ImageAnalyzer(context: Context, imagePath : String) {
 
     private fun getTextFromImage()
     {
+        val time1 = System.nanoTime()
+
         val textRecognizer : TextRecognizer = TextRecognizer.Builder(context).build()
         if(imgFile.exists())
         {
             val myFrame = Frame.Builder()
             myFrame.setBitmap(imgBitmap)
-            recognizedText = textRecognizer.detect(myFrame.build())
 
+            recognizedText = textRecognizer.detect(myFrame.build())
         }
+        val time2 = System.nanoTime()
+        anaylzeTimeGMV = time2 - time1
+    }
+
+    private fun getTextFromImageTess()
+    {
+        val time1 = System.nanoTime()
+        val myDir = context.getExternalFilesDir(Environment.MEDIA_MOUNTED)
+        if(imgFile.exists()) {
+        }
+        val baseApi = TessBaseAPI()
+        baseApi.init(myDir.toString(), "eng") // myDir + "/tessdata/eng.traineddata" must be present
+        baseApi.setImage(imgFile)
+
+        tessText = baseApi.utF8Text // Log or otherwise display this string...
+
+        baseApi.end()
+
+        val time2 = System.nanoTime()
+        analyzeTimeTess = time2 - time1
     }
 
     private fun getImagePath(): String {
@@ -66,6 +94,7 @@ class ImageAnalyzer(context: Context, imagePath : String) {
     {
         loadImage()
         getTextFromImage()
+        getTextFromImageTess()
         mapTextToInvoice()
     }
 
