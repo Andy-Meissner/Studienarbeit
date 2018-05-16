@@ -46,13 +46,18 @@ class ImageAnalyzer(context: Context, imagePath : String) {
         val time1 = System.nanoTime()
 
         val textRecognizer : TextRecognizer = TextRecognizer.Builder(context).build()
-        if(imgFile.exists())
+        if(imgFile.exists() && textRecognizer.isOperational())
         {
             val myFrame = Frame.Builder()
             myFrame.setBitmap(imgBitmap)
 
             recognizedText = textRecognizer.detect(myFrame.build())
         }
+        else
+        {
+            Log.w("ImageAnalyze:","no image found or textrecognizer not operational")
+        }
+
         val time2 = System.nanoTime()
         anaylzeTimeGMV = time2 - time1
     }
@@ -65,7 +70,7 @@ class ImageAnalyzer(context: Context, imagePath : String) {
             val p = m.getPackageInfo(path, 0)
             path = p.applicationInfo.dataDir
         } catch (e: PackageManager.NameNotFoundException) {
-            Log.w("yourtag", "Error Package name not found ", e)
+            Log.w("IA:", "Error Package name not found ", e)
         }
 
         val tessdataDir = File(path + "/tessdata")
@@ -133,7 +138,6 @@ class ImageAnalyzer(context: Context, imagePath : String) {
         getTextFromImage()
         getTextFromImageTess()
         mapTextToInvoice()
-
     }
 
     fun getInvoice() : Invoice
