@@ -38,6 +38,9 @@ class MyAdapter(var myDataset: List<Invoice>, private val recyclerViewFragment: 
         holder.container.saved_iban.text = myDataset[position].iban
         holder.container.saved_receiver.text = myDataset[position].receiver
         holder.container.saved_amount.text = myDataset[position].amount.toString()
+        holder.container.show_details.setOnClickListener({
+            recyclerViewFragment.openDetails(myDataset[position])
+        })
         holder.container.toggle_favorite.setOnClickListener({
             myDataset[position].isFavorite = !myDataset[position].isFavorite
 

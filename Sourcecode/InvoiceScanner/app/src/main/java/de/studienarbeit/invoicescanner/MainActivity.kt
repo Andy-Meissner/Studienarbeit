@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
 
     private lateinit var toolbar : Toolbar
     private var actionbar : ActionBar? = null
+    private var new_invoice = true
 
     private var hideSaveButton = true
     private var hideSearchButton = true
@@ -92,6 +93,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
     }
 
     override fun onImageAvailable(path: String) {
+        new_invoice = true
         val args = Bundle()
         args.putString("imagepath", path)
         pictureAnalyzedFragment.arguments = args
@@ -102,6 +104,18 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         imageAnalyzer.analyse()
         currentInvoice = imageAnalyzer.getInvoice()
         pictureAnalyzedFragment.onImageAnalyzed(currentInvoice)
+    }
+
+    override fun openDetails(invoice: Invoice) {
+        new_invoice = false
+        val args = Bundle()
+        args.putString("imagepath", invoice.imagePath)
+        pictureAnalyzedFragment.arguments = args
+        pictureAnalyzedFragment.actionBarTitle = TITLE_EDIT_INVOICE
+        setFragment(pictureAnalyzedFragment)
+        hideSaveButton = false
+        invalidateOptionsMenu()
+        pictureAnalyzedFragment.onImageAnalyzed(invoice)
     }
 
     private var mDrawerLayout : DrawerLayout? = null
@@ -125,7 +139,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
 
         Thread(Runnable {
             archiveFragment.initDataset(db.invoiceDao().all)
-            favoritesFragment.initDataset(db.invoiceDao().all)}
+            favoritesFragment.initDataset(db.invoiceDao().favorites)}
         ).start()
 
         toolbar = findViewById(R.id.toolbar)
@@ -259,7 +273,14 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         var myinv = pictureAnalyzedFragment.getInvoice()
         object : AsyncTask<Void, Void, Int>() {
             override fun doInBackground(vararg params: Void): Int? {
-                db.invoiceDao().insertInvoice(myinv)
+                if (new_invoice)
+                {
+                    db.invoiceDao().insertInvoice(myinv)
+                }
+                else
+                {
+                    db.invoiceDao().updateInvoice(myinv)
+                }
                 updateData()
                 runOnUiThread({archiveFragment.updateRecyclerView()})
                 return 0

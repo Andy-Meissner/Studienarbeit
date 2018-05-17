@@ -72,6 +72,7 @@ class RecyclerViewFragment : Fragment(), FragmentAttributeInterface {
     interface OnInvoiceChangedListener
     {
         fun onInvoiceChanged(invoice: Invoice, action : String)
+        fun openDetails(invoice: Invoice)
     }
 
     override fun onAttach(context: Context?) {
@@ -128,6 +129,11 @@ class RecyclerViewFragment : Fragment(), FragmentAttributeInterface {
      */
     fun initDataset(Invoices : List<Invoice>) {
         dataset = Invoices
+    }
+
+    fun openDetails(invoice : Invoice)
+    {
+        myListener.openDetails(invoice)
     }
 
     fun updateRecyclerView()
