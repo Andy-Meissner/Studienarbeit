@@ -664,7 +664,6 @@ class CameraFragment : Fragment(), FragmentAttributeInterface, View.OnClickListe
                     override fun onCaptureCompleted(session: CameraCaptureSession,
                                                     request: CaptureRequest,
                                                     result: TotalCaptureResult) {
-                        activity!!.showToast("Saved: $file")
                         Log.d(TAG, file.toString())
                         unlockFocus()
                     }

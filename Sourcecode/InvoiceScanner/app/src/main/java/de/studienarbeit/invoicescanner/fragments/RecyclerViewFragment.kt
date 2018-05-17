@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,14 +64,14 @@ class RecyclerViewFragment : Fragment(), FragmentAttributeInterface {
         return rootView
     }
 
-    fun onInvoiceChanged(invoice : Invoice)
+    fun onInvoiceChanged(invoice : Invoice, action : String )
     {
-        myListener.onInvoiceChanged(invoice)
+        myListener.onInvoiceChanged(invoice, action)
     }
 
     interface OnInvoiceChangedListener
     {
-        fun onInvoiceChanged(invoice: Invoice)
+        fun onInvoiceChanged(invoice: Invoice, action : String)
     }
 
     override fun onAttach(context: Context?) {
@@ -126,7 +127,19 @@ class RecyclerViewFragment : Fragment(), FragmentAttributeInterface {
      * from a local content provider or remote server.
      */
     fun initDataset(Invoices : List<Invoice>) {
-            dataset = Invoices
+        dataset = Invoices
+    }
+
+    fun updateRecyclerView()
+    {
+        try {
+            (recyclerView.adapter as MyAdapter).myDataset = dataset
+            recyclerView.adapter.notifyDataSetChanged()
+        }
+        catch (e: UninitializedPropertyAccessException)
+        {
+            Log.w("Fragment not active", e)
+        }
     }
 
     companion object {

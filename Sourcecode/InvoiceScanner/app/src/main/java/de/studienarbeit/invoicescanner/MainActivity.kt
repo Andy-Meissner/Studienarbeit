@@ -24,19 +24,6 @@ import android.widget.SearchView
 
 
 class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, PictureAnalyzedFragment.OnImagedSavedListener, RecyclerViewFragment.OnInvoiceChangedListener {
-    override fun onInvoiceChanged(invoice: Invoice) {
-        object : AsyncTask<Void, Void, Int>() {
-            override fun doInBackground(vararg params: Void): Int? {
-                db.invoiceDao().updateInvoice(invoice)
-                favoritesFragment.initDataset(db.invoiceDao().favorites)
-                archiveFragment.initDataset(db.invoiceDao().all)
-                return 0
-            }
-
-            override fun onPostExecute(resultCode: Int?) {
-            }
-        }.execute()
-    }
 
     private val cameraFragment = CameraFragment.newInstance()
     private val archiveFragment = RecyclerViewFragment()
@@ -56,6 +43,45 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
     lateinit var currentInvoice : Invoice
 
     lateinit var db : AppDatabase
+
+    override fun onInvoiceChanged(invoice: Invoice, action: String) {
+        when(action)
+        {
+            "update" ->
+                Thread(
+                        Runnable {
+                            db.invoiceDao().updateInvoice(invoice)
+                            updateData()
+                            runOnUiThread({
+                            archiveFragment.updateRecyclerView()
+                            favoritesFragment.updateRecyclerView()})
+                        }
+                ).start()
+
+            "delete" ->
+                Thread(
+                        Runnable {
+                            db.invoiceDao().deleteInvoice(invoice)
+                            updateData()
+                            runOnUiThread({
+                            archiveFragment.updateRecyclerView()
+                            favoritesFragment.updateRecyclerView()})
+                        }
+                ).start()
+        }
+    }
+
+    /*
+    Dont call from Main Thread
+     */
+    fun updateData()
+    {
+        var data = db.invoiceDao().all
+        archiveFragment.initDataset(data)
+        var favs = db.invoiceDao().favorites
+        favoritesFragment.initDataset(favs)
+    }
+
 
     override fun onImageSaved() {
         hideSaveButton = true
@@ -97,16 +123,10 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         db = Room.databaseBuilder(applicationContext,
                 AppDatabase::class.java, "database-name").build()
 
-        object : AsyncTask<Void, Void, Int>() {
-            override fun doInBackground(vararg params: Void): Int? {
-                archiveFragment.initDataset(db.invoiceDao().all)
-                favoritesFragment.initDataset(db.invoiceDao().favorites)
-                return 0
-            }
-
-            override fun onPostExecute(resultCode: Int?) {
-            }
-        }.execute()
+        Thread(Runnable {
+            archiveFragment.initDataset(db.invoiceDao().all)
+            favoritesFragment.initDataset(db.invoiceDao().all)}
+        ).start()
 
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -129,14 +149,28 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
             // For example, swap UI fragments here
             when(menuItem.itemId){
                 R.id.nav_camera ->
-                    {setFragment(cameraFragment)}
-
+                    {
+                        setFragment(cameraFragment)
+                    }
                 R.id.nav_archive ->
-                    {setFragment(archiveFragment)}
+                    {
+                        setFragment(archiveFragment)
+                        Thread(
+                                Runnable {
+                                    updateData()
+                                }
+                                ).start()
 
+                    }
                 R.id.nav_favorites ->
-                    {setFragment(favoritesFragment)}
-
+                    {
+                        setFragment(favoritesFragment)
+                        Thread(
+                                Runnable {
+                                    updateData()
+                                }
+                                ).start()
+                    }
                 R.id.nav_about ->
                     {setFragment(aboutFragment)}
             }
@@ -226,7 +260,8 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         object : AsyncTask<Void, Void, Int>() {
             override fun doInBackground(vararg params: Void): Int? {
                 db.invoiceDao().insertInvoice(myinv)
-                archiveFragment.initDataset(db.invoiceDao().all)
+                updateData()
+                runOnUiThread({archiveFragment.updateRecyclerView()})
                 return 0
             }
 

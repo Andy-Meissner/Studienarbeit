@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.row_item_invoice.view.*
 import java.io.File
 
 
-class MyAdapter(private val myDataset: List<Invoice>, private val recyclerViewFragment: RecyclerViewFragment) :
+class MyAdapter(var myDataset: List<Invoice>, private val recyclerViewFragment: RecyclerViewFragment) :
         RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
     // Provide a reference to the views for each data item
@@ -46,7 +46,10 @@ class MyAdapter(private val myDataset: List<Invoice>, private val recyclerViewFr
             } else {
                 holder.container.toggle_favorite.setBackgroundResource(R.drawable.ic_star_border_black)
             }
-            recyclerViewFragment.onInvoiceChanged(myDataset[position])
+            recyclerViewFragment.onInvoiceChanged(myDataset[position], "update")
+        })
+        holder.container.delete_invoice.setOnClickListener({
+            recyclerViewFragment.onInvoiceChanged(myDataset[position], "delete")
         })
         if(myDataset[position].isFavorite) {
             holder.container.toggle_favorite.setBackgroundResource(R.drawable.ic_star_black)
