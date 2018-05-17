@@ -222,9 +222,10 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
 
     private fun onSaveButtonClicked()
     {
+        var myinv = pictureAnalyzedFragment.getInvoice()
         object : AsyncTask<Void, Void, Int>() {
             override fun doInBackground(vararg params: Void): Int? {
-                db.invoiceDao().insertInvoice(currentInvoice)
+                db.invoiceDao().insertInvoice(myinv)
                 archiveFragment.initDataset(db.invoiceDao().all)
                 return 0
             }

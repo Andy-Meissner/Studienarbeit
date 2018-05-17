@@ -117,6 +117,18 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
 
     }
 
+    fun getInvoice(): Invoice {
+        if (view != null)
+        {
+            currentInvoice.iban = view!!.findViewById<EditText>(R.id.edit_iban).text.toString()
+            currentInvoice.bic = view!!.findViewById<EditText>(R.id.edit_bic).text.toString()
+            currentInvoice.amount = view!!.findViewById<EditText>(R.id.edit_amount).text.toString().toDouble()
+            currentInvoice.receiver = view!!.findViewById<EditText>(R.id.edit_receiver).text.toString()
+            currentInvoice.details = view!!.findViewById<EditText>(R.id.edit_details).text.toString()
+        }
+        return currentInvoice
+    }
+
     interface OnImagedSavedListener
     {
         fun onImageSaved()
