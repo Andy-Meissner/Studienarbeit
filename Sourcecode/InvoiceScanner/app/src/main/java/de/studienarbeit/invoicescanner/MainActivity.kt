@@ -21,6 +21,18 @@ import de.studienarbeit.invoicescanner.fragments.RecyclerViewFragment
 import android.app.SearchManager
 import android.content.Context
 import android.widget.SearchView
+import android.content.Intent
+import android.widget.Toast
+import android.app.Activity
+import android.content.ContextWrapper
+import android.provider.MediaStore
+import android.graphics.Bitmap
+import android.os.Build
+import android.support.annotation.RequiresApi
+import android.util.Log
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 
 class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, PictureAnalyzedFragment.OnImagedSavedListener, RecyclerViewFragment.OnInvoiceChangedListener {
@@ -30,14 +42,13 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
     private val favoritesFragment = RecyclerViewFragment()
     private val aboutFragment = AboutFragment()
     private val pictureAnalyzedFragment = PictureAnalyzedFragment()
-    private val invoiceDetailsFragment = PictureAnalyzedFragment()
     private var currentFragment : android.support.v4.app.Fragment? = null
 
     private lateinit var toolbar : Toolbar
     private var actionbar : ActionBar? = null
     private var new_invoice = true
 
-    private var hideSaveButton = true
+    private var showExplorerIcon = true
     private var hideSearchButton = true
     private var hideEditButton = true
     private var isMenuAvailable = true
@@ -85,7 +96,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
 
 
     override fun onImageSaved() {
-        hideSaveButton = true
+        showExplorerIcon = true
         invalidateOptionsMenu()
         setFragment(archiveFragment)
         setFullscreenMode(false)
@@ -98,7 +109,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         args.putString("imagepath", path)
         pictureAnalyzedFragment.arguments = args
         setFragment(pictureAnalyzedFragment)
-        hideSaveButton = false
+        showExplorerIcon = false
         invalidateOptionsMenu()
         val imageAnalyzer = ImageAnalyzer(this, path)
         imageAnalyzer.analyse()
@@ -113,7 +124,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         pictureAnalyzedFragment.arguments = args
         pictureAnalyzedFragment.actionBarTitle = TITLE_EDIT_INVOICE
         setFragment(pictureAnalyzedFragment)
-        hideSaveButton = false
+        showExplorerIcon = false
         invalidateOptionsMenu()
         pictureAnalyzedFragment.onImageAnalyzed(invoice)
     }
@@ -168,6 +179,8 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
                     }
                 R.id.nav_archive ->
                     {
+                        showExplorerIcon = true
+                        invalidateOptionsMenu()
                         setFragment(archiveFragment)
                         Thread(
                                 Runnable {
@@ -178,6 +191,8 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
                     }
                 R.id.nav_favorites ->
                     {
+                        showExplorerIcon = true
+                        invalidateOptionsMenu()
                         setFragment(favoritesFragment)
                         Thread(
                                 Runnable {
@@ -212,7 +227,14 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.options_menu, menu)
-        menu!!.findItem(R.id.save_button).isVisible = !hideSaveButton
+        if(showExplorerIcon)
+        {
+            menu!!.findItem(R.id.save_button).setIcon(R.drawable.baseline_folder_open_white_24dp)
+        }
+        else
+        {
+            menu!!.findItem(R.id.save_button).setIcon(R.drawable.ic_menu_save)
+        }
         menu!!.findItem(R.id.search).isVisible = !hideSearchButton
         menu.findItem(R.id.edit).isVisible = !hideEditButton
 
@@ -234,8 +256,6 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
                     supportFragmentManager.popBackStack()
                     if(currentFragment == pictureAnalyzedFragment) {
                         setFullscreenMode(true)
-                        hideSaveButton = true
-                        invalidateOptionsMenu()
                         actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
                         currentFragment = cameraFragment
                         isMenuAvailable = true
@@ -244,13 +264,59 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
                 return true
             }
             R.id.save_button -> {
-                onSaveButtonClicked()
+                if(showExplorerIcon)
+                {
+                    val intent = Intent()
+                    intent.type = "image/*"
+                    intent.action = Intent.ACTION_GET_CONTENT//
+                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1)
+                }
+                else
+                {
+                    onSaveButtonClicked()
+                }
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data != null) {
+                    try {
+                        var bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                        var cw = ContextWrapper(applicationContext)
+                        var fileDir = cw.getDir("profile", Context.MODE_PRIVATE)
+                        if(!fileDir.exists())
+                        {
+                            fileDir.mkdir()
+                        }
+                        var myfile = File(fileDir,"temp.jpg")
+                        var fos : FileOutputStream? = null
+                        try{
+                            fos = FileOutputStream(myfile)
+                            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fos)
+                            fos.close()
+                        } catch (e : Exception)
+                        {
+                            Log.w("SAVE_IMAGE", e.message, e)
+                        }
+                        onImageAvailable(myfile.absolutePath)
+
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     override fun onBackPressed() {
         if(currentFragment == archiveFragment ||
                 currentFragment == favoritesFragment ||
@@ -260,7 +326,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         } else if (currentFragment == pictureAnalyzedFragment) {
             setFullscreenMode(true)
             isMenuAvailable = true
-            hideSaveButton = true
+            showExplorerIcon = true
             invalidateOptionsMenu()
             actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
             currentFragment = cameraFragment
@@ -292,8 +358,6 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
 
         pictureAnalyzedFragment.saveImage()
     }
-
-
 
     private fun setFullscreenMode(yes : Boolean) {
         if(yes) {
