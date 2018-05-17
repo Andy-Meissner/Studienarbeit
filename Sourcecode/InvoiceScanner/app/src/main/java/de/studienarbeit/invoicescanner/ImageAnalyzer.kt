@@ -1,5 +1,6 @@
 package de.studienarbeit.invoicescanner
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -15,6 +16,7 @@ import java.io.BufferedReader
 import java.io.FileOutputStream
 import android.content.pm.PackageManager
 import android.content.pm.PackageInfo
+import android.os.AsyncTask
 import android.util.Log
 
 
@@ -97,18 +99,27 @@ class ImageAnalyzer(context: Context, imagePath : String) {
         outputStream.close()
 
         if(imgFile.exists()) {
-            val time1 = System.nanoTime()
-            val baseApi = TessBaseAPI()
-            baseApi.init(path, "eng") // myDir + "/tessdata/eng.traineddata" must be present
-            baseApi.setImage(imgFile)
+            var time1 = 0L
+            var time2 = 0L
+            object : AsyncTask<Void, Void, Int>() {
+                override fun doInBackground(vararg params: Void): Int? {
+                    time1 = System.nanoTime()
+                    val baseApi = TessBaseAPI()
+                    baseApi.init(path, "eng") // myDir + "/tessdata/eng.traineddata" must be present
+                    baseApi.setImage(imgFile)
 
-            tessText = baseApi.utF8Text // Log or otherwise display this string...
+                    tessText = baseApi.utF8Text // Log or otherwise display this string...
 
-            baseApi.end()
-            val time2 = System.nanoTime()
-            analyzeTimeTess = time2 - time1
+                    baseApi.end()
+                    time2 = System.nanoTime()
+                    return 0
+                }
+
+                override fun onPostExecute(resultCode: Int?) {
+                    analyzeTimeTess = time2 - time1
+                }
+            }.execute()
         }
-
     }
 
     private fun getImagePath(): String {
