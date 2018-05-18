@@ -30,6 +30,8 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.util.Log
+import kotlinx.android.synthetic.main.fragment_camera.*
+import kotlinx.android.synthetic.main.fragment_picture_analyzed.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -42,15 +44,18 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
     private val favoritesFragment = RecyclerViewFragment()
     private val aboutFragment = AboutFragment()
     private val pictureAnalyzedFragment = PictureAnalyzedFragment()
-    private var currentFragment : android.support.v4.app.Fragment? = null
+    private val detailsFragment = PictureAnalyzedFragment()
+    private var currentFragment : Fragment? = null
+    private var previousFragment : Fragment? = null
 
     private lateinit var toolbar : Toolbar
     private var actionbar : ActionBar? = null
     private var new_invoice = true
 
-    private var showExplorerIcon = true
     private var hideSearchButton = true
     private var hideEditButton = true
+    private var hideAddImage = false
+    private var hideSaveButton = true
     private var isMenuAvailable = true
     lateinit var currentInvoice : Invoice
 
@@ -96,11 +101,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
 
 
     override fun onImageSaved() {
-        showExplorerIcon = true
-        invalidateOptionsMenu()
         setFragment(archiveFragment)
-        setFullscreenMode(false)
-        actionbar!!.setTitle(R.string.archive)
     }
 
     override fun onImageAvailable(path: String) {
@@ -109,8 +110,6 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         args.putString("imagepath", path)
         pictureAnalyzedFragment.arguments = args
         setFragment(pictureAnalyzedFragment)
-        showExplorerIcon = false
-        invalidateOptionsMenu()
         val imageAnalyzer = ImageAnalyzer(this, path)
         imageAnalyzer.analyse()
         currentInvoice = imageAnalyzer.getInvoice()
@@ -121,12 +120,12 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         new_invoice = false
         val args = Bundle()
         args.putString("imagepath", invoice.imagePath)
-        pictureAnalyzedFragment.arguments = args
-        pictureAnalyzedFragment.actionBarTitle = TITLE_EDIT_INVOICE
-        setFragment(pictureAnalyzedFragment)
-        showExplorerIcon = false
-        invalidateOptionsMenu()
-        pictureAnalyzedFragment.onImageAnalyzed(invoice)
+        detailsFragment.arguments = args
+        detailsFragment.actionBarTitle = TITLE_EDIT_INVOICE
+        detailsFragment.isEditAvailable = true
+        detailsFragment.isSaveAvailable = false
+        setFragment(detailsFragment)
+        detailsFragment.onImageAnalyzed(invoice)
     }
 
     private var mDrawerLayout : DrawerLayout? = null
@@ -179,8 +178,6 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
                     }
                 R.id.nav_archive ->
                     {
-                        showExplorerIcon = true
-                        invalidateOptionsMenu()
                         setFragment(archiveFragment)
                         Thread(
                                 Runnable {
@@ -191,8 +188,6 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
                     }
                 R.id.nav_favorites ->
                     {
-                        showExplorerIcon = true
-                        invalidateOptionsMenu()
                         setFragment(favoritesFragment)
                         Thread(
                                 Runnable {
@@ -227,16 +222,11 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.options_menu, menu)
-        if(showExplorerIcon)
-        {
-            menu!!.findItem(R.id.save_button).setIcon(R.drawable.baseline_folder_open_white_24dp)
-        }
-        else
-        {
-            menu!!.findItem(R.id.save_button).setIcon(R.drawable.ic_menu_save)
-        }
+
         menu!!.findItem(R.id.search).isVisible = !hideSearchButton
         menu.findItem(R.id.edit).isVisible = !hideEditButton
+        menu.findItem(R.id.add_photo).isVisible = !hideAddImage
+        menu.findItem(R.id.save_button).isVisible = !hideSaveButton
 
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView = menu.findItem(R.id.search).actionView as SearchView
@@ -254,27 +244,19 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
                     mDrawerLayout!!.openDrawer(GravityCompat.START)
                 } else {
                     supportFragmentManager.popBackStack()
-                    if(currentFragment == pictureAnalyzedFragment) {
-                        setFullscreenMode(true)
-                        actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
-                        currentFragment = cameraFragment
-                        isMenuAvailable = true
-                    }
+                    setFragment(previousFragment!!, true)
                 }
                 return true
             }
             R.id.save_button -> {
-                if(showExplorerIcon)
-                {
-                    val intent = Intent()
-                    intent.type = "image/*"
-                    intent.action = Intent.ACTION_GET_CONTENT//
-                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1)
-                }
-                else
-                {
-                    onSaveButtonClicked()
-                }
+                onSaveButtonClicked()
+                return true
+            }
+            R.id.add_photo -> {
+                val intent = Intent()
+                intent.type = "image/*"
+                intent.action = Intent.ACTION_GET_CONTENT//
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1)
                 return true
             }
         }
@@ -317,21 +299,10 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
             }
         }
     }
+
     override fun onBackPressed() {
-        if(currentFragment == archiveFragment ||
-                currentFragment == favoritesFragment ||
-                currentFragment == aboutFragment) {
-            setFullscreenMode(true)
-            currentFragment = cameraFragment
-        } else if (currentFragment == pictureAnalyzedFragment) {
-            setFullscreenMode(true)
-            isMenuAvailable = true
-            showExplorerIcon = true
-            invalidateOptionsMenu()
-            actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
-            currentFragment = cameraFragment
-        }
         super.onBackPressed()
+        setFragment(previousFragment!!, true)
     }
 
     private fun onSaveButtonClicked()
@@ -372,24 +343,35 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         }
     }
 
-    private fun setFragment(fragment : Fragment) {
+    private fun setFragment(fragment : Fragment, backmode : Boolean = false) {
         if(currentFragment != fragment) {
             runOnUiThread {
-                if (currentFragment == cameraFragment) {
-                    supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
-                } else {
-                    supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+                if(!backmode) {
+                    if (currentFragment == cameraFragment ||
+                            fragment == detailsFragment) {
+                        supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
+                        previousFragment = currentFragment
+                    } else {
+                        supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+                    }
                 }
                 currentFragment = fragment
                 fragment as FragmentAttributeInterface
                 setFullscreenMode(fragment.fullScreen)
                 actionbar!!.title = fragment.actionBarTitle
+
                 isMenuAvailable = fragment.isMenuAvailable
                 if(isMenuAvailable) {
                     actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
                 } else {
                     actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_back)
                 }
+
+
+                hideAddImage = !fragment.isAddImageAvailable
+                hideSaveButton = !fragment.isSaveAvailable
+                hideEditButton = !fragment.isEditAvailable
+                invalidateOptionsMenu()
             }
         }
     }

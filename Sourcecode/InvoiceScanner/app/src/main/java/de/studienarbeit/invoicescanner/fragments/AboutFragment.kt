@@ -11,6 +11,9 @@ import de.studienarbeit.invoicescanner.TITLE_ABOUT
 class AboutFragment : Fragment(), FragmentAttributeInterface {
 
     override var isMenuAvailable = true
+    override var isAddImageAvailable = false
+    override var isSaveAvailable = false
+    override var isEditAvailable = false
     override var actionBarTitle = TITLE_ABOUT
     override var fullScreen = false
 

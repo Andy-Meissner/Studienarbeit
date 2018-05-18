@@ -46,6 +46,9 @@ class CameraFragment : Fragment(), FragmentAttributeInterface, View.OnClickListe
 {
 
     override var isMenuAvailable = true
+    override var isAddImageAvailable = true
+    override var isSaveAvailable = false
+    override var isEditAvailable = false
     override var fullScreen = true
     override var actionBarTitle = ""
 
