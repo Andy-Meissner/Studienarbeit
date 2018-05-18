@@ -18,8 +18,8 @@ import android.content.pm.PackageManager
 import android.content.pm.PackageInfo
 import android.os.AsyncTask
 import android.util.Log
-
-
+import info.debatty.java.stringsimilarity.JaroWinkler
+import java.util.regex.Pattern
 
 
 class ImageAnalyzer(context: Context, imagePath : String) {
@@ -135,12 +135,41 @@ class ImageAnalyzer(context: Context, imagePath : String) {
 
     private fun mapTextToInvoice()
     {
-        var mystring = ""
+        var ibanPattern = Pattern.compile("^DE\\d{20}\$")
+        var bicPattern = Pattern.compile("^[a-zA-Z]{7}[0-9]{1}[a-zA-Z]{3}\$")
+        var iban = ""
+        var bic = ""
+        var amount = 0.0
+        var details = ""
+        var receiver = ""
+
+
         for (i in 0 until recognizedText.size())
         {
-            mystring += recognizedText[i]?.value
+            if (recognizedText[i] != null) {
+                var vals = recognizedText[i].value.split(" ")
+                for (j in 0 until vals.size)
+                {
+                    var curString = vals[j]
+                    var m = ibanPattern.matcher(curString)
+                    var m2 = bicPattern.matcher(curString)
+                    if (m.matches()) {
+                        iban = curString
+                    }
+                    else if (m2.matches()) {
+                        bic = curString
+                    }
+                    else
+                    {
+                        details += curString + "\n"
+                    }
+                }
+
+            }
+
+
         }
-        invoice = Invoice(null, getImagePath(), mystring, mystring, 0.0, mystring, mystring, false)
+        invoice = Invoice(null, getImagePath(), iban, bic, 0.0, details, receiver , false)
     }
 
     fun analyse()
