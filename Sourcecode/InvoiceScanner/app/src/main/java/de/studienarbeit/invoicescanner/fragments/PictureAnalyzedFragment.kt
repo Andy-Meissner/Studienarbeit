@@ -32,6 +32,9 @@ import java.io.FileOutputStream
 class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , ActivityCompat.OnRequestPermissionsResultCallback {
 
     override var isMenuAvailable = false
+    override var isAddImageAvailable = false
+    override var isSaveAvailable = true
+    override var isEditAvailable = false
     override var actionBarTitle = TITLE_NEW_INVOICE
     override var fullScreen = false
 
