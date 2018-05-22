@@ -121,9 +121,6 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         val args = Bundle()
         args.putString("imagepath", invoice.imagePath)
         detailsFragment.arguments = args
-        detailsFragment.actionBarTitle = TITLE_EDIT_INVOICE
-        detailsFragment.isEditAvailable = true
-        detailsFragment.isSaveAvailable = false
         setFragment(detailsFragment)
         detailsFragment.onImageAnalyzed(invoice)
     }
@@ -138,6 +135,9 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
 
         archiveFragment.actionBarTitle = TITLE_ARCHIVE
         favoritesFragment.actionBarTitle = TITLE_FAVORITES
+        detailsFragment.actionBarTitle = TITLE_EDIT_INVOICE
+        detailsFragment.isEditAvailable = true
+        detailsFragment.isSaveAvailable = false
 
         setContentView(R.layout.activity_main)
         savedInstanceState ?: supportFragmentManager.beginTransaction()
@@ -301,8 +301,16 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
     }
 
     override fun onBackPressed() {
+        if(mDrawerLayout!!.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout!!.closeDrawers()
+            return
+        }
+
         super.onBackPressed()
-        setFragment(previousFragment!!, true)
+
+        if(previousFragment != null) {
+            setFragment(previousFragment!!)
+        }
     }
 
     private fun onSaveButtonClicked()
@@ -347,15 +355,40 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         if(currentFragment != fragment) {
             runOnUiThread {
                 if(!backmode) {
+                    var fragmentTransaction = supportFragmentManager.beginTransaction()
+
                     if (currentFragment == cameraFragment ||
                             fragment == detailsFragment) {
-                        supportFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
+                        fragmentTransaction.replace(R.id.container, fragment).addToBackStack(null)
                         previousFragment = currentFragment
                     } else {
-                        supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+                        fragmentTransaction.replace(R.id.container, fragment)
+                        previousFragment = cameraFragment
+                    }
+
+                    fragmentTransaction.commit()
+                }
+
+                val navigationMenu = findViewById<NavigationView>(R.id.nav_view).menu
+                when(fragment) {
+                    cameraFragment -> {
+                        navigationMenu.findItem(R.id.nav_camera).isChecked = true
+                    }
+
+                    archiveFragment -> {
+                        navigationMenu.findItem(R.id.nav_archive).isChecked = true
+                    }
+
+                    favoritesFragment -> {
+                        navigationMenu.findItem(R.id.nav_favorites).isChecked = true
+                    }
+
+                    aboutFragment -> {
+                        navigationMenu.findItem(R.id.nav_about).isChecked = true
                     }
                 }
-                currentFragment = fragment
+
+
                 fragment as FragmentAttributeInterface
                 setFullscreenMode(fragment.fullScreen)
                 actionbar!!.title = fragment.actionBarTitle
@@ -363,8 +396,10 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
                 isMenuAvailable = fragment.isMenuAvailable
                 if(isMenuAvailable) {
                     actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_white)
+                    mDrawerLayout!!.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                 } else {
                     actionbar!!.setHomeAsUpIndicator(R.drawable.ic_menu_back)
+                    mDrawerLayout!!.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 }
 
 
@@ -372,6 +407,8 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
                 hideSaveButton = !fragment.isSaveAvailable
                 hideEditButton = !fragment.isEditAvailable
                 invalidateOptionsMenu()
+
+                currentFragment = fragment
             }
         }
     }
