@@ -24,6 +24,7 @@ import android.widget.SearchView
 import android.content.Intent
 import android.widget.Toast
 import android.app.Activity
+import android.app.FragmentTransaction
 import android.content.ContextWrapper
 import android.provider.MediaStore
 import android.graphics.Bitmap
@@ -242,7 +243,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
                     mDrawerLayout!!.openDrawer(GravityCompat.START)
                 } else {
                     supportFragmentManager.popBackStack()
-                    setFragment(previousFragment!!, true)
+                    setFragment(previousFragment!!)
                 }
                 return true
             }
@@ -354,6 +355,12 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
             runOnUiThread {
                 if(!backmode) {
                     val fragmentTransaction = supportFragmentManager.beginTransaction()
+
+                    if(fragment == detailsFragment || fragment == pictureAnalyzedFragment) {
+                        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                    } else {
+                        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                    }
 
                     previousFragment = if (currentFragment == cameraFragment ||
                             fragment == detailsFragment) {

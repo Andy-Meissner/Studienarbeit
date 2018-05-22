@@ -3,6 +3,7 @@ package de.studienarbeit.invoicescanner
 import android.graphics.BitmapFactory
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import de.studienarbeit.invoicescanner.fragments.RecyclerViewFragment
@@ -38,22 +39,20 @@ class MyAdapter(var myDataset: List<Invoice>, private val recyclerViewFragment: 
         holder.container.saved_iban.text = myDataset[position].iban
         holder.container.saved_receiver.text = myDataset[position].receiver
         holder.container.saved_amount.text = myDataset[position].amount.toString()
-        holder.container.show_details.setOnClickListener({
+
+        holder.container.setOnClickListener({
             recyclerViewFragment.openDetails(myDataset[position])
         })
+
         holder.container.toggle_favorite.setOnClickListener({
             myDataset[position].isFavorite = !myDataset[position].isFavorite
-
-            if(myDataset[position].isFavorite) {
-                holder.container.toggle_favorite.setBackgroundResource(R.drawable.ic_star_black)
-            } else {
-                holder.container.toggle_favorite.setBackgroundResource(R.drawable.ic_star_border_black)
-            }
             recyclerViewFragment.onInvoiceChanged(myDataset[position], "update")
         })
+
         holder.container.delete_invoice.setOnClickListener({
             recyclerViewFragment.onInvoiceChanged(myDataset[position], "delete")
         })
+
         if(myDataset[position].isFavorite) {
             holder.container.toggle_favorite.setBackgroundResource(R.drawable.ic_star_black)
         } else {
@@ -72,3 +71,4 @@ class MyAdapter(var myDataset: List<Invoice>, private val recyclerViewFragment: 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = myDataset.size
 }
+

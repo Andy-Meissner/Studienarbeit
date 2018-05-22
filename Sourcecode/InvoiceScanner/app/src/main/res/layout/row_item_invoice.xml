@@ -71,16 +71,10 @@
             android:layout_width="0dp"
             app:layout_rowWeight="1"
             app:layout_columnWeight="1"
-            app:layout_columnSpan="1"
+            app:layout_columnSpan="2"
             android:text="@string/empty"
             android:maxLines="1"
             android:ellipsize="end"  />
-
-        <ImageButton
-            android:id="@+id/show_details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/baseline_details_black_24dp" />
 
         <TextView
             android:id="@+id/amount"
