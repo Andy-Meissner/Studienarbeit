@@ -30,8 +30,6 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.util.Log
-import kotlinx.android.synthetic.main.fragment_camera.*
-import kotlinx.android.synthetic.main.fragment_picture_analyzed.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -50,14 +48,14 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
 
     private lateinit var toolbar : Toolbar
     private var actionbar : ActionBar? = null
-    private var new_invoice = true
+    private var newInvoice = true
 
     private var hideSearchButton = true
     private var hideEditButton = true
     private var hideAddImage = false
     private var hideSaveButton = true
     private var isMenuAvailable = true
-    lateinit var currentInvoice : Invoice
+    private lateinit var currentInvoice : Invoice
 
     lateinit var db : AppDatabase
 
@@ -93,9 +91,9 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
      */
     fun updateData()
     {
-        var data = db.invoiceDao().all
+        val data = db.invoiceDao().all
         archiveFragment.initDataset(data)
-        var favs = db.invoiceDao().favorites
+        val favs = db.invoiceDao().favorites
         favoritesFragment.initDataset(favs)
     }
 
@@ -105,7 +103,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
     }
 
     override fun onImageAvailable(path: String) {
-        new_invoice = true
+        newInvoice = true
         val args = Bundle()
         args.putString("imagepath", path)
         pictureAnalyzedFragment.arguments = args
@@ -117,7 +115,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
     }
 
     override fun openDetails(invoice: Invoice) {
-        new_invoice = false
+        newInvoice = false
         val args = Bundle()
         args.putString("imagepath", invoice.imagePath)
         detailsFragment.arguments = args
@@ -270,15 +268,15 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
                     try {
-                        var bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
-                        var cw = ContextWrapper(applicationContext)
-                        var fileDir = cw.getDir("profile", Context.MODE_PRIVATE)
+                        val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, data.data)
+                        val cw = ContextWrapper(applicationContext)
+                        val fileDir = cw.getDir("profile", Context.MODE_PRIVATE)
                         if(!fileDir.exists())
                         {
                             fileDir.mkdir()
                         }
-                        var myfile = File(fileDir,"temp.jpg")
-                        var fos : FileOutputStream? = null
+                        val myfile = File(fileDir,"temp.jpg")
+                        val fos: FileOutputStream?
                         try{
                             fos = FileOutputStream(myfile)
                             bitmap.compress(Bitmap.CompressFormat.JPEG,100,fos)
@@ -315,10 +313,10 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
 
     private fun onSaveButtonClicked()
     {
-        var myinv = pictureAnalyzedFragment.getInvoice()
+        val myinv = pictureAnalyzedFragment.getInvoice()
         object : AsyncTask<Void, Void, Int>() {
             override fun doInBackground(vararg params: Void): Int? {
-                if (new_invoice)
+                if (newInvoice)
                 {
                     db.invoiceDao().insertInvoice(myinv)
                 }
@@ -355,15 +353,15 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
         if(currentFragment != fragment) {
             runOnUiThread {
                 if(!backmode) {
-                    var fragmentTransaction = supportFragmentManager.beginTransaction()
+                    val fragmentTransaction = supportFragmentManager.beginTransaction()
 
-                    if (currentFragment == cameraFragment ||
+                    previousFragment = if (currentFragment == cameraFragment ||
                             fragment == detailsFragment) {
                         fragmentTransaction.replace(R.id.container, fragment).addToBackStack(null)
-                        previousFragment = currentFragment
+                        currentFragment
                     } else {
                         fragmentTransaction.replace(R.id.container, fragment)
-                        previousFragment = cameraFragment
+                        cameraFragment
                     }
 
                     fragmentTransaction.commit()
