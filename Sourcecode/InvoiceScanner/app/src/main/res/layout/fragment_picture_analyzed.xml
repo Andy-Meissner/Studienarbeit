@@ -22,6 +22,7 @@
         android:id="@+id/expanded_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
         android:visibility="invisible"/>
 
     <TableLayout
@@ -39,23 +40,39 @@
             <TextView
                 android:id="@+id/iban"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="@string/iban"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:gravity="center"
                 tools:layout_editor_absoluteX="61dp"
                 tools:layout_editor_absoluteY="232dp" />
 
-            <EditText
-                android:id="@+id/edit_iban"
+            <ViewSwitcher
+                android:id="@+id/iban_switch"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/iban"
-                android:inputType="text"
-                tools:layout_editor_absoluteX="32dp"
-                tools:layout_editor_absoluteY="197dp" />
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/iban_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text = "@string/no_iban"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    tools:layout_editor_absoluteX="32dp"
+                    tools:layout_editor_absoluteY="197dp" />
+
+                <EditText
+                    android:id="@+id/edit_iban"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/iban"
+                    android:inputType="text"
+                    tools:layout_editor_absoluteX="32dp"
+                    tools:layout_editor_absoluteY="197dp" />
+            </ViewSwitcher>
         </TableRow>
 
         <TableRow
@@ -65,49 +82,83 @@
             <TextView
                 android:id="@+id/bic"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="@string/bic"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:gravity="center"
                 tools:layout_editor_absoluteX="61dp"
                 tools:layout_editor_absoluteY="232dp" />
 
-            <EditText
-                android:id="@+id/edit_bic"
+            <ViewSwitcher
+                android:id="@+id/bic_switch"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/bic"
-                android:inputType="text"
-                tools:layout_editor_absoluteX="32dp"
-                tools:layout_editor_absoluteY="197dp" />
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/bic_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text = "@string/no_bic"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    tools:layout_editor_absoluteX="32dp"
+                    tools:layout_editor_absoluteY="197dp" />
+
+                <EditText
+                    android:id="@+id/edit_bic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/bic"
+                    android:inputType="text"
+                    tools:layout_editor_absoluteX="32dp"
+                    tools:layout_editor_absoluteY="197dp" />
+            </ViewSwitcher>
+
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/amount"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="@string/amount"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:gravity="center"
                 tools:layout_editor_absoluteX="61dp"
                 tools:layout_editor_absoluteY="232dp" />
 
-            <EditText
-                android:id="@+id/edit_amount"
+            <ViewSwitcher
+                android:id="@+id/amount_switch"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/amount"
-                android:inputType="numberDecimal"
-                tools:layout_editor_absoluteX="32dp"
-                tools:layout_editor_absoluteY="197dp" />
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/amount_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text = "@string/no_bic"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    tools:layout_editor_absoluteX="32dp"
+                    tools:layout_editor_absoluteY="197dp" />
+
+                <EditText
+                    android:id="@+id/edit_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/amount"
+                    android:inputType="numberDecimal"
+                    tools:layout_editor_absoluteX="32dp"
+                    tools:layout_editor_absoluteY="197dp" />
+            </ViewSwitcher>
+
         </TableRow>
 
         <TableRow
@@ -117,23 +168,40 @@
             <TextView
                 android:id="@+id/receiver"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="@string/receiver"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:gravity="center"
                 tools:layout_editor_absoluteX="61dp"
                 tools:layout_editor_absoluteY="232dp" />
 
-            <EditText
-                android:id="@+id/edit_receiver"
+            <ViewSwitcher
+                android:id="@+id/receiver_switch"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/receiver"
-                android:inputType="text"
-                tools:layout_editor_absoluteX="32dp"
-                tools:layout_editor_absoluteY="197dp" />
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/receiver_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text = "@string/no_bic"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    tools:layout_editor_absoluteX="32dp"
+                    tools:layout_editor_absoluteY="197dp" />
+
+                <EditText
+                    android:id="@+id/edit_receiver"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/receiver"
+                    android:inputType="text"
+                    tools:layout_editor_absoluteX="32dp"
+                    tools:layout_editor_absoluteY="197dp" />
+            </ViewSwitcher>
+
         </TableRow>
 
         <TableRow
@@ -143,23 +211,44 @@
             <TextView
                 android:id="@+id/details"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="@string/details"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:gravity="center"
                 tools:layout_editor_absoluteX="61dp"
                 tools:layout_editor_absoluteY="232dp" />
 
-            <EditText
-                android:id="@+id/edit_details"
+            <ViewSwitcher
+                android:id="@+id/details_switch"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/details"
-                android:inputType="textMultiLine"
-                tools:layout_editor_absoluteX="32dp"
-                tools:layout_editor_absoluteY="197dp" />
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/details_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text = "@string/no_bic"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    tools:layout_editor_absoluteX="32dp"
+                    tools:layout_editor_absoluteY="197dp" />
+
+                <EditText
+                    android:id="@+id/edit_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/details"
+                    android:inputType="textMultiLine"
+                    android:minLines="1"
+                    android:maxLines="3"
+                    android:lines="3"
+                    android:scrollbars="vertical"
+                    tools:layout_editor_absoluteX="32dp"
+                    tools:layout_editor_absoluteY="197dp" />
+            </ViewSwitcher>
+
         </TableRow>
 
     </TableLayout>

@@ -71,6 +71,11 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
         {
             fillEditTextFields(currentInvoice)
         }
+
+        if (actionBarTitle == TITLE_NEW_INVOICE)
+        {
+            switchToEditMode()
+        }
     }
 
 
@@ -129,7 +134,9 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
             currentInvoice.receiver = view!!.findViewById<EditText>(R.id.edit_receiver).text.toString()
             currentInvoice.details = view!!.findViewById<EditText>(R.id.edit_details).text.toString()
         }
+
         return currentInvoice
+
     }
 
     interface OnImagedSavedListener
@@ -153,6 +160,24 @@ class PictureAnalyzedFragment : Fragment(), FragmentAttributeInterface , Activit
             view!!.findViewById<EditText>(R.id.edit_amount).setText((inv.amount).toString(), TextView.BufferType.EDITABLE)
             view!!.findViewById<EditText>(R.id.edit_receiver).setText(inv.receiver, TextView.BufferType.EDITABLE)
             view!!.findViewById<EditText>(R.id.edit_details).setText(inv.details, TextView.BufferType.EDITABLE)
+
+            view!!.findViewById<TextView>(R.id.iban_textview).text = inv.iban
+            view!!.findViewById<TextView>(R.id.bic_textview).text = inv.bic
+            view!!.findViewById<TextView>(R.id.amount_textview).text = inv.amount.toString()
+            view!!.findViewById<TextView>(R.id.receiver_textview).text = inv.receiver
+            view!!.findViewById<TextView>(R.id.details_textview).text = inv.details
+        }
+    }
+
+    fun switchToEditMode()
+    {
+        if (view != null)
+        {
+            view!!.findViewById<ViewSwitcher>(R.id.iban_switch).showNext()
+            view!!.findViewById<ViewSwitcher>(R.id.bic_switch).showNext()
+            view!!.findViewById<ViewSwitcher>(R.id.amount_switch).showNext()
+            view!!.findViewById<ViewSwitcher>(R.id.receiver_switch).showNext()
+            view!!.findViewById<ViewSwitcher>(R.id.details_switch).showNext()
         }
     }
 

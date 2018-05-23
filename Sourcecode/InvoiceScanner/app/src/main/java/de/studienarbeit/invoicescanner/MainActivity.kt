@@ -31,6 +31,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -244,11 +245,19 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
                 } else {
                     supportFragmentManager.popBackStack()
                     setFragment(previousFragment!!)
+                    hideKeyboard()
                 }
                 return true
             }
             R.id.save_button -> {
                 onSaveButtonClicked()
+                return true
+            }
+            R.id.edit -> {
+                detailsFragment.switchToEditMode()
+                hideSaveButton = false
+                hideEditButton = true
+                invalidateOptionsMenu()
                 return true
             }
             R.id.add_photo -> {
@@ -314,7 +323,20 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
 
     private fun onSaveButtonClicked()
     {
-        val myinv = pictureAnalyzedFragment.getInvoice()
+        var myinv : Invoice = when(currentFragment) {
+            pictureAnalyzedFragment -> {
+                pictureAnalyzedFragment.getInvoice()
+            }
+
+            detailsFragment -> {
+                detailsFragment.getInvoice()
+            }
+
+            else -> {
+                Invoice()
+            }
+        }
+
         object : AsyncTask<Void, Void, Int>() {
             override fun doInBackground(vararg params: Void): Int? {
                 if (newInvoice)
@@ -334,7 +356,22 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
             }
         }.execute()
 
-        pictureAnalyzedFragment.saveImage()
+        if(currentFragment == pictureAnalyzedFragment)
+        {
+            pictureAnalyzedFragment.saveImage()
+        } else if (currentFragment == detailsFragment) {
+            setFragment(archiveFragment)
+        }
+
+        hideKeyboard()
+    }
+
+    private fun hideKeyboard() {
+        val view = this.currentFocus
+        if (view != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
     private fun setFullscreenMode(yes : Boolean) {
