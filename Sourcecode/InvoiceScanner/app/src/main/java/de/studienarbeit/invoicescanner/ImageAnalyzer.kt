@@ -19,6 +19,8 @@ import android.content.pm.PackageInfo
 import android.os.AsyncTask
 import android.util.Log
 import info.debatty.java.stringsimilarity.JaroWinkler
+import nl.garvelink.iban.IBAN
+import nl.garvelink.iban.IBANFields
 import java.util.regex.Pattern
 
 
@@ -151,6 +153,8 @@ class ImageAnalyzer(context: Context, imagePath : String) {
                 for (j in 0 until vals.size)
                 {
                     var curString = vals[j]
+                    //var myIban = IBAN.valueOf(curString)
+                    //IBANFields.getBankIdentifier(myIban)
                     var m = ibanPattern.matcher(curString)
                     var m2 = bicPattern.matcher(curString)
                     if (m.matches()) {

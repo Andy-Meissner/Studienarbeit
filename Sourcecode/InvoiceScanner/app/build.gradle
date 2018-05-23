@@ -38,6 +38,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:gridlayout-v7:27.1.1'
     implementation 'com.rmtheis:tess-two:9.0.0'
+    implementation 'nl.garvelink.oss:iban:1.5.1'
     implementation "android.arch.persistence.room:runtime:$archRoomVersion"
     annotationProcessor "android.arch.persistence.room:compiler:$archRoomVersion"
     kapt "android.arch.persistence.room:compiler:$archRoomVersion"
