@@ -1,0 +1,4 @@
+https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+https://en.wikipedia.org/wiki/International_Bank_Account_Number
+https://www.iban.de/was_ist_iban.html
+https://www.iban.de/iban-pruefsumme.html

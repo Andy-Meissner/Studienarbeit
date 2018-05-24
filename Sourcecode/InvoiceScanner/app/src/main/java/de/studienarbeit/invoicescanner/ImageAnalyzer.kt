@@ -33,6 +33,7 @@ class ImageAnalyzer(context: Context, imagePath : String) {
     private lateinit var imgBitmap : Bitmap
     private lateinit var recognizedText : SparseArray<TextBlock>
     private lateinit var tessText : String
+    private lateinit var gmvText : String
     private lateinit var invoice : Invoice
     private var analyzeTimeTess : Long = 0
     private var anaylzeTimeGMV : Long = 0
@@ -54,7 +55,6 @@ class ImageAnalyzer(context: Context, imagePath : String) {
         {
             val myFrame = Frame.Builder()
             myFrame.setBitmap(imgBitmap)
-
             recognizedText = textRecognizer.detect(myFrame.build())
         }
         else
@@ -82,7 +82,7 @@ class ImageAnalyzer(context: Context, imagePath : String) {
         {
             tessdataDir.mkdirs()
         }
-        val trainedData = File(path + "/tessdata/eng.traineddata")
+        val trainedData = File(path + "/tessdata/deu.traineddata")
         if (trainedData.exists())
         {
             if (trainedData.isDirectory)
@@ -97,7 +97,7 @@ class ImageAnalyzer(context: Context, imagePath : String) {
         }
 
         val outputStream = FileOutputStream(trainedData)
-        IOUtils.copyStream(context.assets.open("eng.traineddata"), outputStream)
+        IOUtils.copyStream(context.assets.open("deu.traineddata"), outputStream)
         outputStream.close()
 
         if(imgFile.exists()) {
@@ -107,7 +107,7 @@ class ImageAnalyzer(context: Context, imagePath : String) {
                 override fun doInBackground(vararg params: Void): Int? {
                     time1 = System.nanoTime()
                     val baseApi = TessBaseAPI()
-                    baseApi.init(path, "eng") // myDir + "/tessdata/eng.traineddata" must be present
+                    baseApi.init(path, "deu") // myDir + "/tessdata/eng.traineddata" must be present
                     baseApi.setImage(imgFile)
 
                     tessText = baseApi.utF8Text // Log or otherwise display this string...
@@ -119,11 +119,16 @@ class ImageAnalyzer(context: Context, imagePath : String) {
 
                 override fun onPostExecute(resultCode: Int?) {
                     analyzeTimeTess = time2 - time1
+                    debugLol()
                 }
             }.execute()
         }
     }
 
+    private fun debugLol()
+    {
+        var mystop = 1+1
+    }
     private fun getImagePath(): String {
         val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
 
@@ -137,6 +142,7 @@ class ImageAnalyzer(context: Context, imagePath : String) {
 
     private fun mapTextToInvoice()
     {
+        gmvText = ""
         var ibanPattern = Pattern.compile("^DE\\d{20}\$")
         var bicPattern = Pattern.compile("^[a-zA-Z]{7}[0-9]{1}[a-zA-Z]{3}\$")
         var iban = ""
@@ -149,6 +155,7 @@ class ImageAnalyzer(context: Context, imagePath : String) {
         for (i in 0 until recognizedText.size())
         {
             if (recognizedText[i] != null) {
+                gmvText += recognizedText[i].value + "\n"
                 var vals = recognizedText[i].value.split(" ")
                 for (j in 0 until vals.size)
                 {
