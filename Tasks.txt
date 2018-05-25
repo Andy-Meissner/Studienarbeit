@@ -1,42 +1,27 @@
-Vorbereitungsphase 
-	Tasks:
-		Organisatorisches
-		Entscheidung welches Testmodell
-		Zeitplan
-		Konventionen
-		Pflichtenheft
-	Milestones:
-		Testmodell
-		Zeitplan
-		Konventionen
-		Pflichtenheft
-Recherchephase
-	Tasks:
-		Modellierung der Architektur
-		Mobile Application Software Design/Engineering
-		OCR
-		Textanalyse (Pattern Matching)
-		Prototypentwicklung
-	Milestones:
-		Klassendiagramm
-		Use-Case Diagramm?
-		Prototyp
+Implementierung:
+	- Datenbank timestamp und titel			( Andy )
+	- Datenbank UI-Implementierung 			( Giuseppe)
+	- Amount, Details				( Andy ) ( höchste Kommazahl, "Verwendungszweck" )
+	- IBAN, BIC, Receiver				( Andy )
 
-Implementierungsphase
-	Task:
-		KameraTask
-		MenüTask
-		Archiv
-		Favoriten
-		Texterkennung
-		Pattern Matching
-	Milestones:
-		Berechtigungen kriegen
-		Photo machen
-		Photo speichern und wieder aufrufen
-		Text erkennen und parsen
-		Fertige Applikation
-		jeweils Dokumentationen
-Testphase
-	Task:
-	Milestones:
+Einleitung:
+	- Roten Faden ziehen (Grafik?)			(Giuseppe)
+	- UseCase Diagramm				(Giuseppe)
+	- Aktivitätsdiagramm				(Giuseppe)
+	- Klassendiagramm				(Andy)
+	- Tests						(Giuseppe)
+	- Units Test Text Analyse 			(Andy)
+	- SE Pressman 5. Kriterium für mobile		(Andy)
+	- 4.4.6 schreiben				(Andy)
+	- Kapitel 4 Review bearbeiten			(Andy)
+	- Kapitel 5	
+	- Bilder beschreiben Aktivität/Fragment		(Giuseppe)
+	- Ladebildschirm impl --> ausblick		(Giuseppe)
+	- Implementierung mit Diagrammen darstellen	(Andy)
+	- Kapitel 7 Anwendungsbilder hinzufügen		(Giuseppe)
+	- Kapitel 7 Implementierung - Beschreibung der Applikation 		(Giuseppe)
+	- Kapitel 7 Implementierung - Beschreiben des Kontodatenfilters 	(Andy)
+	- Kapitel 7 Implementierung - OCR					(Andy)
+	- Kapitel 7 Implementierung - Kapitel 6 in Kapitel 7 referenzieren	(Andy)
+	- Quellen					(Giuseppe,Andy)
+	- Formatierung fertigstellen			(Giuseppe,Andy)

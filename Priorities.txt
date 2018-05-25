@@ -1,2 +1,0 @@
-Variable "largest" umbenennen zu was besserem
-Unnötigen Code aus Kamerafragment entfernen
