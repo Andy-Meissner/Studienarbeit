@@ -21,7 +21,9 @@ import android.util.Log
 import info.debatty.java.stringsimilarity.JaroWinkler
 import nl.garvelink.iban.IBAN
 import nl.garvelink.iban.IBANFields
+import nl.garvelink.iban.Modulo97
 import java.util.regex.Pattern
+import kotlin.math.max
 
 
 class ImageAnalyzer(context: Context, imagePath : String) {
@@ -143,47 +145,78 @@ class ImageAnalyzer(context: Context, imagePath : String) {
     private fun mapTextToInvoice()
     {
         gmvText = ""
-        var ibanPattern = Pattern.compile("^DE\\d{20}\$")
-        var bicPattern = Pattern.compile("^[a-zA-Z]{7}[0-9]{1}[a-zA-Z]{3}\$")
+        var ibanPattern = Pattern.compile("[A-Z]{2}[0-9]{2}\\s?([0-9A-Z]\\s?){13,28}")
+        var bicPattern = Pattern.compile("[A-Z]{6}[0-9,A-Z]{2}[A-Z]{3}?")
+        var kommaZahl = Pattern.compile("[0-9]+[,]{1}[0-9]+")
+
         var iban = ""
         var bic = ""
         var amount = 0.0
         var details = ""
         var receiver = ""
 
+        var allDoubles = mutableListOf<Double>()
 
         for (i in 0 until recognizedText.size())
         {
             if (recognizedText[i] != null) {
-                gmvText += recognizedText[i].value + "\n"
-                var vals = recognizedText[i].value.split(" ")
-                for (j in 0 until vals.size)
+                var curString = recognizedText[i].value
+                gmvText += curString + "\n"
+
+                var ibanMatcher = ibanPattern.matcher(curString)
+                if(ibanMatcher.find())
                 {
-                    var curString = vals[j]
-                    //var myIban = IBAN.valueOf(curString)
-                    //IBANFields.getBankIdentifier(myIban)
-                    var m = ibanPattern.matcher(curString)
-                    var m2 = bicPattern.matcher(curString)
-                    if (m.matches()) {
-                        iban = curString
-                    }
-                    else if (m2.matches()) {
-                        bic = curString
-                    }
-                    else
+                    iban = curString.substring(ibanMatcher.start(),ibanMatcher.end())
+                    if (iban.toLowerCase().contains("bic"))
                     {
-                        details += curString + "\n"
+                        var cutIndex = iban.toLowerCase().indexOf("bic")
+                        var temp = iban.substring(0, cutIndex)
+                        if(Modulo97.verifyCheckDigits(temp))
+                        {
+                            iban = temp
+                        }
                     }
                 }
 
+                var bicMatcher = bicPattern.matcher(curString)
+                if(bicMatcher.find())
+                {
+                    bic = curString.substring(bicMatcher.start(),bicMatcher.end())
+                }
+
+                if (curString.contains("Verwendungszweck:"))
+                {
+                    var cutIndex = curString.indexOf("Verwendungszweck:") + 17
+                    if (curString.length > cutIndex)
+                    {
+                        details.substring(cutIndex)
+                    }
+                }
+
+
+                var kommazahlmatcher = kommaZahl.matcher(curString)
+                while(kommazahlmatcher.find())
+                {
+                    var mydouble = curString.substring(kommazahlmatcher.start(),kommazahlmatcher.end())
+                    mydouble = mydouble.replace(',','.')
+                    allDoubles.add(mydouble.toDouble())
+                }
             }
-
-
         }
+
+        var maxDouble = 0.0
+
+        for (i in allDoubles.indices)
+        {
+            if (allDoubles[i] > maxDouble){
+                maxDouble = allDoubles[i]
+            }
+        }
+        amount = maxDouble
 
         var myTS = System.currentTimeMillis()
         val name = "Rechnung-" + myTS.toString()
-        invoice = Invoice(null, name, getImagePath(), iban, bic, 0.0, details, receiver , false, myTS)
+        invoice = Invoice(null, name, getImagePath(), iban, bic, amount, details, receiver , false, myTS)
     }
 
     fun analyse()

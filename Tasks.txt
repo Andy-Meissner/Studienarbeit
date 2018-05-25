@@ -1,5 +1,5 @@
 Implementierung:
-	- Datenbank timestamp und titel			( Andy )
+(done)	- Datenbank timestamp und titel			( Andy ) 
 	- Datenbank UI-Implementierung 			( Giuseppe)
 	- Amount, Details				( Andy ) ( höchste Kommazahl, "Verwendungszweck" )
 	- IBAN, BIC, Receiver				( Andy )
@@ -11,7 +11,7 @@ Einleitung:
 	- Klassendiagramm				(Andy)
 	- Tests						(Giuseppe)
 	- Units Test Text Analyse 			(Andy)
-	- SE Pressman 5. Kriterium für mobile		(Andy)
+(done)	- SE Pressman 5. Kriterium für mobile		(Andy)
 	- 4.4.6 schreiben				(Andy)
 	- Kapitel 4 Review bearbeiten			(Andy)
 	- Bilder beschreiben Aktivität/Fragment		(Giuseppe)
