@@ -14,7 +14,6 @@ Einleitung:
 	- SE Pressman 5. Kriterium für mobile		(Andy)
 	- 4.4.6 schreiben				(Andy)
 	- Kapitel 4 Review bearbeiten			(Andy)
-	- Kapitel 5	
 	- Bilder beschreiben Aktivität/Fragment		(Giuseppe)
 	- Ladebildschirm impl --> ausblick		(Giuseppe)
 	- Implementierung mit Diagrammen darstellen	(Andy)
