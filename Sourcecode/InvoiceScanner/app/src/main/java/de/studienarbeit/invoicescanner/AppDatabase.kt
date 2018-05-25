@@ -12,15 +12,17 @@ import android.support.annotation.NonNull
  */
 @Entity
 data class Invoice (@PrimaryKey(autoGenerate = true) var id: Int? = null,
+                    @ColumnInfo(name = "name") var name : String,
                     @ColumnInfo(name = "imagePath") var imagePath: String,
                     @ColumnInfo(name = "iban")@NonNull var iban: String,
                     @ColumnInfo(name = "bic") var bic: String,
                     @ColumnInfo(name = "amount") @NonNull var amount: Double,
                     @ColumnInfo(name = "details") var details: String,
                     @ColumnInfo(name = "receiver") @NonNull var receiver: String,
-                    @ColumnInfo(name = "isFavorite") var isFavorite: Boolean
+                    @ColumnInfo(name = "isFavorite") var isFavorite: Boolean,
+                    @ColumnInfo(name = "timestamp") var timestamp : Long
                     ){
-    constructor():this(null,"","","",0.0,"","",false)
+    constructor():this(null,"", "","","",0.0,"","",false, 0L)
 }
 
 @Dao

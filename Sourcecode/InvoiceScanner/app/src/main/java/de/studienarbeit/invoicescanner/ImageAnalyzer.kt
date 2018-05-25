@@ -134,8 +134,8 @@ class ImageAnalyzer(context: Context, imagePath : String) {
 
         val myDir = File("$root/invoice_scanner")
         myDir.mkdirs()
-        val timestamp = (System.currentTimeMillis() / 1000).toString()
-        val imagepath = myDir.toString() + "Invoice-" + timestamp + ".jpg"
+        val ts = (System.currentTimeMillis() / 1000).toString()
+        val imagepath = myDir.toString() + "Invoice-" + ts + ".jpg"
 
         return imagepath
     }
@@ -180,7 +180,10 @@ class ImageAnalyzer(context: Context, imagePath : String) {
 
 
         }
-        invoice = Invoice(null, getImagePath(), iban, bic, 0.0, details, receiver , false)
+
+        var myTS = System.currentTimeMillis()
+        val name = "Rechnung-" + myTS.toString()
+        invoice = Invoice(null, name, getImagePath(), iban, bic, 0.0, details, receiver , false, myTS)
     }
 
     fun analyse()
