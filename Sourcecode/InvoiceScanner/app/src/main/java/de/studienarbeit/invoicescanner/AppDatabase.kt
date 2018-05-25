@@ -27,10 +27,10 @@ data class Invoice (@PrimaryKey(autoGenerate = true) var id: Int? = null,
 
 @Dao
 interface InvoiceDao {
-    @get:Query("SELECT * FROM invoice")
+    @get:Query("SELECT * FROM invoice ORDER BY timestamp DESC")
     val all: List<Invoice>
 
-    @get:Query("SELECT * FROM invoice WHERE isFavorite = 1")
+    @get:Query("SELECT * FROM invoice WHERE isFavorite = 1 ORDER BY timestamp DESC")
     val favorites: List<Invoice>
 
     @Insert
