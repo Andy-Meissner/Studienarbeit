@@ -1,8 +1,9 @@
 Implementierung:
 (done)	- Datenbank timestamp und titel			( Andy ) 
 	- Datenbank UI-Implementierung 			( Giuseppe)
-	- Amount, Details				( Andy ) ( höchste Kommazahl, "Verwendungszweck" )
-	- IBAN, BIC, Receiver				( Andy )
+(done)	- Amount, Details				( Andy ) ( höchste Kommazahl, "Verwendungszweck" )
+(done)	- IBAN, BIC					( Andy )
+	- Receiver 					(Andy)
 
 Einleitung:
 	- Roten Faden ziehen (Grafik?)			(Giuseppe)
@@ -15,12 +16,9 @@ Einleitung:
 	- 4.4.6 schreiben				(Andy)
 	- Kapitel 4 Review bearbeiten			(Andy)
 	- Bilder beschreiben Aktivität/Fragment		(Giuseppe)
-	- Ladebildschirm impl --> ausblick		(Giuseppe)
-	- Implementierung mit Diagrammen darstellen	(Andy)
 	- Kapitel 7 Anwendungsbilder hinzufügen		(Giuseppe)
 	- Kapitel 7 Implementierung - Beschreibung der Applikation 		(Giuseppe)
-	- Kapitel 7 Implementierung - Beschreiben des Kontodatenfilters 	(Andy)
-	- Kapitel 7 Implementierung - OCR					(Andy)
-	- Kapitel 7 Implementierung - Kapitel 6 in Kapitel 7 referenzieren	(Andy)
+(done)	- Kapitel 7 Implementierung - Beschreiben des Kontodatenfilters 	(Andy)
+	- Kapitel 7 ergänzen (Text + Diagramme)					(Andy)
 	- Quellen					(Giuseppe,Andy)
 	- Formatierung fertigstellen			(Giuseppe,Andy)

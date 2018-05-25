@@ -146,7 +146,7 @@ class ImageAnalyzer(context: Context, imagePath : String) {
     {
         gmvText = ""
         var ibanPattern = Pattern.compile("[A-Z]{2}[0-9]{2}\\s?([0-9A-Z]\\s?){13,28}")
-        var bicPattern = Pattern.compile("[A-Z]{6}[0-9,A-Z]{2}[A-Z]{3}?")
+        var bicPattern = Pattern.compile("[A-Z]{6}[0-9,A-Z]{2}([A-Z]{3})?")
         var kommaZahl = Pattern.compile("[0-9]+[,]{1}[0-9]+")
 
         var iban = ""
