@@ -35,4 +35,6 @@
     <string name="add_photo">Add Photo</string>
     <string name="no_iban">No IBAN found</string>
     <string name="no_bic">No BIC found</string>
+    <string name="title">Title</string>
+    <string name="date">Date</string>
 </resources>

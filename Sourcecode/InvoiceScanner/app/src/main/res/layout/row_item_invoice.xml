@@ -10,11 +10,31 @@
     <android.support.v7.widget.GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:columnCount="3"
-        app:rowCount="6"
-        >
+        app:columnCount="4"
+        app:rowCount="7">
 
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            app:layout_rowWeight="1"
+            app:layout_columnWeight="100"
+            app:layout_columnSpan="2"
+            android:text="@string/title"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
 
+        <TextView
+            android:id="@+id/timestamp"
+            android:layout_width="0dp"
+            app:layout_rowWeight="1"
+            app:layout_columnWeight="1"
+            app:layout_columnSpan="2"
+            android:text="@string/date"
+            android:textAlignment="textEnd"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
 
         <ImageView
             android:id="@+id/saved_invoice_picture"
@@ -28,8 +48,9 @@
             android:layout_width="0dp"
             app:layout_rowWeight="1"
             app:layout_columnWeight="1"
-            app:layout_columnSpan="2"
+            app:layout_columnSpan="3"
             android:text="@string/iban"
+            android:paddingTop="10dp"
             android:textStyle="bold"
             android:maxLines="1"
             android:ellipsize="end" />
@@ -40,6 +61,7 @@
             android:layout_width="0dp"
             app:layout_rowWeight="1"
             app:layout_columnWeight="100"
+            app:layout_columnSpan="2"
             android:text="@string/empty"
             android:maxLines="1"
             android:ellipsize="end"/>
@@ -59,7 +81,7 @@
             android:layout_width="0dp"
             app:layout_rowWeight="1"
             app:layout_columnWeight="1"
-            app:layout_columnSpan="2"
+            app:layout_columnSpan="3"
             android:text="@string/receiver"
             android:textStyle="bold"
             android:paddingTop="10dp"
@@ -71,7 +93,7 @@
             android:layout_width="0dp"
             app:layout_rowWeight="1"
             app:layout_columnWeight="1"
-            app:layout_columnSpan="2"
+            app:layout_columnSpan="3"
             android:text="@string/empty"
             android:maxLines="1"
             android:ellipsize="end"  />
@@ -81,7 +103,7 @@
             android:layout_width="0dp"
             app:layout_rowWeight="1"
             app:layout_columnWeight="3"
-            app:layout_columnSpan="2"
+            app:layout_columnSpan="3"
             android:text="@string/amount"
             android:textStyle="bold"
             android:paddingTop="10dp"
@@ -93,6 +115,7 @@
             android:layout_width="0dp"
             app:layout_rowWeight="1"
             app:layout_columnWeight="100"
+            app:layout_columnSpan="2"
             android:text="@string/empty"
             android:gravity="bottom"
             android:maxLines="1"

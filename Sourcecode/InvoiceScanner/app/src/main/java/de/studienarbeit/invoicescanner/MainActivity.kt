@@ -117,6 +117,7 @@ class MainActivity : AppCompatActivity(), CameraFragment.onImageTakenListener, P
     }
 
     override fun openDetails(invoice: Invoice) {
+        detailsFragment.actionBarTitle = invoice.name
         newInvoice = false
         val args = Bundle()
         args.putString("imagepath", invoice.imagePath)

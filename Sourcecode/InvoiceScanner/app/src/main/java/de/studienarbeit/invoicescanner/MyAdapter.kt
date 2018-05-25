@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import de.studienarbeit.invoicescanner.fragments.RecyclerViewFragment
 import kotlinx.android.synthetic.main.row_item_invoice.view.*
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class MyAdapter(var myDataset: List<Invoice>, private val recyclerViewFragment: RecyclerViewFragment) :
@@ -36,6 +38,12 @@ class MyAdapter(var myDataset: List<Invoice>, private val recyclerViewFragment: 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+        holder.container.title.text = myDataset[position].name
+
+        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm")
+        val date = Date(myDataset[position].timestamp)
+        holder.container.timestamp.text = sdf.format(date)
+
         holder.container.saved_iban.text = myDataset[position].iban
         holder.container.saved_receiver.text = myDataset[position].receiver
         holder.container.saved_amount.text = myDataset[position].amount.toString()
