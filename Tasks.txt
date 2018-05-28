@@ -1,12 +1,12 @@
 Implementierung:
 (done)	- Datenbank timestamp und titel			( Andy ) 
-	- Datenbank UI-Implementierung 			( Giuseppe)
+(done)	- Datenbank UI-Implementierung 			( Giuseppe)
 (done)	- Amount, Details				( Andy ) ( höchste Kommazahl, "Verwendungszweck" )
 (done)	- IBAN, BIC					( Andy )
 	- Receiver 					(Andy)
 
 Einleitung:
-	- Roten Faden ziehen (Grafik?)			(Giuseppe)
+(done)	- Roten Faden ziehen (Grafik?)			(Giuseppe)
 	- UseCase Diagramm				(Giuseppe)
 	- Aktivitätsdiagramm				(Giuseppe)
 	- Klassendiagramm				(Andy)
