@@ -15,7 +15,7 @@ Einleitung:
 (done)	- SE Pressman 5. Kriterium für mobile		(Andy)
 	- 4.4.6 schreiben				(Andy)
 	- Kapitel 4 Review bearbeiten			(Andy)
-	- Bilder beschreiben Aktivität/Fragment		(Giuseppe)
+(done)	- Bilder beschreiben Aktivität/Fragment		(Giuseppe)
 	- Kapitel 7 Anwendungsbilder hinzufügen		(Giuseppe)
 	- Kapitel 7 Implementierung - Beschreibung der Applikation 		(Giuseppe)
 (done)	- Kapitel 7 Implementierung - Beschreiben des Kontodatenfilters 	(Andy)
