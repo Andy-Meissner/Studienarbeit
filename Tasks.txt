@@ -18,11 +18,11 @@ Einleitung:
 (done)	- Kapitel 7 Implementierung - Beschreiben des Kontodatenfilters 	(Andy)
 	- Quellen					(Giuseppe,Andy)
 	- Formatierung fertigstellen			(Giuseppe,Andy)
+(done)	- Kapitel 4 Review bearbeiten			(Andy)
 
 Andy -
 
 	- Receiver 					(Andy)
 	- Units Test Text Analyse 			(Andy)
-	- Kapitel 4 Review bearbeiten			(Andy)
 	- Kapitel 7 ergänzen (Text + Diagramme)		(Andy)
 	- Quellen und Formatierung
