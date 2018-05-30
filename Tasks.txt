@@ -3,22 +3,26 @@ Implementierung:
 (done)	- Datenbank UI-Implementierung 			( Giuseppe)
 (done)	- Amount, Details				( Andy ) ( höchste Kommazahl, "Verwendungszweck" )
 (done)	- IBAN, BIC					( Andy )
-	- Receiver 					(Andy)
 
 Einleitung:
 (done)	- Roten Faden ziehen (Grafik?)			(Giuseppe)
 	- UseCase Diagramm				(Giuseppe)
 (done)	- Aktivitätsdiagramm				(Giuseppe)
-	- Klassendiagramm				(Andy)
+(done)	- Klassendiagramm				(Andy)
 	- Tests						(Giuseppe)
-	- Units Test Text Analyse 			(Andy)
 (done)	- SE Pressman 5. Kriterium für mobile		(Andy)
-	- 4.4.6 schreiben				(Andy)
-	- Kapitel 4 Review bearbeiten			(Andy)
+(done)	- 4.4.6 schreiben				(Andy)
 (done)	- Bilder beschreiben Aktivität/Fragment		(Giuseppe)
 	- Kapitel 7 Anwendungsbilder hinzufügen		(Giuseppe)
 (done)	- Kapitel 7 Implementierung - Beschreibung der Applikation 		(Giuseppe)
 (done)	- Kapitel 7 Implementierung - Beschreiben des Kontodatenfilters 	(Andy)
-	- Kapitel 7 ergänzen (Text + Diagramme)					(Andy)
 	- Quellen					(Giuseppe,Andy)
 	- Formatierung fertigstellen			(Giuseppe,Andy)
+
+Andy -
+
+	- Receiver 					(Andy)
+	- Units Test Text Analyse 			(Andy)
+	- Kapitel 4 Review bearbeiten			(Andy)
+	- Kapitel 7 ergänzen (Text + Diagramme)		(Andy)
+	- Quellen und Formatierung
