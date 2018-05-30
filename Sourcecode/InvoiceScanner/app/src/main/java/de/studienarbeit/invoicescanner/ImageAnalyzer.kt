@@ -145,9 +145,9 @@ class ImageAnalyzer(context: Context, imagePath : String) {
     private fun mapTextToInvoice()
     {
         gmvText = ""
-        var ibanPattern = Pattern.compile("[A-Z]{2}[0-9]{2}\\s?([0-9A-Z]\\s?){13,28}")
+        var ibanPattern = Pattern.compile("[A-Z]{2}[0-9]{2} ?([0-9A-Z] ?){13,28}")
         var bicPattern = Pattern.compile("[A-Z]{6}[0-9,A-Z]{2}([A-Z]{3})?")
-        var kommaZahl = Pattern.compile("[0-9]+[,]{1}[0-9]+")
+        var kommaZahl = Pattern.compile("[0-9.]+[,]{1}[0-9]+")
 
         var iban = ""
         var bic = ""
@@ -176,6 +176,16 @@ class ImageAnalyzer(context: Context, imagePath : String) {
                             iban = temp
                         }
                     }
+                    if (iban.toLowerCase().contains("swift"))
+                    {
+                        var cutIndex = iban.toLowerCase().indexOf("swift")
+                        var temp = iban.substring(0, cutIndex)
+                        if(Modulo97.verifyCheckDigits(temp))
+                        {
+                            iban = temp
+                        }
+
+                    }
                 }
 
                 var bicMatcher = bicPattern.matcher(curString)
@@ -184,20 +194,39 @@ class ImageAnalyzer(context: Context, imagePath : String) {
                     bic = curString.substring(bicMatcher.start(),bicMatcher.end())
                 }
 
-                if (curString.contains("Verwendungszweck:"))
+                if (curString.contains("Verwendungszweck: "))
                 {
-                    var cutIndex = curString.indexOf("Verwendungszweck:") + 17
+                    var cutIndex = curString.indexOf("Verwendungszweck: ") + 18
                     if (curString.length > cutIndex)
                     {
-                        details.substring(cutIndex)
+                        details = curString.substring(cutIndex)
+                        if (details.contains('\n'))
+                        {
+                            var endindex = details.indexOf('\n')
+                            details = details.substring(0,endindex)
+                        }
                     }
                 }
 
+                if (curString.contains("Empfänger: "))
+                {
+                    var cutIndex = curString.indexOf("Empfänger: ") + 11
+                    if (curString.length > cutIndex)
+                    {
+                        receiver = curString.substring(cutIndex)
+                        if (receiver.contains('\n'))
+                        {
+                            var endindex = receiver.indexOf('\n')
+                            receiver = receiver.substring(0,endindex)
+                        }
+                    }
+                }
 
                 var kommazahlmatcher = kommaZahl.matcher(curString)
                 while(kommazahlmatcher.find())
                 {
                     var mydouble = curString.substring(kommazahlmatcher.start(),kommazahlmatcher.end())
+                    mydouble = mydouble.replace(".","")
                     mydouble = mydouble.replace(',','.')
                     allDoubles.add(mydouble.toDouble())
                 }
