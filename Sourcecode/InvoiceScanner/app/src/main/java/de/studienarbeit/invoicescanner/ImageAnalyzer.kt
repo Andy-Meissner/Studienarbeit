@@ -12,19 +12,12 @@ import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
 import java.io.File
 import com.googlecode.tesseract.android.TessBaseAPI
-import java.io.BufferedReader
 import java.io.FileOutputStream
 import android.content.pm.PackageManager
-import android.content.pm.PackageInfo
 import android.os.AsyncTask
 import android.util.Log
-import info.debatty.java.stringsimilarity.JaroWinkler
-import nl.garvelink.iban.IBAN
-import nl.garvelink.iban.IBANFields
 import nl.garvelink.iban.Modulo97
 import java.util.regex.Pattern
-import kotlin.math.max
-
 
 class ImageAnalyzer(context: Context, imagePath : String) {
 
@@ -252,12 +245,39 @@ class ImageAnalyzer(context: Context, imagePath : String) {
     {
         loadImage()
         getTextFromImage()
-        getTextFromImageTess()
+        //getTextFromImageTess()
         mapTextToInvoice()
     }
 
     fun getInvoice() : Invoice
     {
         return invoice
+    }
+
+    companion object {
+        fun containsIBAN(testString : String) : Boolean
+        {
+            var ibanPattern = Pattern.compile("[A-Z]{2}[0-9]{2} ?([0-9A-Z] ?){13,28}")
+            var ibanMatcher = ibanPattern.matcher(testString)
+            var iban = ""
+            if(ibanMatcher.find())
+            {
+                iban = testString.substring(ibanMatcher.start(),ibanMatcher.end())
+                return true
+            }
+            return false
+        }
+
+        fun containsBIC(testString : String) : Boolean
+        {
+            var bicPattern = Pattern.compile("[A-Z]{6}[0-9,A-Z]{2}([A-Z]{3})?")
+
+            var bicMatcher = bicPattern.matcher(testString)
+            if(bicMatcher.find())
+            {
+                return true
+            }
+            return false
+        }
     }
 }
